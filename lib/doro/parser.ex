@@ -13,9 +13,12 @@ defmodule Doro.Parser do
       {:ok, %{subject: "player1", object: "book", verb: "look"}}
 
   """
-  @spec parse(String.t(), String.t()) :: {:ok, map()}
+  @spec parse(String.t(), String.t()) :: {:ok, %Doro.Context{}} | {:error, any()}
   def parse(s, user) do
-    [verb, object] = String.split(s)
-    {:ok, %{subject: user, verb: verb, object: object}}
+    with [verb, object] <- String.split(s) do
+      {:ok, %Doro.Context{subject: user, verb: verb, object: object}}
+    else
+      _ -> {:error, {:unparseable, s}}
+    end
   end
 end

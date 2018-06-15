@@ -6,7 +6,14 @@ defmodule DoroWeb.PlayerChannel do
   end
 
   def handle_in("cmd", %{"cmd" => cmd, "player" => player}, socket) do
-    broadcast(socket, "output", %{body: "#{player} sent: '#{cmd}'"})
+    with {:ok, ctx} <- Doro.Parser.parse(cmd, player),
+         {:ok, output} <- Doro.Engine.player_input(ctx) do
+      broadcast(socket, "output", %{body: output})
+    else
+      _ ->
+        broadcast(socket, "output", %{body: "Huh?"})
+    end
+
     {:noreply, socket}
   end
 end
