@@ -1,1 +1,15 @@
 /* This file is for your main application css. */
+
+body {
+  padding: 20px;
+}
+
+#output {
+  height: 80vh;
+  font-family: monospace;
+  outline: 1px solid #eee;
+}
+
+#input {
+  width: 100%;
+}
