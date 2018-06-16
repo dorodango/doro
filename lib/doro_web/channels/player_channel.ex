@@ -5,6 +5,12 @@ defmodule DoroWeb.PlayerChannel do
     {:ok, socket}
   end
 
+  def handle_in("cmd", %{"cmd" => "/reload"}, socket) do
+    Doro.GameState.reload()
+    broadcast(socket, "output", %{body: "Game state reloaded"})
+    {:noreply, socket}
+  end
+
   def handle_in("cmd", %{"cmd" => cmd, "player" => player_id}, socket) do
     with {verb, object_id} <- Doro.Parser.parse(cmd),
          {:ok, ctx} <- Doro.Context.create(player_id, verb, object_id),

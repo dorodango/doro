@@ -1,0 +1,22 @@
+{
+  "entities": {
+    "player1": {
+      "id": "player1",
+      "behaviors": ["debug"],
+      "props": { "location": 1 }
+    },
+    "player2": {
+      "id": "player2",
+      "behaviors": ["debug"],
+      "props": { "location": 1 }
+    },
+    "plant": {
+      "id": "plant",
+      "behaviors": ["debug", "visible"],
+      "props": {
+        "location": 1,
+        "description": "The plant is herbaceous, glabrous, and four-pinnate."
+      }
+    }
+  }
+}

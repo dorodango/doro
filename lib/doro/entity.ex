@@ -1,5 +1,7 @@
 defmodule Doro.Entity do
-  defstruct id: nil, behaviors: [], props: %{}
+  defstruct id: nil,
+            behaviors: [],
+            props: %{}
 
   @doc "Execute the behaviors for an entity"
   @spec execute_behaviors(%Doro.Context{}) :: {:ok, %Doro.Context{}} | {:error, any()}
