@@ -11,10 +11,11 @@ defmodule Doro.GameState do
     %{
       entities: %{
         "ingar" => %Entity{id: "ingar", behaviors: ~w(visible)},
+        "player2" => %Entity{id: "player2", behaviors: ~w(visible)},
         "plant" => %Entity{
           id: "plant",
-          behaviors: ~w(visible),
-          props: %{description: "It is herbaceous, glabrous, and two-pinnate."}
+          behaviors: [Doro.Behaviors.Debug, Doro.Behaviors.Visible],
+          props: %{description: "The plant is herbaceous, glabrous, and two-pinnate."}
         }
       }
     }

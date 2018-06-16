@@ -5,13 +5,15 @@ defmodule DoroWeb.PlayerChannel do
     {:ok, socket}
   end
 
-  def handle_in("cmd", %{"cmd" => cmd, "player" => player}, socket) do
-    with {:ok, ctx} <- Doro.Parser.parse(cmd, player),
-         {:ok, output} <- Doro.Engine.player_input(ctx) do
-      broadcast(socket, "output", %{body: output})
+  def handle_in("cmd", %{"cmd" => cmd, "player" => player_id}, socket) do
+    with {verb, object_id} <- Doro.Parser.parse(cmd),
+         {:ok, ctx} <- Doro.Context.create(player_id, verb, object_id),
+         {:ok, ctx} <- Doro.Engine.player_input(ctx) do
+      broadcast_from(socket, "output", %{body: Enum.join(ctx.tp_responses, " ")})
+      push(socket, "output", %{body: Enum.join(ctx.fp_responses, " ")})
     else
       _ ->
-        broadcast(socket, "output", %{body: "Huh?"})
+        push(socket, "output", %{body: "Huh?"})
     end
 
     {:noreply, socket}

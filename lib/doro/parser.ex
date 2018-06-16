@@ -6,19 +6,13 @@ defmodule Doro.Parser do
 
   @doc """
   Processes a string of user input.
-
-  ## Examples
-
-      iex> Doro.Parser.parse("take book", "player1")
-      {:ok, %{subject: "player1", object: "book", verb: "look"}}
-
   """
-  @spec parse(String.t(), String.t()) :: {:ok, %Doro.Context{}} | {:error, any()}
-  def parse(s, user) do
-    with [verb, object] <- String.split(s) do
-      {:ok, %Doro.Context{subject: user, verb: verb, object: object}}
+  @spec parse(String.t()) :: {String.t(), String.t()} | :error
+  def parse(s) do
+    with [verb, object_id] <- String.split(s) do
+      {verb, object_id}
     else
-      _ -> {:error, {:unparseable, s}}
+      _ -> :error
     end
   end
 end
