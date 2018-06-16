@@ -11,8 +11,14 @@ config :doro, DoroWeb.Endpoint,
   debug_errors: true,
   code_reloader: true,
   check_origin: false,
-  watchers: [node: ["node_modules/brunch/bin/brunch", "watch", "--stdin",
-                    cd: Path.expand("../assets", __DIR__)]]
+  watchers: [
+    node: [
+      "node_modules/brunch/bin/brunch",
+      "watch",
+      "--stdin",
+      cd: Path.expand("../assets", __DIR__)
+    ]
+  ]
 
 # ## SSL Support
 #
@@ -40,6 +46,8 @@ config :doro, DoroWeb.Endpoint,
       ~r{lib/doro_web/templates/.*(eex)$}
     ]
   ]
+
+config :doro, DoroWeb.Endpoint, reloadable_compilers: [:gettext, :phoenix, :elixir]
 
 # Do not include metadata nor timestamps in development logs
 config :logger, :console, format: "[$level] $message\n"
