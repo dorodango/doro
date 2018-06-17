@@ -5,8 +5,6 @@
 // and connect at the socket path in "lib/web/endpoint.ex":
 import { Socket } from "phoenix"
 
-let socket = new Socket("/socket", { params: { token: window.userToken } })
-
 // When you connect, you'll often need to authenticate the client.
 // For example, imagine you have an authentication plug, `MyAuth`,
 // which authenticates the session and assigns a `:current_user`.
@@ -51,37 +49,42 @@ let socket = new Socket("/socket", { params: { token: window.userToken } })
 // Finally, pass the token on connect as below. Or remove it
 // from connect if you don't care about authentication.
 
-socket.connect()
-
 // Now that you are connected, you can join channels with a topic:
 // let channel = socket.channel("topic:subtopic", {})
-let channel = socket.channel("player:debug", {})
-let input = document.querySelector("#input")
-let output = document.querySelector("#output")
-let player = document.querySelector("#player")
 
-input.addEventListener("keypress", event => {
-  if (event.keyCode === 13) {
-    channel.push("cmd", { cmd: input.value, player: player.value })
-    input.value = ""
-  }
-})
+document.querySelector("#connect").addEventListener("click", () => {
+  const playerId = document.querySelector("#player").value
+  let input = document.querySelector("#input")
+  let output = document.querySelector("#output")
 
-channel.on("output", payload => {
-  if (payload.body) {
-    let messageItem = document.createElement("div")
-    messageItem.innerText = `${payload.body}`
-    output.appendChild(messageItem)
-  }
-})
+  let socket = new Socket("/socket", { params: { player_id: playerId } })
+  socket.connect()
+  let channel = socket.channel("player:debug")
 
-channel
-  .join()
-  .receive("ok", resp => {
-    console.log("Joined successfully", resp)
-  })
-  .receive("error", resp => {
-    console.log("Unable to join", resp)
+  document.querySelector("#player-id").innerText = playerId
+  document.querySelector("#join-form").classList.add("hidden")
+  document.querySelector("#console").classList.remove("hidden")
+
+  channel.on("output", payload => {
+    if (payload.body) {
+      let messageItem = document.createElement("div")
+      messageItem.innerText = `${payload.body}`
+      output.appendChild(messageItem)
+    }
   })
 
-export default socket
+  channel
+    .join()
+    .receive("ok", resp => {
+      console.log("Joined successfully", resp)
+    })
+    .receive("error", resp => {
+      console.log("Unable to join", resp)
+    })
+  input.addEventListener("keypress", event => {
+    if (event.keyCode === 13) {
+      channel.push("cmd", { cmd: input.value })
+      input.value = ""
+    }
+  })
+})

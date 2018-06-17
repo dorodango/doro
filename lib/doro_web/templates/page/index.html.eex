@@ -1,3 +1,8 @@
-<input id="player" placeholder="player id">
-<div id="output"></div>
-<input id="input" placeholder="Enter a command">
+<div id="join-form">
+    <input id="player" value="player1" placeholder="player id"><button id="connect">Connect</button>
+</div>
+<div id="console" class="hidden">
+    <span id="player-id"></span>
+    <div id="output"></div>
+    <input id="input" placeholder="Enter a command">
+</div>
