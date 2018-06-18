@@ -2,12 +2,12 @@
   "entities": {
     "player1": {
       "id": "player1",
-      "behaviors": ["debug"],
+      "behaviors": ["debug", "player"],
       "props": { "location": 1 }
     },
     "player2": {
       "id": "player2",
-      "behaviors": ["debug"],
+      "behaviors": ["debug", "player"],
       "props": { "location": 1 }
     },
     "plant": {

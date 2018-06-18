@@ -59,7 +59,7 @@ document.querySelector("#connect").addEventListener("click", () => {
 
   let socket = new Socket("/socket", { params: { player_id: playerId } })
   socket.connect()
-  let channel = socket.channel("player:debug")
+  let channel = socket.channel(`player:${playerId}`)
 
   document.querySelector("#player-id").innerText = playerId
   document.querySelector("#join-form").classList.add("hidden")

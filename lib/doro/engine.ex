@@ -1,13 +1,13 @@
 defmodule Doro.Engine do
-  @moduledoc """
-  Main loop for the application
-  """
+  alias Phoenix.PubSub
 
-  @doc """
-  Processes a string of player input.
-  """
-  @spec player_input(%Doro.Context{}) :: {:ok, any()}
-  def player_input(ctx) do
-    {:ok, Doro.Entity.execute_behaviors(ctx)}
+  def player_input(player_id, s) do
+    {verb, object_id} = Doro.Parser.parse(s)
+    {:ok, ctx} = Doro.Context.create(player_id, verb, object_id)
+    Doro.Entity.execute_behaviors(ctx)
+  end
+
+  def send_to_player(player_id, s) do
+    PubSub.broadcast(Doro.PubSub, "player-session:#{player_id}", {:send, s})
   end
 end

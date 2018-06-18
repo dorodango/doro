@@ -9,7 +9,6 @@ defmodule Doro.GameState.Marshal do
     s
     |> Poison.decode!(keys: :atoms)
     |> unmarshal_world()
-    |> Apex.ap()
   end
 
   defp unmarshal_world(world) do

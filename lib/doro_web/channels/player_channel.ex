@@ -1,30 +1,16 @@
 defmodule DoroWeb.PlayerChannel do
   require Logger
-
   use Phoenix.Channel
 
-  def join("player:debug", _, socket) do
-    Logger.info("Player '#{socket.assigns.player_id}' connected via Phoenix Channels")
-    {:ok, socket}
+  def join("player:" <> player_id, _auth_message, socket = %{assigns: %{player_id: player_id}}) do
+    Logger.info("Player(#{socket.assigns.player_id}) connected via Phoenix Channels")
+    {:ok, session} = Doro.Session.create_session(player_id)
+    {:ok, Phoenix.Socket.assign(socket, :session, session)}
   end
 
-  def handle_in("cmd", %{"cmd" => "/reload"}, socket) do
-    Doro.GameState.reload()
-    broadcast(socket, "output", %{body: "Game state reloaded"})
-    {:noreply, socket}
-  end
-
-  def handle_in("cmd", %{"cmd" => cmd}, socket) do
-    with {verb, object_id} <- Doro.Parser.parse(cmd),
-         {:ok, ctx} <- Doro.Context.create(socket.assigns.player_id, verb, object_id),
-         {:ok, ctx} <- Doro.Engine.player_input(ctx) do
-      broadcast_from(socket, "output", %{body: Enum.join(ctx.tp_responses, " ")})
-      push(socket, "output", %{body: Enum.join(ctx.fp_responses, " ")})
-    else
-      _ ->
-        push(socket, "output", %{body: "Huh?"})
-    end
-
+  @doc "Input coming in from a channel just gets sent to this player's session"
+  def handle_in("cmd", %{"cmd" => cmd}, socket = %{assigns: %{session: session}}) do
+    Doro.Session.player_input(session, cmd)
     {:noreply, socket}
   end
 end

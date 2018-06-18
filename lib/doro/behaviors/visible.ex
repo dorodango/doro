@@ -1,13 +1,13 @@
 defmodule Doro.Behaviors.Visible do
-  alias Doro.Context
+  use Doro.Behavior
 
   def handle(ctx = %{verb: "look"}) do
-    ctx
-    |> Context.add_first_person_response(ctx.object.props.description)
-    |> Context.add_third_person_response(
-      ~s(#{ctx.subject.id} regards #{ctx.object.id} thoughtfully.)
-    )
+    send_to_player(ctx, ctx.object.props.description)
   end
 
-  def handle(ctx), do: ctx
+  def handle(ctx = %{verb: verb, object: object}) do
+    send_to_player(ctx, "You can't [#{verb}] a [#{object.id}]!")
+  end
+
+  def handle(ctx), do: super(ctx)
 end

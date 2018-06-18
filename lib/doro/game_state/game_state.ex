@@ -11,6 +11,8 @@ defmodule Doro.GameState do
   end
 
   @doc "Gets an entity by id"
+  def get_entity(nil), do: nil
+
   def get_entity(id) do
     Agent.get(__MODULE__, fn world -> world.entities[id] end)
   end

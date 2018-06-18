@@ -9,10 +9,15 @@ defmodule Doro.Parser do
   """
   @spec parse(String.t()) :: {String.t(), String.t()} | :error
   def parse(s) do
-    with [verb, object_id] <- String.split(s) do
-      {verb, object_id}
-    else
-      _ -> :error
+    case String.split(s) do
+      [verb, object_id] ->
+        {verb, object_id}
+
+      [verb] ->
+        {verb, nil}
+
+      _ ->
+        :error
     end
   end
 end
