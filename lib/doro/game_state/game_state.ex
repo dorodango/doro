@@ -17,6 +17,25 @@ defmodule Doro.GameState do
     Agent.get(__MODULE__, fn world -> world.entities[id] end)
   end
 
+  def players_in_location(location) do
+    Agent.get(__MODULE__, fn world ->
+      world.entities
+      |> Map.values()
+      |> entities_in_location(location)
+      |> entities_with_behavior(Doro.Behaviors.Player)
+    end)
+  end
+
+  defp entities_with_behavior(entities, behavior) do
+    entities
+    |> Enum.filter(fn e -> Enum.member?(e.behaviors, behavior) end)
+  end
+
+  defp entities_in_location(entities, location) do
+    entities
+    |> Enum.filter(fn e -> e.props[:location] == location end)
+  end
+
   defp read_debug_world do
     Path.join(:code.priv_dir(:doro), "game_state.json")
     |> File.read!()

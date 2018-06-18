@@ -1,20 +1,31 @@
 {
   "entities": {
+    "office": {
+      "id": "office",
+      "behaviors": [],
+      "props": {
+        "description": "You are in a soul-crushing office."
+      }
+    },
     "player1": {
       "id": "player1",
       "behaviors": ["debug", "player"],
-      "props": { "location": 1 }
+      "props": {
+        "location": "office"
+      }
     },
     "player2": {
       "id": "player2",
       "behaviors": ["debug", "player"],
-      "props": { "location": 1 }
+      "props": {
+        "location": "office"
+      }
     },
     "plant": {
       "id": "plant",
       "behaviors": ["debug", "visible"],
       "props": {
-        "location": 1,
+        "location": "office",
         "description": "The plant is herbaceous, glabrous, and four-pinnate."
       }
     }

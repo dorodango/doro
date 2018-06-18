@@ -3,6 +3,7 @@ defmodule Doro.Behaviors.Visible do
 
   def handle(ctx = %{verb: "look"}) do
     send_to_player(ctx, ctx.object.props.description)
+    send_to_others(ctx, "[#{ctx.subject.id}] looks at [#{ctx.object.id}] thoughtfully.")
   end
 
   def handle(ctx = %{verb: verb, object: object}) do
