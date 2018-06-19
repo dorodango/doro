@@ -25,6 +25,14 @@ defmodule Doro.GameState do
     end)
   end
 
+  def all_entities(filter \\ & &1) do
+    Agent.get(__MODULE__, fn world ->
+      world.entities
+      |> Map.values()
+      |> Enum.filter(filter)
+    end)
+  end
+
   def players_in_location(location) do
     entities_in_location(location)
     |> entities_with_behavior(Doro.Behaviors.Player)
