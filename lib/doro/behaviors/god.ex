@@ -1,4 +1,4 @@
-defmodule Doro.Behaviors.Debug do
+defmodule Doro.Behaviors.God do
   use Doro.Behavior
 
   def handle(ctx = %{verb: "/reload"}) do

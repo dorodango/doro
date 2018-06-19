@@ -9,24 +9,26 @@
     },
     "player1": {
       "id": "player1",
-      "behaviors": ["debug", "player"],
+      "behaviors": ["visible", "player", "god"],
       "props": {
-        "location": "office"
+        "location": "office",
+        "description": "is disheveled and smelly."
       }
     },
     "player2": {
       "id": "player2",
-      "behaviors": ["debug", "player"],
+      "behaviors": ["visible", "player"],
       "props": {
-        "location": "office"
+        "location": "office",
+        "description": "is wearing some nice artisinal gut covers."
       }
     },
     "plant": {
       "id": "plant",
-      "behaviors": ["debug", "visible"],
+      "behaviors": ["visible"],
       "props": {
         "location": "office",
-        "description": "The plant is herbaceous, glabrous, and four-pinnate."
+        "description": "is herbaceous, glabrous, and four-pinnate."
       }
     }
   }

@@ -17,13 +17,17 @@ defmodule Doro.GameState do
     Agent.get(__MODULE__, fn world -> world.entities[id] end)
   end
 
-  def players_in_location(location) do
+  def entities_in_location(location) do
     Agent.get(__MODULE__, fn world ->
       world.entities
       |> Map.values()
       |> entities_in_location(location)
-      |> entities_with_behavior(Doro.Behaviors.Player)
     end)
+  end
+
+  def players_in_location(location) do
+    entities_in_location(location)
+    |> entities_with_behavior(Doro.Behaviors.Player)
   end
 
   defp entities_with_behavior(entities, behavior) do

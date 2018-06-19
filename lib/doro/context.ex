@@ -18,4 +18,8 @@ defmodule Doro.Context do
       }
     }
   end
+
+  def location(ctx) do
+    Doro.GameState.get_entity(ctx.subject.props.location)
+  end
 end
