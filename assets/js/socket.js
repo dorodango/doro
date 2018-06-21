@@ -67,9 +67,16 @@ document.querySelector("#connect").addEventListener("click", () => {
 
   channel.on("output", payload => {
     if (payload.body) {
+      const atBottom =
+        output.scrollTop + output.offsetHeight === output.scrollHeight
+
       let messageItem = document.createElement("div")
       messageItem.innerText = `${payload.body}`
       output.appendChild(messageItem)
+
+      if (atBottom) {
+        output.scrollTop = output.scrollHeight
+      }
     }
   })
 

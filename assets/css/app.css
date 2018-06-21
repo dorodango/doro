@@ -8,6 +8,7 @@ body {
   height: 80vh;
   font-family: monospace;
   outline: 1px solid #eee;
+  overflow-y: scroll;
 }
 
 #input {
