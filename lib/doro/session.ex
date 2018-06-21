@@ -56,7 +56,7 @@ defmodule Doro.Session do
     {:noreply, state}
   end
 
-  def handle_info(msg, state) do
+  def handle_info(_, state) do
     {:noreply, state}
   end
 end

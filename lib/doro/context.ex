@@ -1,5 +1,5 @@
 defmodule Doro.Context do
-  alias Doro.GameState
+  alias Doro.World
 
   defstruct original_command: nil,
             subject: nil,
@@ -14,14 +14,14 @@ defmodule Doro.Context do
       :ok,
       %Doro.Context{
         original_command: original_command,
-        subject: GameState.get_entity(player_id),
-        object: GameState.get_entity(object_id) || GameState.get_entity(player_id),
+        subject: World.get_entity(player_id),
+        object: World.get_entity(object_id) || World.get_entity(player_id),
         verb: verb
       }
     }
   end
 
   def location(ctx) do
-    Doro.GameState.get_entity(ctx.subject.props.location)
+    Doro.World.get_entity(ctx.subject.props.location)
   end
 end

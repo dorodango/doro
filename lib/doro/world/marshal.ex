@@ -1,12 +1,13 @@
-defmodule Doro.GameState.Marshal do
+defmodule Doro.World.Marshal do
+  require Logger
+
   @moduledoc """
-
+  Functions for loading the world from JSON
   """
-  # def marshal(world) do
-  # end
 
-  def unmarshal(s) do
-    s
+  @doc "Unmarshals a world from a JSON string"
+  def unmarshal(json) do
+    json
     |> Poison.decode!(keys: :atoms)
     |> unmarshal_world()
   end
@@ -30,13 +31,13 @@ defmodule Doro.GameState.Marshal do
   end
 
   defp resolve_behaviors(entity) do
-    %{
-      entity
-      | behaviors:
-          Enum.map(
-            entity.behaviors,
-            &String.to_existing_atom("Elixir.Doro.Behaviors.#{Macro.camelize(&1)}")
-          )
-    }
+    Map.put(
+      entity,
+      :behaviors,
+      Enum.map(
+        Map.get(entity, :behaviors, []),
+        &String.to_existing_atom("Elixir.Doro.Behaviors.#{Macro.camelize(&1)}")
+      )
+    )
   end
 end

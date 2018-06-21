@@ -14,7 +14,7 @@ defmodule Doro.Behaviors.Clock do
 
   def handle_info({:heartbeat, t}, state) do
     if rem(t, 10) == 0 do
-      Doro.GameState.all_entities(&Enum.member?(&1.behaviors, __MODULE__))
+      Doro.World.entities_with_behavior(__MODULE__)
       |> Enum.each(fn clock -> tell_time(clock, t) end)
     end
 
@@ -22,10 +22,7 @@ defmodule Doro.Behaviors.Clock do
   end
 
   defp tell_time(clock, t) do
-    Doro.GameState.all_entities(fn e ->
-      e.props[:location] == clock.props.location &&
-        Enum.member?(e.behaviors, Doro.Behaviors.Player)
-    end)
+    Doro.World.players_in_location(clock.props.location)
     |> Enum.each(&send_to_player(&1.id, "At the tone the time will be: #{t}"))
   end
 end

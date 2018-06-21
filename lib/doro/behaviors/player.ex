@@ -6,7 +6,7 @@ defmodule Doro.Behaviors.Player do
       send_to_player(ctx, Doro.Context.location(ctx).props.description)
 
       # List entities
-      Doro.GameState.entities_in_location(player.props.location)
+      Doro.World.entities_in_location(player.props.location)
       |> Enum.filter(&(&1.id != player.id))
       |> Enum.each(fn e -> send_to_player(ctx, "[#{e.id}] is here.") end)
     end
