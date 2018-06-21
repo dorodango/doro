@@ -32,6 +32,14 @@ defmodule Doro.World do
     entities_in_location_with_behavior(location, Doro.Behaviors.Player)
   end
 
+  def move_entity(entity, destination_id) when is_binary(destination_id) do
+    GameState.set_prop(entity.id, :location, destination_id)
+  end
+
+  def move_entity(entity, destination) do
+    move_entity(entity, destination.id)
+  end
+
   @doc "Clobbers the current state of the world with this new state"
   def clobber(new_state) do
     GameState.set(new_state)

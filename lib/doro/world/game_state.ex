@@ -19,7 +19,15 @@ defmodule Doro.World.GameState do
     Agent.get(__MODULE__, fn world ->
       world.entities
       |> Map.values()
+      |> Apex.ap()
       |> Enum.filter(filter)
+    end)
+  end
+
+  def set_prop(entity_id, key, value) when is_atom(key) do
+    Agent.update(__MODULE__, fn state ->
+      state
+      |> put_in([:entities, entity_id, key], value)
     end)
   end
 

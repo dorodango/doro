@@ -3,7 +3,7 @@ defmodule Doro.Behaviors.Player do
   import Doro.Comms
   alias Doro.World
 
-  @verbs MapSet.new(~w(look halp))
+  @verbs MapSet.new(~w(look halp inv))
 
   def responds_to?("look", ctx) do
     ctx.original_command == "look"
@@ -20,13 +20,14 @@ defmodule Doro.Behaviors.Player do
     Doro.World.entities_in_location(player.props.location)
     |> Enum.filter(&(&1.id != player.id))
     |> Enum.each(fn e -> send_to_player(player, "[#{e.id}] is here.") end)
+  end
 
-    ctx
+  def handle(ctx = %{verb: "inv", player: player}) do
+    Doro.World.entities_in_location(player.id)
+    |> Enum.each(fn e -> send_to_player(player, "You are carrying [#{e.id}].") end)
   end
 
   def handle(%{verb: "halp", player: player}) do
     send_to_player(player, "You are helpless.")
   end
-
-  def handle(ctx), do: super(ctx)
 end

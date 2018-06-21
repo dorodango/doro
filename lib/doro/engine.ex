@@ -22,11 +22,10 @@ defmodule Doro.Engine do
   # transitive command
   def process_command(ctx = %{player: player}) do
     responding_behaviors =
-      Doro.World.entities_in_locations(MapSet.new([player, player.props.location]))
+      Doro.World.entities_in_locations(MapSet.new([player.id, player.props.location]))
       |> Enum.filter(&Doro.Entity.is_called?(&1, ctx.object_id))
       |> Enum.map(fn entity -> {entity, Doro.Entity.first_responder(entity, ctx)} end)
       |> Enum.filter(fn {_, behavior} -> behavior end)
-      |> Apex.ap()
 
     case responding_behaviors do
       [] ->

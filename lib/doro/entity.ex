@@ -30,4 +30,28 @@ defmodule Doro.Entity do
   def is_called?(entity, name) do
     name == entity.id
   end
+
+  @behaviour Access
+
+  @impl Access
+  def fetch(entity, key) do
+    Map.fetch(entity.props, key)
+  end
+
+  @impl Access
+  def get(entity, key, default \\ nil) do
+    Map.get(entity.props, key, default)
+  end
+
+  @impl Access
+  def pop(entity, key, default \\ nil) do
+    {value, new_props} = Map.pop(entity, key, default)
+    {value, %{entity | props: new_props}}
+  end
+
+  @impl Access
+  def get_and_update(entity, key, fun) do
+    {value, new_props} = Map.get_and_update(entity.props, key, fun)
+    {value, %{entity | props: new_props}}
+  end
 end

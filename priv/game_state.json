@@ -25,10 +25,18 @@
     },
     "plant": {
       "id": "plant",
-      "behaviors": ["visible"],
+      "behaviors": ["visible", "portable"],
       "props": {
         "location": "office",
         "description": "is herbaceous, glabrous, and four-pinnate."
+      }
+    },
+    "lacroix": {
+      "id": "lacroix",
+      "behaviors": ["visible", "portable"],
+      "props": {
+        "location": "office",
+        "description": "is coconut flavored.  Yuck."
       }
     },
     "annoying_clock": {

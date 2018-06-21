@@ -14,7 +14,7 @@ defmodule Doro.Behaviors.Clock do
   end
 
   def handle_info({:heartbeat, t}, state) do
-    if rem(t, 10) == 0 do
+    if rem(t, 100) == 0 do
       Doro.World.entities_with_behavior(__MODULE__)
       |> Enum.each(fn clock -> tell_time(clock, t) end)
     end
