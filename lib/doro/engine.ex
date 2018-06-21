@@ -3,7 +3,7 @@ defmodule Doro.Engine do
 
   def player_input(player_id, s) do
     {verb, object_id} = Doro.Parser.parse(s)
-    {:ok, ctx} = Doro.Context.create(player_id, verb, object_id)
+    {:ok, ctx} = Doro.Context.create(s, player_id, verb, object_id)
     Doro.Entity.execute_behaviors(ctx)
   end
 

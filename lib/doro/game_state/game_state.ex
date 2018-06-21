@@ -10,6 +10,18 @@ defmodule Doro.GameState do
     Agent.update(__MODULE__, fn _ -> read_debug_world() end)
   end
 
+  @doc """
+  For use during development.  Reloads the game state from a github gist.
+
+  This will load the content of the first file in the gist.  It should be a JSON file
+  in the format of game_state.json.
+
+  There is NO ERROR HANDLING.
+  """
+  def load_from_gist(gist_id) do
+    Agent.update(__MODULE__, fn _ -> Doro.GameState.Gist.load_gist(gist_id) end)
+  end
+
   @doc "Gets an entity by id"
   def get_entity(nil), do: nil
 
