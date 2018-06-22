@@ -16,7 +16,7 @@ defmodule Doro.Application do
       # worker(Doro.Worker, [arg1, arg2, arg3]),
       worker(Doro.World.GameState, []),
       worker(Doro.Heartbeat, []),
-      worker(Doro.Behaviors.Clock, [])
+      worker(Doro.Phenomena, [])
     ]
 
     # See https://hexdocs.pm/elixir/Supervisor.html
