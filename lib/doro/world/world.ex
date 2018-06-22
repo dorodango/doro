@@ -9,6 +9,18 @@ defmodule Doro.World do
     GameState.get_entity(id)
   end
 
+  @doc """
+  Finds named entities in specificied locations.
+  """
+  @spec get_named_entities_in_locations(String.t(), [String.t()]) :: [%Doro.Entity{}]
+  def get_named_entities_in_locations(name, location_ids) do
+    locations_set = MapSet.new(location_ids)
+
+    GameState.get_entities(fn e ->
+      MapSet.member?(locations_set, e.props[:location]) && Doro.Entity.named?(e, name)
+    end)
+  end
+
   def entities_in_location(location) do
     GameState.get_entities(fn e -> e.props[:location] == location end)
   end

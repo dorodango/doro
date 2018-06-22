@@ -32,7 +32,6 @@ defmodule Doro.Session do
   end
 
   # Callbacks
-
   @impl true
   def init(player_id) do
     Phoenix.PubSub.subscribe(Doro.PubSub, "player-session:#{player_id}")
@@ -46,7 +45,7 @@ defmodule Doro.Session do
 
   @impl true
   def handle_cast({:player_input, s}, state) do
-    Doro.Engine.player_input(state.player_id, s)
+    Doro.CLI.interpret(state.player_id, s)
     {:noreply, state}
   end
 

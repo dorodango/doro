@@ -15,14 +15,12 @@ defmodule Doro.Behaviors.Portable do
   def handle(%{verb: "take", object: object, player: player}) do
     Doro.World.move_entity(object, player)
     send_to_player(player, "Taken.")
-    send_to_others(player, "#{Entity.name(player)} greedily takes the #{Entity.name(object)}")
+    send_to_others(player, "#{Entity.name(player)} takes something.")
   end
 
   def handle(%{verb: "drop", object: object, player: player}) do
     Doro.World.move_entity(object, player.props.location)
     send_to_player(player, "Dropped.")
-    send_to_others(player, "#{Entity.name(player)} dropped something.")
+    send_to_others(player, "#{Entity.name(player)} drops something.")
   end
-
-  def handle(ctx), do: super(ctx)
 end
