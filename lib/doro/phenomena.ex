@@ -18,8 +18,8 @@ defmodule Doro.Phenomena do
 
   def handle_info({:heartbeat, t}, state) do
     [
-      Doro.Phenomena.Clock,
-      Doro.Phenomena.VascularPlant
+      Doro.Behaviors.Clock,
+      Doro.Behaviors.VascularPlant
     ]
     |> Enum.each(fn phenom ->
       Task.start(fn -> phenom.tick(t) end)
