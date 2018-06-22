@@ -4,6 +4,7 @@ defmodule Doro.Behaviors.Portable do
   """
   use Doro.Behavior
   import Doro.Comms
+  alias Doro.Entity
 
   @verbs MapSet.new(~w(take drop))
 
@@ -14,13 +15,13 @@ defmodule Doro.Behaviors.Portable do
   def handle(%{verb: "take", object: object, player: player}) do
     Doro.World.move_entity(object, player)
     send_to_player(player, "Taken.")
-    send_to_others(player, "[#{player.id}] greedily takes the [#{object.id}]")
+    send_to_others(player, "#{Entity.name(player)} greedily takes the #{Entity.name(object)}")
   end
 
   def handle(%{verb: "drop", object: object, player: player}) do
     Doro.World.move_entity(object, player.props.location)
     send_to_player(player, "Dropped.")
-    send_to_others(player, "[#{player.id}] dropped something.")
+    send_to_others(player, "#{Entity.name(player)} dropped something.")
   end
 
   def handle(ctx), do: super(ctx)

@@ -31,6 +31,10 @@ defmodule Doro.Entity do
     name == entity.id
   end
 
+  def name(entity) do
+    "[#{entity.id}]"
+  end
+
   @behaviour Access
 
   @impl Access

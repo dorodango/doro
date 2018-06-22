@@ -16,6 +16,9 @@ defmodule Doro.Parser do
       [verb] ->
         {verb, nil}
 
+      [verb | _] ->
+        {verb, nil}
+
       _ ->
         :error
     end

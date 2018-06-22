@@ -1,6 +1,7 @@
 defmodule Doro.Behaviors.Visible do
   use Doro.Behavior
   import Doro.Comms
+  alias Doro.Entity
 
   @verbs MapSet.new(~w(look))
 
@@ -8,11 +9,8 @@ defmodule Doro.Behaviors.Visible do
     MapSet.member?(@verbs, verb) && ctx.object
   end
 
-  def handle(ctx = %{verb: "look", player: player}) do
-    send_to_player(player, "[#{ctx.object.id}] #{ctx.object.props.description}")
-    send_to_others(player, "[#{ctx.player.id}] looks at [#{ctx.object.id}] thoughtfully.")
-    ctx
+  def handle(%{verb: "look", player: player, object: object}) do
+    send_to_player(player, "#{Entity.name(object)} #{object.props.description}")
+    send_to_others(player, "#{Entity.name(player)} looks at #{Entity.name(object)} thoughtfully.")
   end
-
-  def handle(ctx), do: super(ctx)
 end

@@ -19,7 +19,6 @@ defmodule Doro.World.GameState do
     Agent.get(__MODULE__, fn world ->
       world.entities
       |> Map.values()
-      |> Apex.ap()
       |> Enum.filter(filter)
     end)
   end
