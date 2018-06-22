@@ -1,5 +1,6 @@
 defmodule Doro.Behaviors.God do
   use Doro.Behavior
+  import Doro.Comms
 
   def handle(ctx = %{verb: "/reload"}) do
     Doro.World.clobber_from_default()

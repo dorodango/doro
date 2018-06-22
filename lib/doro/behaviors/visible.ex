@@ -1,5 +1,6 @@
 defmodule Doro.Behaviors.Visible do
   use Doro.Behavior
+  import Doro.Comms
 
   def handle(ctx = %{verb: "look"}) do
     if ctx.subject != ctx.object do

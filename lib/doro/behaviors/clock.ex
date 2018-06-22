@@ -2,6 +2,7 @@ defmodule Doro.Behaviors.Clock do
   require Logger
   use GenServer
   use Doro.Behavior
+  import Doro.Comms
 
   def start_link do
     GenServer.start_link(__MODULE__, [], name: :behavior_clock)

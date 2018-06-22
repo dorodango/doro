@@ -1,5 +1,6 @@
 defmodule Doro.Behaviors.Player do
   use Doro.Behavior
+  import Doro.Comms
 
   def handle(ctx = %{verb: "look", subject: player, object: object}) do
     if player.id == object.id do
