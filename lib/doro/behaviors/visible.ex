@@ -2,12 +2,15 @@ defmodule Doro.Behaviors.Visible do
   use Doro.Behavior
   import Doro.Comms
 
-  def handle(ctx = %{verb: "look"}) do
-    if ctx.subject != ctx.object do
-      send_to_player(ctx, "[#{ctx.object.id}] #{ctx.object.props.description}")
-      send_to_others(ctx, "[#{ctx.subject.id}] looks at [#{ctx.object.id}] thoughtfully.")
-    end
+  @verbs MapSet.new(~w(look))
 
+  def responds_to?(verb, ctx) do
+    MapSet.member?(@verbs, verb) && ctx.object
+  end
+
+  def handle(ctx = %{verb: "look", player: player}) do
+    send_to_player(player, "[#{ctx.object.id}] #{ctx.object.props.description}")
+    send_to_others(player, "[#{ctx.player.id}] looks at [#{ctx.object.id}] thoughtfully.")
     ctx
   end
 

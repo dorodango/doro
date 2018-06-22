@@ -2,22 +2,15 @@ defmodule Doro.Comms do
   @moduledoc """
   Functions for sending output to players.
   """
-  def send_to_player(ctx, s) when is_map(ctx) do
-    send_to_player(ctx.subject.id, s)
-    %{ctx | handled: true}
+  def send_to_player(player = %Doro.Entity{}, s) do
+    Phoenix.PubSub.broadcast(Doro.PubSub, "player-session:#{player.id}", {:send, s})
   end
 
-  def send_to_player(player_id, s) when is_binary(player_id) do
-    Doro.Engine.send_to_player(player_id, s)
-  end
-
-  def send_to_others(ctx = %{subject: %{props: %{location: location}}}, s) do
+  def send_to_others(player = %Doro.Entity{props: %{location: location}}, s) do
     Doro.World.players_in_location(location)
-    |> Enum.filter(&(&1.id != ctx.subject.id))
+    |> Enum.filter(&(&1.id != player.id))
     |> Enum.each(fn player ->
-      Doro.Engine.send_to_player(player.id, s)
+      send_to_player(player, s)
     end)
-
-    %{ctx | handled: true}
   end
 end

@@ -13,6 +13,10 @@ defmodule Doro.World do
     GameState.get_entities(fn e -> e.props[:location] == location end)
   end
 
+  def entities_in_locations(locations) do
+    GameState.get_entities(fn e -> Enum.member?(locations, e.props[:location]) end)
+  end
+
   def entities_with_behavior(behavior) do
     GameState.get_entities(fn e -> Enum.member?(e.behaviors, behavior) end)
   end
