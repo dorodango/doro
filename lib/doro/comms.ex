@@ -13,4 +13,9 @@ defmodule Doro.Comms do
       send_to_player(player, s)
     end)
   end
+
+  def send_to_location(location_id, s) do
+    Doro.World.players_in_location(location_id)
+    |> Enum.each(&send_to_player(&1, s))
+  end
 end

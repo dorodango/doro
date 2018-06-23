@@ -25,7 +25,7 @@
     },
     "plant": {
       "id": "plant",
-      "behaviors": ["visible", "portable"],
+      "behaviors": ["visible", "portable", "vascular_plant"],
       "props": {
         "location": "office",
         "description": "is herbaceous, glabrous, and four-pinnate."

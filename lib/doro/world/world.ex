@@ -21,35 +21,40 @@ defmodule Doro.World do
     end)
   end
 
-  def entities_in_location(location) do
-    GameState.get_entities(fn e -> e.props[:location] == location end)
+  def entities_in_location(location_id) do
+    GameState.get_entities(fn e -> e[:location] == location_id end)
   end
 
-  def entities_in_locations(locations) do
-    GameState.get_entities(fn e -> Enum.member?(locations, e.props[:location]) end)
+  def entities_in_locations(location_ids) do
+    GameState.get_entities(fn e -> Enum.member?(location_ids, e[:location]) end)
   end
 
   def entities_with_behavior(behavior) do
     GameState.get_entities(fn e -> Enum.member?(e.behaviors, behavior) end)
   end
 
-  def entities_in_location_with_behavior(location, behavior) do
+  def entities_in_location_with_behavior(location_id, behavior) do
     GameState.get_entities(fn e ->
-      e.props[:location] == location && Enum.member?(e.behaviors, behavior)
+      e[:location] == location_id && Enum.member?(e.behaviors, behavior)
     end)
   end
 
   @doc "Convenience function"
-  def players_in_location(location) do
-    entities_in_location_with_behavior(location, Doro.Behaviors.Player)
+  def players_in_location(location_id) do
+    entities_in_location_with_behavior(location_id, Doro.Behaviors.Player)
   end
 
   def move_entity(entity, destination_id) when is_binary(destination_id) do
-    GameState.set_prop(entity.id, :location, destination_id)
+    set_prop(entity, :location, destination_id)
   end
 
   def move_entity(entity, destination) do
     move_entity(entity, destination.id)
+  end
+
+  def set_prop(entity, key, value) do
+    GameState.set_prop(entity.id, key, value)
+    put_in(entity, [key], value)
   end
 
   @doc "Clobbers the current state of the world with this new state"
