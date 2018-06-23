@@ -1,5 +1,12 @@
 {
   "entities": {
+    "bathroom": {
+      "id": "bathroom",
+      "behaviors": [],
+      "props": {
+        "description": "You are in a small, dingy bathroom; a flourescent light flickers overhead."
+      }
+    },
     "office": {
       "id": "office",
       "behaviors": [],
@@ -7,9 +14,37 @@
         "description": "You are in a soul-crushing office."
       }
     },
+    "bathroom-door": {
+      "id": "bathroom-door",
+      "behaviors": [
+        "exit",
+        "visible"
+      ],
+      "props": {
+        "location": "office",
+        "description": "A door emblazoned with 'WC'.",
+        "destination_id": "bathroom"
+      }
+    },
+    "office-door": {
+      "id": "office-door",
+      "behaviors": [
+        "exit",
+        "visible"
+      ],
+      "props": {
+        "location": "bathroom",
+        "description": "A red door.",
+        "destination_id": "office"
+      }
+    },
     "player1": {
       "id": "player1",
-      "behaviors": ["visible", "player", "god"],
+      "behaviors": [
+        "visible",
+        "player",
+        "god"
+      ],
       "props": {
         "location": "office",
         "description": "is disheveled and smelly."
@@ -17,7 +52,10 @@
     },
     "player2": {
       "id": "player2",
-      "behaviors": ["visible", "player"],
+      "behaviors": [
+        "visible",
+        "player"
+      ],
       "props": {
         "location": "office",
         "description": "is wearing some nice artisinal gut covers."
@@ -25,7 +63,11 @@
     },
     "plant": {
       "id": "plant",
-      "behaviors": ["visible", "portable", "vascular_plant"],
+      "behaviors": [
+        "visible",
+        "portable",
+        "vascular_plant"
+      ],
       "props": {
         "location": "office",
         "description": "is herbaceous, glabrous, and four-pinnate."
@@ -33,7 +75,10 @@
     },
     "lacroix": {
       "id": "lacroix",
-      "behaviors": ["visible", "portable"],
+      "behaviors": [
+        "visible",
+        "portable"
+      ],
       "props": {
         "location": "office",
         "description": "is coconut flavored.  Yuck."
@@ -41,7 +86,10 @@
     },
     "annoying_clock": {
       "id": "annoying_clock",
-      "behaviors": ["visible", "clock"],
+      "behaviors": [
+        "visible",
+        "clock"
+      ],
       "props": {
         "location": "office",
         "description": "just looks like it wants to annoy you."
