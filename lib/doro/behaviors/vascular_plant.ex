@@ -5,8 +5,8 @@ defmodule Doro.Behaviors.VascularPlant do
   @prop :vascular_plant_hydration_level
   @default_hydration 10
 
-  def responds_to?(verb, ctx) do
-    verb == "water" && ctx.object
+  def responds_to?(verb, _) do
+    verb == "water"
   end
 
   def handle(%{verb: "water", object: plant, player: player}) do

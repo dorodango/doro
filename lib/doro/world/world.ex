@@ -13,6 +13,8 @@ defmodule Doro.World do
   Finds named entities in specificied locations.
   """
   @spec get_named_entities_in_locations(String.t(), [String.t()]) :: [%Doro.Entity{}]
+  def get_named_entities_in_locations(nil, _), do: []
+
   def get_named_entities_in_locations(name, location_ids) do
     locations_set = MapSet.new(location_ids)
 

@@ -3,6 +3,8 @@ defmodule Doro.Entity do
 
   defstruct id: nil,
             behaviors: [],
+            name: nil,
+            name_tokens: nil,
             props: %{}
 
   def execute_behaviors(ctx) do
@@ -12,7 +14,7 @@ defmodule Doro.Entity do
   @doc "Returns the first behavior that can handle this verb in this context"
   def first_responder(entity = %Entity{}, ctx = %Doro.Context{verb: verb}) do
     behaviors(entity)
-    |> Enum.find(& &1.responds_to?(verb, ctx))
+    |> Enum.find(& &1.responds_to?(verb, %{ctx | object: entity}))
   end
 
   @doc "Returns all behaviors for this entity"
@@ -28,11 +30,12 @@ defmodule Doro.Entity do
     'pen' -> <redpen>, <bluepen>
   """
   def named?(entity, name) do
-    name == entity.id
+    entity.name_tokens
+    |> MapSet.member?(String.downcase(name))
   end
 
   def name(entity) do
-    "[#{entity.id}]"
+    "[#{entity.name}]"
   end
 
   @behaviour Access

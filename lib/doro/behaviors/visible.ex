@@ -3,10 +3,8 @@ defmodule Doro.Behaviors.Visible do
   import Doro.Comms
   alias Doro.Entity
 
-  @verbs MapSet.new(~w(look))
-
   def responds_to?(verb, ctx) do
-    MapSet.member?(@verbs, verb) && ctx.object
+    verb == "look" && ctx.player != ctx.object
   end
 
   def handle(%{verb: "look", player: player, object: object}) do

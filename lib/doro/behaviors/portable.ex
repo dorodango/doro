@@ -8,8 +8,8 @@ defmodule Doro.Behaviors.Portable do
 
   @verbs MapSet.new(~w(take drop))
 
-  def responds_to?(verb, ctx) do
-    MapSet.member?(@verbs, verb) && ctx.object
+  def responds_to?(verb, _) do
+    MapSet.member?(@verbs, verb)
   end
 
   def handle(%{verb: "take", object: object, player: player}) do

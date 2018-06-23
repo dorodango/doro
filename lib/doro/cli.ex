@@ -21,29 +21,27 @@ defmodule Doro.CLI do
 
   def interpret(player_id, s) do
     {verb, object_id} = Doro.Parser.parse(s)
-    {:ok, ctx} = Doro.Context.create(s, player_id, verb, object_id)
-    process_command(ctx)
-  end
 
-  # reflexive (player) command
-  def process_command(ctx = %{object: nil, player: player}) do
-    execute_possible_behaviors([{player, Doro.Entity.first_responder(player, ctx)}], ctx)
-  end
+    {:ok, ctx = %{player: player, object_id: object_name}} =
+      Doro.Context.create(s, player_id, verb, object_id)
 
-  # transitive command
-  def process_command(ctx = %{player: player, object_id: object_name}) do
-    Doro.World.get_named_entities_in_locations(object_name, [player.id, player.props.location])
-    |> Enum.map(fn entity -> {entity, Doro.Entity.first_responder(entity, ctx)} end)
-    |> execute_possible_behaviors(ctx)
-  end
+    entity_behaviors =
+      Doro.World.get_named_entities_in_locations(object_name, [player.id, player.props.location])
+      |> Enum.map(fn entity -> {entity, Doro.Entity.first_responder(entity, ctx)} end)
+      |> Enum.filter(fn {_, behavior} -> behavior end)
 
-  defp execute_possible_behaviors(entity_behaviors, ctx) do
-    entity_behaviors
-    |> Enum.filter(fn {_, behavior} -> behavior end)
+    case entity_behaviors do
+      [] -> [{player, Doro.Entity.first_responder(player, ctx)}]
+      _ -> entity_behaviors
+    end
     |> execute_entity_behavior(ctx)
   end
 
   defp execute_entity_behavior([], %Context{player: player}) do
+    send_to_player(player, "Huh?")
+  end
+
+  defp execute_entity_behavior([{_, nil}], %Context{player: player}) do
     send_to_player(player, "Huh?")
   end
 
