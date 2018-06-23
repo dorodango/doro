@@ -24,10 +24,21 @@ defmodule Doro.World.Marshal do
     end)
   end
 
-  defp unmarshal_entity(entity) do
+  def unmarshal_entity(entity) do
     entity
     |> resolve_behaviors()
+    |> preprocess_name()
     |> (&struct(Doro.Entity, &1)).()
+  end
+
+  defp preprocess_name(entity) do
+    name = Map.get(entity, :name, entity.id) |> String.downcase()
+
+    Map.put(
+      entity,
+      :name_tokens,
+      [name | String.split(name)] |> MapSet.new()
+    )
   end
 
   defp resolve_behaviors(entity) do

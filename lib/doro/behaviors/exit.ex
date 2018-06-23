@@ -3,8 +3,8 @@ defmodule Doro.Behaviors.Exit do
   import Doro.Comms
   alias Doro.Entity
 
-  def responds_to?(verb, ctx) do
-    verb == "exit" && ctx.object
+  def responds_to?(verb, _) do
+    verb == "exit"
   end
 
   def handle(%{verb: "exit", object: object, player: player}) do

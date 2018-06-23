@@ -1,6 +1,7 @@
 defmodule Doro.Behaviors.Player do
   use Doro.Behavior
   import Doro.Comms
+  import Doro.SentenceConstruction
   alias Doro.World
 
   @verbs MapSet.new(~w(look halp inv i emote))
@@ -19,7 +20,7 @@ defmodule Doro.Behaviors.Player do
     # List entities
     Doro.World.entities_in_location(player.props.location)
     |> Enum.filter(&(&1.id != player.id))
-    |> Enum.each(fn e -> send_to_player(player, "#{Doro.Entity.name(e)} is here.") end)
+    |> Enum.each(fn e -> send_to_player(player, "#{indefinite(e)} is here.") end)
   end
 
   # we *could* do synonyms this way
@@ -27,7 +28,7 @@ defmodule Doro.Behaviors.Player do
 
   def handle(%{verb: "inv", player: player}) do
     Doro.World.entities_in_location(player.id)
-    |> Enum.each(fn e -> send_to_player(player, "You are carrying #{Doro.Entity.name(e)}.") end)
+    |> Enum.each(fn e -> send_to_player(player, "You are carrying #{indefinite(e)}.") end)
   end
 
   def handle(ctx = %{verb: "emote", player: player}) do

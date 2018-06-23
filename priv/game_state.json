@@ -4,7 +4,8 @@
       "id": "bathroom",
       "behaviors": [],
       "props": {
-        "description": "You are in a small, dingy bathroom; a flourescent light flickers overhead."
+        "description":
+          "You are in a small, dingy bathroom; a flourescent light flickers overhead."
       }
     },
     "office": {
@@ -16,10 +17,8 @@
     },
     "bathroom-door": {
       "id": "bathroom-door",
-      "behaviors": [
-        "exit",
-        "visible"
-      ],
+      "name": "WC Door",
+      "behaviors": ["exit", "visible"],
       "props": {
         "location": "office",
         "description": "A door emblazoned with 'WC'.",
@@ -28,10 +27,8 @@
     },
     "office-door": {
       "id": "office-door",
-      "behaviors": [
-        "exit",
-        "visible"
-      ],
+      "name": "Red Door",
+      "behaviors": ["exit", "visible"],
       "props": {
         "location": "bathroom",
         "description": "A red door.",
@@ -40,11 +37,8 @@
     },
     "player1": {
       "id": "player1",
-      "behaviors": [
-        "visible",
-        "player",
-        "god"
-      ],
+      "name": "Goose",
+      "behaviors": ["visible", "player", "god"],
       "props": {
         "location": "office",
         "description": "is disheveled and smelly."
@@ -52,10 +46,8 @@
     },
     "player2": {
       "id": "player2",
-      "behaviors": [
-        "visible",
-        "player"
-      ],
+      "name": "Viper",
+      "behaviors": ["visible", "player"],
       "props": {
         "location": "office",
         "description": "is wearing some nice artisinal gut covers."
@@ -63,11 +55,8 @@
     },
     "plant": {
       "id": "plant",
-      "behaviors": [
-        "visible",
-        "portable",
-        "vascular_plant"
-      ],
+      "name": "Fiddleleaf Fig",
+      "behaviors": ["visible", "portable", "vascular_plant"],
       "props": {
         "location": "office",
         "description": "is herbaceous, glabrous, and four-pinnate."
@@ -75,10 +64,8 @@
     },
     "lacroix": {
       "id": "lacroix",
-      "behaviors": [
-        "visible",
-        "portable"
-      ],
+      "name": "can of Lacroix",
+      "behaviors": ["visible", "portable"],
       "props": {
         "location": "office",
         "description": "is coconut flavored.  Yuck."
@@ -86,10 +73,8 @@
     },
     "annoying_clock": {
       "id": "annoying_clock",
-      "behaviors": [
-        "visible",
-        "clock"
-      ],
+      "name": "annoying clock",
+      "behaviors": ["visible", "clock"],
       "props": {
         "location": "office",
         "description": "just looks like it wants to annoy you."
