@@ -35,7 +35,16 @@ defmodule Doro.Entity do
   end
 
   def name(entity) do
-    "[#{entity.name}]"
+    entity.name || entity.id
+  end
+
+  def has_behavior?(entity, behavior) do
+    Enum.member?(entity.behaviors, behavior)
+  end
+
+  def is_person?(entity) do
+    entity
+    |> has_behavior?(Doro.Behaviors.Player)
   end
 
   @behaviour Access

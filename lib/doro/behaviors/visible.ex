@@ -1,14 +1,14 @@
 defmodule Doro.Behaviors.Visible do
   use Doro.Behavior
   import Doro.Comms
-  alias Doro.Entity
+  import Doro.SentenceConstruction
 
-  def responds_to?(verb, ctx) do
-    verb == "look" && ctx.player != ctx.object
+  def responds_to?(verb, %{player: player, object: object}) do
+    verb == "look" && player != object
   end
 
   def handle(%{verb: "look", player: player, object: object}) do
-    send_to_player(player, "#{Entity.name(object)} #{object.props.description}")
-    send_to_others(player, "#{Entity.name(player)} looks at #{Entity.name(object)} thoughtfully.")
+    send_to_player(player, "#{definite(object)} #{object.props.description}")
+    send_to_others(player, "#{definite(player)} looks at #{definite(object)} thoughtfully.")
   end
 end

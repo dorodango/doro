@@ -1,6 +1,7 @@
 defmodule Doro.Behaviors.VascularPlant do
   use Doro.Behavior
   alias Doro.Entity
+  import Doro.SentenceConstruction
 
   @prop :vascular_plant_hydration_level
   @default_hydration 10
@@ -11,9 +12,9 @@ defmodule Doro.Behaviors.VascularPlant do
 
   def handle(%{verb: "water", object: plant, player: player}) do
     plant = Doro.World.set_prop(plant, @prop, @default_hydration)
+    Doro.Comms.send_to_player(player, "You water #{definite(plant)}.")
+    Doro.Comms.send_to_others(player, "#{definite(player)} waters #{definite(plant)}.")
     broadcast_condition(plant)
-    Doro.Comms.send_to_player(player, "You water #{Entity.name(plant)}.")
-    Doro.Comms.send_to_others(player, "#{Entity.name(player)} waters #{Entity.name(plant)}.")
   end
 
   # Phenomenon
@@ -32,7 +33,7 @@ defmodule Doro.Behaviors.VascularPlant do
   defp broadcast_condition(plant) do
     Doro.Comms.send_to_location(
       plant[:location],
-      "#{Doro.Entity.name(plant)} looks #{desc(plant[@prop])}."
+      "#{definite(plant)} looks #{desc(plant[@prop])}."
     )
   end
 
