@@ -38,7 +38,7 @@
     {
       "id": "player1",
       "name": "Goose",
-      "behaviors": ["visible", "player", "god"],
+      "proto": "_god",
       "props": {
         "location": "office",
         "description": "is disheveled and smelly."
@@ -47,10 +47,9 @@
     {
       "id": "player2",
       "name": "Viper",
-      "behaviors": ["visible", "player"],
+      "proto": "_player",
       "props": {
-        "location": "office",
-        "description": "is wearing some nice artisinal gut covers."
+        "location": "office"
       }
     },
     {
@@ -79,6 +78,19 @@
         "location": "office",
         "description": "just looks like it wants to annoy you."
       }
+    },
+
+    {
+      "id": "_player",
+      "behaviors": ["visible", "player"],
+      "props": {
+        "description": "is a generic player."
+      }
+    },
+    {
+      "id": "_god",
+      "proto": "_player",
+      "behaviors": ["god"]
     }
   ]
 }

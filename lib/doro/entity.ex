@@ -54,7 +54,9 @@ defmodule Doro.Entity do
   end
 
   def has_behavior?(entity, behavior) do
-    Enum.member?(entity.behaviors, behavior)
+    entity
+    |> Entity.behaviors()
+    |> Enum.member?(behavior)
   end
 
   def is_person?(entity) do

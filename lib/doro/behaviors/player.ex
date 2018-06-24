@@ -15,10 +15,10 @@ defmodule Doro.Behaviors.Player do
   end
 
   def handle(%{verb: "look", player: player}) do
-    send_to_player(player, World.get_entity(player.props.location).props.description)
+    send_to_player(player, World.get_entity(player[:location])[:description])
 
     # List entities
-    Doro.World.entities_in_location(player.props.location)
+    Doro.World.entities_in_location(player[:location])
     |> Enum.filter(&(&1.id != player.id))
     |> Enum.each(fn e -> send_to_player(player, "#{indefinite(e)} is here.") end)
   end

@@ -14,7 +14,7 @@ defmodule Doro.Behaviors.Clock do
   end
 
   defp tell_time(clock, t) do
-    Doro.World.players_in_location(clock.props.location)
+    Doro.World.players_in_location(clock[:location])
     |> Enum.each(&send_to_player(&1, "At the tone the time will be: #{t}"))
   end
 end

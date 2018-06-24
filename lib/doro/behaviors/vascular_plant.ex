@@ -1,6 +1,5 @@
 defmodule Doro.Behaviors.VascularPlant do
   use Doro.Behavior
-  alias Doro.Entity
   import Doro.SentenceConstruction
 
   @prop :vascular_plant_hydration_level

@@ -19,7 +19,7 @@ defmodule Doro.World do
     locations_set = MapSet.new(location_ids)
 
     GameState.get_entities(fn e ->
-      MapSet.member?(locations_set, e.props[:location]) && Doro.Entity.named?(e, name)
+      MapSet.member?(locations_set, e[:location]) && Doro.Entity.named?(e, name)
     end)
   end
 
