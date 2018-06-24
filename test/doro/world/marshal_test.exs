@@ -17,7 +17,7 @@ defmodule Doro.World.MarshalTest do
         "ice" => iceman
       } = entity_map
 
-      assert [Doro.Behaviors.Visible, Doro.Behaviors.Player] = player_proto.behaviors
+      assert [Doro.Behaviors.Visible, Doro.Behaviors.Player] = Doro.Entity.behaviors(player_proto)
       assert iceman.proto == god_proto
       assert god_proto.proto == player_proto
     end

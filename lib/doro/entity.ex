@@ -9,7 +9,7 @@ defmodule Doro.Entity do
             props: %{}
 
   def execute_behaviors(ctx) do
-    Enum.reduce(ctx.object.behaviors, ctx, fn behavior, acc -> behavior.handle(acc) end)
+    Enum.reduce(Entity.behaviors(ctx.object), ctx, fn behavior, acc -> behavior.handle(acc) end)
   end
 
   @doc "Creates an entity"
