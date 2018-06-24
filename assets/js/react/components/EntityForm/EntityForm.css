@@ -1,0 +1,35 @@
+.EntityForm {
+  padding: 20px;
+}
+
+.EntityForm + .EntityForm {
+  border-top: 1px solid #ccc;
+}
+
+.EntityForm .form-row {
+  display: flex;
+  align-items: flex-start;
+  justify-content: flex-start;
+  margin-bottom: 20px;
+}
+
+.EntityForm .form-row:last-child {
+  margin-bottom: 0;
+}
+
+.EntityForm .form-label {
+  font-size: 10px;
+  text-transform: uppercase;
+  text-align: right;
+  margin-right: 10px;
+  flex:1;
+}
+
+.EntityForm .form-input {
+  flex:4;
+}
+
+.form-actions {
+  display: flex;
+  justify-content: space-between;
+}
