@@ -21,6 +21,13 @@ defmodule DoroWeb.Router do
     get "game_state", GameStateController, :edit
   end
 
+  scope "/api", DoroWeb do
+    pipe_through :api
+    get "game_state", Api.GameStateController, :show
+    get "behaviors", Api.BehaviorsController, :index
+  end
+
+
   # Other scopes may use custom stacks.
   # scope "/api", DoroWeb do
   #   pipe_through :api
