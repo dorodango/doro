@@ -1,0 +1,8 @@
+.Entity {
+  position: relative;
+}
+.Entity__edit {
+  position: absolute;
+  right: 0;
+  top: 0;
+}

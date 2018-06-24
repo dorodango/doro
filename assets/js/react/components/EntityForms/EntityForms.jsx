@@ -5,8 +5,6 @@ import axios from 'axios';
 
 import EntityForm from "../EntityForm/EntityForm";
 
-
-
 const isBlank = (x) => !isNil(x) && !isEmpty(x)
 const compact = filter(isBlank);
 
@@ -27,13 +25,22 @@ class Entity extends Component {
     };
   };
 
+  handleEdit = (ev) => {
+    return this.props.handleEdit(this.props.entity);
+  };
+
   render() {
     return (
-      <pre>
-        <code>
-          { `${JSON.stringify(this.props.entity, null, 2)}` }
-        </code>
-      </pre>
+      <div className="Entity">
+        <button className="Entity__edit" onClick={this.handleEdit} >
+          Edit
+        </button>
+        <pre>
+          <code>
+            { `${JSON.stringify(this.props.entity, null, 2)}` }
+          </code>
+        </pre>
+      </div>
     );
   }
 }
@@ -43,6 +50,7 @@ class EntityForms extends Component {
   constructor(props) {
     super(props)
     this.state = {
+      currentEntity: {},
       entities: [],
       availableBehaviors: []
     }
@@ -54,6 +62,13 @@ class EntityForms extends Component {
       }
     });
   }
+
+  handleEdit = (entity) => {
+    this.setState({
+      entity: entity
+    });
+  };
+
 
   remapEntity = (entity) => {
     return {
@@ -84,6 +99,7 @@ class EntityForms extends Component {
 
     this.setState({
       ...currentState,
+      entity: null,
       entities: upsert(entity, currentState.entities)
     });
   }
@@ -98,17 +114,15 @@ class EntityForms extends Component {
   };
 
   renderExistingEntities = () => {
-    return pipe(
-      map( (elem, idx) => [
-        <Entity key={idx} entity={elem}/>,
-        <div key={ `separator-${idx}` }>,</div>
-      ]),
-      flatten
-    )(this.state.entities);
+    return (
+      map(
+        (elem, idx) => <Entity key={idx} entity={elem} handleEdit={this.handleEdit} />
+      )(this.state.entities)
+    );
   };
 
   render() {
-    const { entities, availableBehaviors } = this.state;
+    const { entities, availableBehaviors, entity } = this.state;
     const availableEntities =
       pipe(
         map(prop('name')),
@@ -118,20 +132,30 @@ class EntityForms extends Component {
     return (
       <div className="EntityForms">
         <section className="EntityForms-current">
-          {this.renderExistingEntities()}
+          { this.renderExistingEntities() }
           { this.state.entities.count && (
-            <div className="form-actions" >
-              <button onClick={this.reset}>Reset</button>
-            </div>
-            )
+              <div className="form-actions" >
+                <button onClick={this.reset}>Reset</button>
+              </div>
+          )
           }
         </section>
         <aside className="EntityForms-addNew">
-          <EntityForm
-            add={this.addEntity}
-            availableEntities={ availableEntities }
-            availableBehaviors={ availableBehaviors }
-          />
+          { entity &&
+            <EntityForm
+              add={this.addEntity}
+              entity={entity}
+              availableEntities={ availableEntities }
+              availableBehaviors={ availableBehaviors }
+            />
+          }
+          { !entity &&
+            <EntityForm
+              add={this.addEntity}
+              availableEntities={ availableEntities }
+              availableBehaviors={ availableBehaviors }
+            />
+          }
         </aside>
       </div>
     );

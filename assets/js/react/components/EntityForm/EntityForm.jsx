@@ -86,8 +86,11 @@ class EntityForm extends Component {
     return (
       <div className={ classnames( "EntityForm", { "display-only": displayOnly } )} >
         <div className="form-row">
-          <label className="form-label" >Entity Name</label>
+          <label
+            required={true}
+            className="form-label" >Entity Name</label>
           <input
+            required={true}
             className="form-input"
             value={entity.name}
             onChange={this.handleChangeName}
@@ -95,8 +98,11 @@ class EntityForm extends Component {
             name="name"/>
         </div>
         <div className="form-row">
-          <label className="form-label" >Entity Id</label>
+          <label
+            required={true}
+            className="form-label" >Entity Id</label>
           <input
+            required={true}
             className="form-input"
             value={entity.id}
             onChange={this.handleChange}
@@ -104,8 +110,11 @@ class EntityForm extends Component {
             name="id"/>
         </div>
         <div className="form-row">
-          <label className="form-label" >Description</label>
+          <label
+            required={true}
+            className="form-label" >Description</label>
           <textarea
+            required={true}
             className="form-input"
             onChange={this.handleChange}
             value={entity.description}

@@ -33,3 +33,13 @@
   display: flex;
   justify-content: space-between;
 }
+
+label[required]:after {
+  content: "*";
+  color: red;
+  margin-left: 5px;
+}
+
+.form-input {
+  font-size: 20px;
+}
