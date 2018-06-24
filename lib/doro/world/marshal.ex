@@ -7,48 +7,63 @@ defmodule Doro.World.Marshal do
 
   @doc "Unmarshals a world from a JSON string"
   def unmarshal(json) do
-    json
-    |> Poison.decode!(keys: :atoms)
-    |> unmarshal_world()
+    entities =
+      json
+      |> Poison.decode!(keys: :atoms)
+      |> Map.get(:entities)
+      |> Enum.map(&unmarshal_entity/1)
+      |> fixup_pointers()
+      |> Enum.reduce(%{}, fn entity, acc -> Map.put(acc, entity.id, entity) end)
+
+    %{entities: entities}
   end
 
-  defp unmarshal_world(world) do
-    world
-    |> (fn state -> %{state | entities: unmarshal_entities(state.entities)} end).()
-  end
-
-  defp unmarshal_entities(entity_map) do
-    entity_map
-    |> Enum.reduce(%{}, fn {_, entity}, acc ->
-      Map.put(acc, entity.id, unmarshal_entity(entity))
-    end)
-  end
-
-  def unmarshal_entity(entity) do
-    entity
+  defp unmarshal_entity(data) do
+    data
     |> resolve_behaviors()
     |> preprocess_name()
     |> (&struct(Doro.Entity, &1)).()
   end
 
-  defp preprocess_name(entity) do
-    name = Map.get(entity, :name, entity.id) |> String.downcase()
+  defp preprocess_name(data) do
+    name = Map.get(data, :name, data.id) |> String.downcase()
 
     Map.put(
-      entity,
+      data,
       :name_tokens,
       [name | String.split(name)] |> MapSet.new()
     )
   end
 
-  defp resolve_behaviors(entity) do
+  defp resolve_behaviors(data) do
     Map.put(
-      entity,
+      data,
       :behaviors,
       Enum.map(
-        Map.get(entity, :behaviors, []),
+        Map.get(data, :behaviors, []),
         &String.to_existing_atom("Elixir.Doro.Behaviors.#{Macro.camelize(&1)}")
       )
     )
+  end
+
+  defp fixup_pointers(entities) do
+    Enum.split_with(entities, &is_nil(&1.proto))
+    |> resolve_prototypes()
+  end
+
+  defp resolve_prototypes({resolved, []}), do: resolved
+
+  defp resolve_prototypes({resolved, unresolved}) do
+    {to_resolve, unresolved} =
+      Enum.split_with(unresolved, fn e ->
+        Enum.any?(resolved, &(&1.id == e.proto))
+      end)
+
+    resolved =
+      Enum.reduce(to_resolve, resolved, fn e, acc ->
+        [%{e | proto: Enum.find(resolved, &(&1.id == e.proto))} | acc]
+      end)
+
+    resolve_prototypes({resolved, unresolved})
   end
 end

@@ -1,6 +1,6 @@
 {
-  "entities": {
-    "bathroom": {
+  "entities": [
+    {
       "id": "bathroom",
       "behaviors": [],
       "props": {
@@ -8,14 +8,14 @@
           "You are in a small, dingy bathroom; a flourescent light flickers overhead."
       }
     },
-    "office": {
+    {
       "id": "office",
       "behaviors": [],
       "props": {
         "description": "You are in a soul-crushing office."
       }
     },
-    "bathroom-door": {
+    {
       "id": "bathroom-door",
       "name": "WC Door",
       "behaviors": ["exit", "visible"],
@@ -25,7 +25,7 @@
         "destination_id": "bathroom"
       }
     },
-    "office-door": {
+    {
       "id": "office-door",
       "name": "Red Door",
       "behaviors": ["exit", "visible"],
@@ -35,7 +35,7 @@
         "destination_id": "office"
       }
     },
-    "player1": {
+    {
       "id": "player1",
       "name": "Goose",
       "behaviors": ["visible", "player", "god"],
@@ -44,7 +44,7 @@
         "description": "is disheveled and smelly."
       }
     },
-    "player2": {
+    {
       "id": "player2",
       "name": "Viper",
       "behaviors": ["visible", "player"],
@@ -53,7 +53,7 @@
         "description": "is wearing some nice artisinal gut covers."
       }
     },
-    "plant": {
+    {
       "id": "plant",
       "name": "Fiddleleaf Fig",
       "behaviors": ["visible", "portable", "vascular_plant"],
@@ -62,7 +62,7 @@
         "description": "is herbaceous, glabrous, and four-pinnate."
       }
     },
-    "lacroix": {
+    {
       "id": "lacroix",
       "name": "can of Lacroix",
       "behaviors": ["visible", "portable"],
@@ -71,7 +71,7 @@
         "description": "is coconut flavored.  Yuck."
       }
     },
-    "annoying_clock": {
+    {
       "id": "annoying_clock",
       "name": "annoying clock",
       "behaviors": ["visible", "clock"],
@@ -80,5 +80,5 @@
         "description": "just looks like it wants to annoy you."
       }
     }
-  }
+  ]
 }

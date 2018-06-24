@@ -7,17 +7,21 @@ defmodule Doro.EntityTest do
     entity =
       """
       {
-        "id": "plant",
-        "name": "Fiddleleaf Fig",
-        "behaviors": ["visible", "portable", "vascular_plant"],
-        "props": {
-          "location": "office",
-          "description": "is herbaceous, glabrous, and four-pinnate."
-        }
+        "entities": [
+          {
+            "id": "plant",
+            "name": "Fiddleleaf Fig",
+            "behaviors": ["visible", "portable", "vascular_plant"],
+            "props": {
+              "location": "office",
+              "description": "is herbaceous, glabrous, and four-pinnate."
+            }
+          }
+        ]
       }
       """
-      |> Poison.decode!(keys: :atoms)
-      |> Doro.World.Marshal.unmarshal_entity()
+      |> Doro.World.Marshal.unmarshal()
+      |> get_in([:entities, "plant"])
 
     [entity: entity]
   end
