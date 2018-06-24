@@ -1,8 +1,10 @@
 import React, { Component } from "react";
 import { find, map, merge, omit, append, prop, propEq, join,
          uniq, identity, filter, pipe, isNil, isEmpty, reduce, flatten} from "ramda";
+import axios from 'axios';
 
 import EntityForm from "../EntityForm/EntityForm";
+
 
 
 const isBlank = (x) => !isNil(x) && !isEmpty(x)
@@ -13,7 +15,6 @@ class Entity extends Component {
 
   constructor(props) {
     super(props);
-    console.log(props);
   }
 
   remapEntity = (entity) => {
@@ -42,8 +43,16 @@ class EntityForms extends Component {
   constructor(props) {
     super(props)
     this.state = {
-      entities: []
+      entities: [],
+      availableBehaviors: []
     }
+
+    axios.get('/api/behaviors').then(response => {
+      if (response.data.behaviors) {
+        const formattedBehaviors = map((behavior) => ({ value: behavior, label: behavior}), response.data.behaviors);
+        this.setState({availableBehaviors: formattedBehaviors});
+      }
+    });
   }
 
   remapEntity = (entity) => {
@@ -99,7 +108,7 @@ class EntityForms extends Component {
   };
 
   render() {
-    const { entities } = this.state;
+    const { entities, availableBehaviors } = this.state;
     const availableEntities =
       pipe(
         map(prop('name')),
@@ -121,6 +130,7 @@ class EntityForms extends Component {
           <EntityForm
             add={this.addEntity}
             availableEntities={ availableEntities }
+            availableBehaviors={ availableBehaviors }
           />
         </aside>
       </div>

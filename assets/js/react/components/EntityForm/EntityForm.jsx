@@ -14,6 +14,16 @@ class EntityForm extends Component {
     this.state = {entity: this.props.entity || {}}
   }
 
+  handleChangeBehaviors = (behaviors) => {
+    const currentState = this.state;
+    this.setState({
+      entity: {
+        ...currentState.entity,
+        behaviors: map(prop('value'),behaviors)
+      }
+    });
+  };
+
   handleChangeDropdown = (fieldname) => {
     return (selectedValue) => {
       const currentState = this.state;
@@ -68,8 +78,7 @@ class EntityForm extends Component {
 
   render() {
     const {entity} = this.state;
-    const {displayOnly, availableEntities} = this.props;
-
+    const {displayOnly, availableEntities, availableBehaviors} = this.props;
     const entitiesForSelect = prepend({value:"", label: "none"}, map(
       (dest) => ({ value: dest, label: dest }),
       availableEntities || []
@@ -101,6 +110,18 @@ class EntityForm extends Component {
             onChange={this.handleChange}
             value={entity.description}
             name="description" />
+        </div>
+        <div className="form-row">
+          <label className="form-label" >Behaviors</label>
+          <Select
+            name="behaviors"
+            className="form-input"
+            multi={true}
+            removeSelected={true}
+            value={entity.behaviors}
+            options={availableBehaviors}
+            onChange={this.handleChangeBehaviors}
+          />
         </div>
         <div className="form-row">
           <label className="form-label" >Location</label>

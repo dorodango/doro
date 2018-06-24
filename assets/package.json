@@ -7,6 +7,7 @@
   },
   "dependencies": {
     "auto-reload-brunch": "^2.7.1",
+    "axios": "^0.18.0",
     "babel-plugin-transform-class-properties": "^6.24.1",
     "babel-preset-airbnb": "^2.5.1",
     "babel-preset-env": "^1.7.0",
