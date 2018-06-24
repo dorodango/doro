@@ -79,6 +79,17 @@
         "description": "just looks like it wants to annoy you."
       }
     },
+    {
+      "id": "juki",
+      "name": "sewing machine",
+      "behaviors": ["visible", "slot_machine"],
+      "props": {
+        "location": "bathroom",
+        "description":
+          "is a Juki DNU-1541, threaded with some #69 bonded nylon.",
+        "slot_machine_rewards": ["_backpack"]
+      }
+    },
 
     {
       "id": "_player",
@@ -91,6 +102,14 @@
       "id": "_god",
       "proto": "_player",
       "behaviors": ["god"]
+    },
+    {
+      "id": "_backpack",
+      "name": "backpack",
+      "behaviors": ["visible", "portable"],
+      "props": {
+        "description": "is a generic backpack."
+      }
     }
   ]
 }

@@ -21,18 +21,8 @@ defmodule Doro.World.Marshal do
   defp unmarshal_entity(data) do
     data
     |> resolve_behaviors()
-    |> preprocess_name()
+    |> (&Doro.Entity.preprocess_name(&1)).()
     |> (&struct(Doro.Entity, &1)).()
-  end
-
-  defp preprocess_name(data) do
-    name = Map.get(data, :name, data.id) |> String.downcase()
-
-    Map.put(
-      data,
-      :name_tokens,
-      [name | String.split(name)] |> MapSet.new()
-    )
   end
 
   defp resolve_behaviors(data) do

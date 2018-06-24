@@ -4,9 +4,14 @@ defmodule Doro.World do
   """
 
   alias Doro.World.GameState
+  alias Doro.Entity
 
   def get_entity(id) do
     GameState.get_entity(id)
+  end
+
+  def insert_entity(entity = %Doro.Entity{}) do
+    GameState.add_entity(entity)
   end
 
   @doc """
@@ -32,12 +37,12 @@ defmodule Doro.World do
   end
 
   def entities_with_behavior(behavior) do
-    GameState.get_entities(fn e -> Enum.member?(e.behaviors, behavior) end)
+    GameState.get_entities(fn e -> Enum.member?(Entity.behaviors(e), behavior) end)
   end
 
   def entities_in_location_with_behavior(location_id, behavior) do
     GameState.get_entities(fn e ->
-      e[:location] == location_id && Enum.member?(e.behaviors, behavior)
+      e[:location] == location_id && Enum.member?(Entity.behaviors(e), behavior)
     end)
   end
 

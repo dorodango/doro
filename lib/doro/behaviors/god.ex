@@ -23,7 +23,7 @@ defmodule Doro.Behaviors.God do
 
   def handle(ctx = %{verb: "/entdump", player: player}) do
     dump =
-      Regex.run(~r/\/entdump id:(\w+)/, ctx.original_command, capture: :all_but_first)
+      Regex.run(~r/\/entdump id:(\S+)/, ctx.original_command, capture: :all_but_first)
       |> List.first()
       |> Doro.World.get_entity()
       |> Poison.encode!(pretty: true)
