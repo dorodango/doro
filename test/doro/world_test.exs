@@ -5,13 +5,13 @@ defmodule Doro.WorldTest do
 
   setup do
     %{
-      entities: %{
-        office: %{id: "office"},
-        basement: %{id: "basement"},
-        player12: %{id: "player12", behaviors: ["player"], props: %{location: "office"}},
-        player34: %{id: "player34", behaviors: ["player"], props: %{location: "basement"}},
-        plant: %{id: "plant", behaviors: ["visible"], props: %{location: "office"}}
-      }
+      entities: [
+        %{id: "office"},
+        %{id: "basement"},
+        %{id: "player12", behaviors: ["player"], props: %{location: "office"}},
+        %{id: "player34", behaviors: ["player"], props: %{location: "basement"}},
+        %{id: "plant", behaviors: ["visible"], props: %{location: "office"}}
+      ]
     }
     |> Poison.encode!()
     |> World.clobber_from_string()

@@ -19,7 +19,7 @@ defmodule Doro.Behaviors.Portable do
   end
 
   def handle(%{verb: "drop", object: object, player: player}) do
-    Doro.World.move_entity(object, player.props.location)
+    Doro.World.move_entity(object, player[:location])
     send_to_player(player, "Dropped.")
     send_to_others(player, "#{Entity.name(player)} drops something.")
   end

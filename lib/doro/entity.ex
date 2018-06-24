@@ -1,7 +1,8 @@
 defmodule Doro.Entity do
   alias Doro.Entity
 
-  defstruct id: nil,
+  defstruct proto: nil,
+            id: nil,
             behaviors: [],
             name: nil,
             name_tokens: nil,
@@ -18,8 +19,22 @@ defmodule Doro.Entity do
   end
 
   @doc "Returns all behaviors for this entity"
+  def behaviors(nil), do: []
+
   def behaviors(entity = %Entity{}) do
-    entity.behaviors
+    entity.behaviors ++ behaviors(entity.proto)
+  end
+
+  @doc "Returns a property for this entity, including looking up the prototype chain"
+  def get_prop(nil, _), do: :error
+
+  def get_prop(%Entity{proto: proto, props: props}, key) do
+    Map.get(props, key, get_prop(proto, key))
+  end
+
+  @doc "Returns {<new value>, entity}"
+  def set_prop(entity = %Entity{props: props}, key, value) do
+    {value, %{entity | props: Map.put(props, key, value)}}
   end
 
   @doc """
@@ -39,7 +54,9 @@ defmodule Doro.Entity do
   end
 
   def has_behavior?(entity, behavior) do
-    Enum.member?(entity.behaviors, behavior)
+    entity
+    |> Entity.behaviors()
+    |> Enum.member?(behavior)
   end
 
   def is_person?(entity) do
@@ -51,20 +68,28 @@ defmodule Doro.Entity do
 
   @impl Access
   def fetch(entity, key) do
-    Map.fetch(entity.props, key)
+    case get_prop(entity, key) do
+      :error -> :error
+      value -> {:ok, value}
+    end
   end
 
   @impl Access
   def get(entity, key, default \\ nil) do
-    Map.get(entity.props, key, default)
+    case get_prop(entity, key) do
+      :error -> default
+      value -> value
+    end
   end
 
+  # This behavior is wrong I think
   @impl Access
   def pop(entity, key, default \\ nil) do
     {value, new_props} = Map.pop(entity, key, default)
     {value, %{entity | props: new_props}}
   end
 
+  # This behavior is wrong I think
   @impl Access
   def get_and_update(entity, key, fun) do
     {value, new_props} = Map.get_and_update(entity.props, key, fun)

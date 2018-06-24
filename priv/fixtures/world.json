@@ -1,0 +1,32 @@
+{
+  "entities": [
+    {
+      "id": "ice",
+      "proto": "_god",
+      "name": "Iceman"
+    },
+    {
+      "id": "mav",
+      "proto": "_player",
+      "name": "Maverick"
+    },
+    {
+      "id": "tomcat",
+      "name": "F14 Tomcat"
+    },
+
+    {
+      "id": "_player",
+      "name": "player prototype",
+      "behaviors": ["visible", "player"],
+      "props": {
+        "description": "is player prototype.  Put some props on the instance!"
+      }
+    },
+    {
+      "id": "_god",
+      "proto": "_player",
+      "behaviors": ["god"]
+    }
+  ]
+}

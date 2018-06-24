@@ -55,6 +55,7 @@ defmodule Doro.Session do
     {:noreply, state}
   end
 
+  @impl true
   def handle_info(_, state) do
     {:noreply, state}
   end

@@ -26,7 +26,7 @@ defmodule Doro.CLI do
       Doro.Context.create(s, player_id, verb, object_id)
 
     entity_behaviors =
-      Doro.World.get_named_entities_in_locations(object_name, [player.id, player.props.location])
+      Doro.World.get_named_entities_in_locations(object_name, [player.id, player[:location]])
       |> Enum.map(fn entity -> {entity, Doro.Entity.first_responder(entity, ctx)} end)
       |> Enum.filter(fn {_, behavior} -> behavior end)
 
