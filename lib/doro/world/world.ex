@@ -9,6 +9,10 @@ defmodule Doro.World do
     GameState.get_entity(id)
   end
 
+  def insert_entity(entity = %Doro.Entity{}) do
+    GameState.add_entity(entity)
+  end
+
   @doc """
   Finds named entities in specificied locations.
   """

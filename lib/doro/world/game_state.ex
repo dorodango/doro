@@ -30,6 +30,13 @@ defmodule Doro.World.GameState do
     end)
   end
 
+  def add_entity(entity = %Doro.Entity{id: id}) do
+    Agent.update(__MODULE__, fn state ->
+      state
+      |> put_in([:entities, id], entity)
+    end)
+  end
+
   defp read_debug_world do
     Path.join(:code.priv_dir(:doro), "game_state.json")
     |> File.read!()

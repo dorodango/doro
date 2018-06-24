@@ -12,6 +12,20 @@ defmodule Doro.Entity do
     Enum.reduce(ctx.object.behaviors, ctx, fn behavior, acc -> behavior.handle(acc) end)
   end
 
+  @doc "Creates an entity"
+  def create_entity(prototype_id, props, naming_fn) do
+    prototype = Doro.World.get_entity(prototype_id)
+
+    %{
+      id: generate_id(prototype_id),
+      name: naming_fn.(prototype),
+      proto: prototype,
+      props: props
+    }
+    |> preprocess_name()
+    |> (&struct(Entity, &1)).()
+  end
+
   @doc "Returns the first behavior that can handle this verb in this context"
   def first_responder(entity = %Entity{}, ctx = %Doro.Context{verb: verb}) do
     behaviors(entity)
@@ -62,6 +76,20 @@ defmodule Doro.Entity do
   def is_person?(entity) do
     entity
     |> has_behavior?(Doro.Behaviors.Player)
+  end
+
+  defp generate_id() do
+    Base.encode32(:crypto.strong_rand_bytes(8), padding: false, case: :lower)
+  end
+
+  defp generate_id(prefix) do
+    "#{prefix}-#{generate_id()}"
+  end
+
+  def preprocess_name(entity_params = %{id: id}) do
+    entity_params = Map.put(entity_params, :name, Map.get(entity_params, :name, id))
+    downcased = String.downcase(entity_params.name)
+    Map.put(entity_params, :name_tokens, MapSet.new([downcased | String.split(downcased)]))
   end
 
   @behaviour Access
