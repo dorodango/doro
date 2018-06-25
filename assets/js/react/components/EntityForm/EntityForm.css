@@ -31,15 +31,15 @@
 
 .form-actions {
   display: flex;
-  justify-content: space-between;
+  justify-content: flex-end;
+}
+
+.form-actions button + button {
+  margin-left: 10px;
 }
 
 label[required]:after {
   content: "*";
   color: red;
   margin-left: 5px;
-}
-
-.form-input {
-  font-size: 20px;
 }

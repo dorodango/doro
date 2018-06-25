@@ -173,18 +173,20 @@ class EntityForms extends Component {
       <div className="EntityForms">
         <section className="EntityForms-current">
           <h3>Entities</h3>
-          <button
-            className="EntityForms__download"
-            onClick={this.handleDownload}>Download</button>
-          <button
-            className="EntityForms__reload"
-            onClick={this.handleUpdateWorld}>Update World</button>
-          <button
-            className="EntityForms__reset"
-            onClick={this.handleReset}>Reset</button>
+          <div class="EntityForms__actions">
+            <button
+              className="EntityForms__reload"
+              onClick={this.handleUpdateWorld}>Update World</button>
+            <button
+              className="EntityForms__reset"
+              onClick={this.handleReset}>Reset</button>
+            <button
+              className="EntityForms__download"
+              onClick={this.handleDownload}>Download</button>
+          </div>
           { this.renderExistingEntities() }
         </section>
-        <aside className="EntityForms-addNew">
+        <aside className="EntityForms__addNew">
           { entity &&
             <EntityForm key="edit-form"
                         add={this.handleAddEntity}

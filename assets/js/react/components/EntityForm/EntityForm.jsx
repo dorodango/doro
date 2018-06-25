@@ -165,7 +165,7 @@ class EntityForm extends Component {
         </div>
         <div className="form-actions">
           <button disabled={!this.valid()} onClick={this.handleAdd}>Add</button>
-          <button onClick={this.handleClear}>Clear Form</button>
+          <button onClick={this.handleClear}>Clear</button>
         </div>
       </div>
     );
