@@ -4,5 +4,5 @@
 <div id="console" class="hidden">
     <span id="player-id"></span>
     <div id="output"></div>
-    <input id="input" placeholder="Enter a command">
+    <input id="input" placeholder="Enter a command" autofocus>
 </div>
