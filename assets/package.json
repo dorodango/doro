@@ -3,7 +3,9 @@
   "license": "MIT",
   "scripts": {
     "deploy": "brunch build --production",
-    "watch": "brunch watch --stdin"
+    "watch": "brunch watch --stdin",
+    "prettier-fix": "prettier --write 'js/**/*.{es6,js,jsx,json}'",
+    "prettier-lint": "prettier --list-different 'js/**/*.{es6,js,jsx,json}'"
   },
   "dependencies": {
     "auto-reload-brunch": "^2.7.1",
@@ -17,6 +19,7 @@
     "downloadjs": "^1.4.7",
     "phoenix": "file:../deps/phoenix",
     "phoenix_html": "file:../deps/phoenix_html",
+    "prettier": "^1.13.5",
     "ramda": "^0.25.0",
     "react": "^16.4.1",
     "react-select": "^1.2.1"

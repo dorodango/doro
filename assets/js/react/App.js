@@ -1,5 +1,5 @@
-import React, { Component } from 'react';
-import EntityForms from "./components/EntityForms/EntityForms";
+import React, { Component } from "react"
+import EntityForms from "./components/EntityForms/EntityForms"
 
 class App extends Component {
   render() {
@@ -9,11 +9,11 @@ class App extends Component {
           <h1 className="App-title">Generate your Doro Game State Here!</h1>
         </header>
         <main className="App-intro">
-        <EntityForms />
+          <EntityForms />
         </main>
       </div>
-    );
+    )
   }
 }
 
-export default App;
+export default App

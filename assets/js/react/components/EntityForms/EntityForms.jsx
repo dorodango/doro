@@ -1,211 +1,242 @@
-import React, { Component } from "react";
-import { find, map, merge, omit, prepend, prop, propEq, join, addIndex,
-         uniq, identity, filter, pipe, isNil, isEmpty, sortBy, reduce, flatten} from "ramda";
-import axios from 'axios';
-import download from 'downloadjs';
+import React, { Component } from "react"
+import {
+  find,
+  map,
+  merge,
+  omit,
+  prepend,
+  prop,
+  propEq,
+  join,
+  addIndex,
+  uniq,
+  identity,
+  filter,
+  pipe,
+  isNil,
+  isEmpty,
+  sortBy,
+  reduce,
+  flatten,
+} from "ramda"
+import axios from "axios"
+import download from "downloadjs"
 
-import EntityForm from "../EntityForm/EntityForm";
+import EntityForm from "../EntityForm/EntityForm"
 
-const isBlank = (x) => !isNil(x) && !isEmpty(x)
-const compact = filter(isBlank);
-
+const isBlank = x => !isNil(x) && !isEmpty(x)
+const compact = filter(isBlank)
 
 class Entity extends Component {
-
   constructor(props) {
-    super(props);
+    super(props)
   }
 
-  remapEntity = (entity) => {
+  remapEntity = entity => {
     return {
       id: entity.id,
       name: entity.name,
       behaviors: [],
       proto: null,
-      props: compact(omit(["name", "id"], entity))
-    };
-  };
+      props: compact(omit(["name", "id"], entity)),
+    }
+  }
 
-  handleEdit = (ev) => {
-    return this.props.handleEdit(this.props.entity);
-  };
+  handleEdit = ev => {
+    return this.props.handleEdit(this.props.entity)
+  }
 
-  handleDelete = (ev) => {
-    return this.props.handleDelete(this.props.entity);
-  };
+  handleDelete = ev => {
+    return this.props.handleDelete(this.props.entity)
+  }
 
   render() {
     return (
       <div className="Entity">
         <div className="Entity__actions">
-          <button className="Entity__edit" onClick={this.handleEdit} >
+          <button className="Entity__edit" onClick={this.handleEdit}>
             Edit
           </button>
-          <button className="Entity__delete" onClick={this.handleDelete} >
+          <button className="Entity__delete" onClick={this.handleDelete}>
             X
           </button>
         </div>
         <pre>
-          <code>
-            { `${JSON.stringify(this.props.entity, null, 2)}` }
-          </code>
+          <code>{`${JSON.stringify(this.props.entity, null, 2)}`}</code>
         </pre>
       </div>
-    );
+    )
   }
 }
 
 class EntityForms extends Component {
-
   constructor(props) {
     super(props)
     this.state = {
       currentEntity: {},
       entities: [],
-      availableBehaviors: []
+      availableBehaviors: [],
     }
-    axios.get('/api/game_state').then(
-      (response) => {
+    axios.get("/api/game_state").then(
+      response => {
         if (response.data.state) {
-          this.setState(response.data.state);
-        };
+          this.setState(response.data.state)
+        }
       },
-      (error) => {
-        console.log("ERROR", error);
+      error => {
+        console.log("ERROR", error)
       }
-    );
-    axios.get('/api/behaviors').then(response => {
+    )
+    axios.get("/api/behaviors").then(response => {
       if (response.data.behaviors) {
-        const formattedBehaviors = map((behavior) => ({ value: behavior, label: behavior}), response.data.behaviors);
-        this.setState({availableBehaviors: formattedBehaviors});
+        const formattedBehaviors = map(
+          behavior => ({ value: behavior, label: behavior }),
+          response.data.behaviors
+        )
+        this.setState({ availableBehaviors: formattedBehaviors })
       }
-    });
+    })
   }
 
-  handleEdit = (entity) => {
+  handleEdit = entity => {
     this.setState({
-      entity: entity
-    });
-  };
+      entity: entity,
+    })
+  }
 
-  handleDelete = (entity) => {
-    const { entities } = this.state;
+  handleDelete = entity => {
+    const { entities } = this.state
     this.setState({
-      entities: filter((entry) => ( entry.id !== entity.id ), entities)
-    });
-  };
+      entities: filter(entry => entry.id !== entity.id, entities),
+    })
+  }
 
-  handleDownload = (ev) => {
-    download(JSON.stringify({ entities: this.state.entities }), "game_state.json", "application/json");
-  };
+  handleDownload = ev => {
+    download(
+      JSON.stringify({ entities: this.state.entities }),
+      "game_state.json",
+      "application/json"
+    )
+  }
 
-  handleUpdateWorld = (ev) => {
-    axios.post('/api/game_state', {entities: this.state.entities}).then(
-      (response) => console.log("[Game State Reload] success", response),
-      (error) => console.log("[Game State Reload] Failure", error)
-    );
-  };
+  handleUpdateWorld = ev => {
+    axios
+      .post("/api/game_state", { entities: this.state.entities })
+      .then(
+        response => console.log("[Game State Reload] success", response),
+        error => console.log("[Game State Reload] Failure", error)
+      )
+  }
 
-  handleReset = (ev) => {
-    axios.put('/api/game_state').then(
-      (response) => console.log("[Game State Reset] success", response),
-      (error) => console.log("[Game State Reset] Failure", error)
-    );
-  };
+  handleReset = ev => {
+    axios
+      .put("/api/game_state")
+      .then(
+        response => console.log("[Game State Reset] success", response),
+        error => console.log("[Game State Reset] Failure", error)
+      )
+  }
 
-  remapEntity = (entity) => {
+  remapEntity = entity => {
     return {
       id: entity.id,
       name: entity.name,
       behaviors: [],
       proto: null,
-      props: compact(omit(["name", "id"], entity))
-    };
-  };
+      props: compact(omit(["name", "id"], entity)),
+    }
+  }
 
-  handleAddEntity = (entity) => {
-    console.log("ADD ENTITY", entity);
-    const currentState = this.state;
+  handleAddEntity = entity => {
+    console.log("ADD ENTITY", entity)
+    const currentState = this.state
 
     const upsert = (obj, data) => {
-      const mergeIfMatch = (entry) => ( (entry.id === obj.id) ? merge(entry, obj) : entry )
+      const mergeIfMatch = entry =>
+        entry.id === obj.id ? merge(entry, obj) : entry
 
-      return find( propEq('id', obj.id), data ) ? map(mergeIfMatch, data) : prepend(obj, data);
+      return find(propEq("id", obj.id), data)
+        ? map(mergeIfMatch, data)
+        : prepend(obj, data)
     }
 
     this.setState({
       entity: null,
-      entities: upsert(entity, currentState.entities)
-    });
+      entities: upsert(entity, currentState.entities),
+    })
   }
 
-  handleClear = (_ev) => {
+  handleClear = _ev => {
     this.setState({
-      entities: []
-    });
-  };
+      entities: [],
+    })
+  }
 
   renderExistingEntities = () => {
-    var mapIndexed = addIndex(map);
-    return (
-      mapIndexed(
-        (elem, idx) => (
-          <Entity
-            key={idx}
-            entity={elem}
-            handleEdit={this.handleEdit}
-            handleDelete={this.handleDelete} />
-        )
-      )(this.state.entities)
-    );
-  };
+    var mapIndexed = addIndex(map)
+    return mapIndexed((elem, idx) => (
+      <Entity
+        key={idx}
+        entity={elem}
+        handleEdit={this.handleEdit}
+        handleDelete={this.handleDelete}
+      />
+    ))(this.state.entities)
+  }
 
   render() {
-    const { entities, availableBehaviors, entity } = this.state;
-    const availableEntities =
-      pipe(
-        map(prop('id')),
-        uniq,
-        filter(identity),
-        sortBy(identity)
-      )(entities)
+    const { entities, availableBehaviors, entity } = this.state
+    const availableEntities = pipe(
+      map(prop("id")),
+      uniq,
+      filter(identity),
+      sortBy(identity)
+    )(entities)
     return (
       <div className="EntityForms">
         <section className="EntityForms-current">
           <h3>Entities</h3>
-          <div class="EntityForms__actions">
+          <div className="EntityForms__actions">
             <button
               className="EntityForms__reload"
-              onClick={this.handleUpdateWorld}>Update World</button>
-            <button
-              className="EntityForms__reset"
-              onClick={this.handleReset}>Reset</button>
+              onClick={this.handleUpdateWorld}
+            >
+              Update World
+            </button>
+            <button className="EntityForms__reset" onClick={this.handleReset}>
+              Reset
+            </button>
             <button
               className="EntityForms__download"
-              onClick={this.handleDownload}>Download</button>
+              onClick={this.handleDownload}
+            >
+              Download
+            </button>
           </div>
-          { this.renderExistingEntities() }
+          {this.renderExistingEntities()}
         </section>
         <aside className="EntityForms__addNew">
-          { entity &&
-            <EntityForm key="edit-form"
-                        add={this.handleAddEntity}
-                        entity={entity}
-                        availableEntities={ availableEntities }
-                        availableBehaviors={ availableBehaviors }
+          {entity && (
+            <EntityForm
+              key="edit-form"
+              add={this.handleAddEntity}
+              entity={entity}
+              availableEntities={availableEntities}
+              availableBehaviors={availableBehaviors}
             />
-          }
-          { !entity &&
-            <EntityForm key="new-form"
-                        add={this.handleAddEntity}
-                        availableEntities={ availableEntities }
-                        availableBehaviors={ availableBehaviors }
+          )}
+          {!entity && (
+            <EntityForm
+              key="new-form"
+              add={this.handleAddEntity}
+              availableEntities={availableEntities}
+              availableBehaviors={availableBehaviors}
             />
-          }
+          )}
         </aside>
       </div>
-    );
+    )
   }
-};
+}
 
-export default EntityForms;
+export default EntityForms

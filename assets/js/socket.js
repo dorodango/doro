@@ -52,7 +52,7 @@ import { Socket } from "phoenix"
 // Now that you are connected, you can join channels with a topic:
 // let channel = socket.channel("topic:subtopic", {})
 
-const connectButton = document.querySelector("#connect");
+const connectButton = document.querySelector("#connect")
 
 if (connectButton) {
   connectButton.addEventListener("click", () => {
@@ -71,7 +71,7 @@ if (connectButton) {
     channel.on("output", payload => {
       if (payload.body) {
         const atBottom =
-              output.scrollTop + output.offsetHeight === output.scrollHeight
+          output.scrollTop + output.offsetHeight === output.scrollHeight
 
         let messageItem = document.createElement("div")
         messageItem.innerText = `${payload.body}`
