@@ -29,12 +29,21 @@ class Entity extends Component {
     return this.props.handleEdit(this.props.entity);
   };
 
+  handleDelete = (ev) => {
+    return this.props.handleDelete(this.props.entity);
+  };
+
   render() {
     return (
       <div className="Entity">
-        <button className="Entity__edit" onClick={this.handleEdit} >
-          Edit
-        </button>
+        <div className="Entity__actions">
+          <button className="Entity__edit" onClick={this.handleEdit} >
+            Edit
+          </button>
+          <button className="Entity__delete" onClick={this.handleDelete} >
+            X
+          </button>
+        </div>
         <pre>
           <code>
             { `${JSON.stringify(this.props.entity, null, 2)}` }
@@ -78,6 +87,13 @@ class EntityForms extends Component {
     });
   };
 
+  handleDelete = (entity) => {
+    const { entities } = this.state;
+    this.setState({
+      entities: filter((entry) => ( entry.id !== entity.id ), entities)
+    });
+  };
+
 
   remapEntity = (entity) => {
     return {
@@ -108,17 +124,13 @@ class EntityForms extends Component {
     }
 
     this.setState({
-      ...currentState,
       entity: null,
       entities: upsert(entity, currentState.entities)
     });
   }
 
   reset = (_ev) => {
-    const currentState = this.state;
-
     this.setState({
-      ...currentState,
       entities: []
     });
   };
@@ -127,7 +139,13 @@ class EntityForms extends Component {
     var mapIndexed = addIndex(map);
     return (
       mapIndexed(
-        (elem, idx) => <Entity key={idx} entity={elem} handleEdit={this.handleEdit} />
+        (elem, idx) => (
+          <Entity
+            key={idx}
+            entity={elem}
+            handleEdit={this.handleEdit}
+            handleDelete={this.handleDelete} />
+        )
       )(this.state.entities)
     );
   };
@@ -144,6 +162,7 @@ class EntityForms extends Component {
     return (
       <div className="EntityForms">
         <section className="EntityForms-current">
+          <h3>Entities</h3>
           { this.renderExistingEntities() }
           { this.state.entities.count && (
               <div className="form-actions" >
