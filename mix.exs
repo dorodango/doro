@@ -35,6 +35,7 @@ defmodule Doro.Mixfile do
     [
       {:apex, "~>1.2.0"},
       {:cowboy, "~> 1.0"},
+      {:distillery, "~> 1.5", runtime: false},
       {:gettext, "~> 0.11"},
       {:httpoison, "~> 1.0"},
       {:phoenix_ecto, "~> 3.2"},
