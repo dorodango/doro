@@ -3,7 +3,6 @@ exports.config = {
   files: {
     javascripts: {
       joinTo: "js/app.js"
-
       // To use a separate vendor.js bundle, specify two files path
       // http://brunch.io/docs/config#-files-
       // joinTo: {
@@ -45,18 +44,48 @@ exports.config = {
   // Configure your plugins
   plugins: {
     babel: {
+      presets: [
+        'latest',
+        'react',
+        [
+          "env",
+          {
+            "modules": false,
+            "targets": {
+              "browsers": "> 1%",
+              "uglify": true
+            },
+            "useBuiltIns": true
+          }
+        ]
+      ],
       // Do not use ES6 compiler in vendor code
+      plugins: [
+        "transform-object-rest-spread",
+        [
+          "transform-class-properties",
+          {
+            "spec": true
+          }
+        ]
+      ],
       ignore: [/vendor/]
-    }
+    },
   },
 
   modules: {
     autoRequire: {
-      "js/app.js": ["js/app"]
+      "js/app.js": ["js/app"],
+      "js/react_app.js": ["js/app"]
     }
   },
 
   npm: {
-    enabled: true
+    enabled: true,
+    styles: {
+      "react-select": [
+        'dist/react-select.css'
+      ]
+    }
   }
 };

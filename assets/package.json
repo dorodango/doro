@@ -3,16 +3,31 @@
   "license": "MIT",
   "scripts": {
     "deploy": "brunch build --production",
-    "watch": "brunch watch --stdin"
+    "watch": "brunch watch --stdin",
+    "prettier-fix": "prettier --write 'js/**/*.{es6,js,jsx,json}'",
+    "prettier-lint": "prettier --list-different 'js/**/*.{es6,js,jsx,json}'"
   },
   "dependencies": {
+    "auto-reload-brunch": "^2.7.1",
+    "axios": "^0.18.0",
+    "babel-plugin-transform-class-properties": "^6.24.1",
+    "babel-preset-airbnb": "^2.5.1",
+    "babel-preset-env": "^1.7.0",
+    "babel-preset-latest": "^6.24.1",
+    "babel-preset-react": "^6.24.1",
+    "classnames": "^2.2.6",
+    "downloadjs": "^1.4.7",
     "phoenix": "file:../deps/phoenix",
-    "phoenix_html": "file:../deps/phoenix_html"
+    "phoenix_html": "file:../deps/phoenix_html",
+    "prettier": "^1.13.5",
+    "ramda": "^0.25.0",
+    "react": "^16.4.1",
+    "react-select": "^1.2.1"
   },
   "devDependencies": {
-    "babel-brunch": "6.1.1",
-    "brunch": "2.10.9",
-    "clean-css-brunch": "2.10.0",
-    "uglify-js-brunch": "2.10.0"
+    "babel-brunch": "^6.1.1",
+    "brunch": "^2.10.12",
+    "clean-css-brunch": "^2.10.0",
+    "uglify-js-brunch": "^2.10.0"
   }
 }

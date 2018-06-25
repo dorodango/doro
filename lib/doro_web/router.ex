@@ -17,10 +17,16 @@ defmodule DoroWeb.Router do
     pipe_through :browser # Use the default browser stack
 
     get "/", PageController, :index
+
+    get "/game_state", GameStateController, :edit
   end
 
-  # Other scopes may use custom stacks.
-  # scope "/api", DoroWeb do
-  #   pipe_through :api
-  # end
+  scope "/api", DoroWeb do
+    pipe_through :api
+    get "/game_state", Api.GameStateController, :show
+    post "/game_state", Api.GameStateController, :update
+    put "/game_state", Api.GameStateController, :create
+    get "/behaviors", Api.BehaviorsController, :index
+  end
+
 end

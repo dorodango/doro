@@ -52,46 +52,50 @@ import { Socket } from "phoenix"
 // Now that you are connected, you can join channels with a topic:
 // let channel = socket.channel("topic:subtopic", {})
 
-document.querySelector("#connect").addEventListener("click", () => {
-  const playerId = document.querySelector("#player").value
-  let input = document.querySelector("#input")
-  let output = document.querySelector("#output")
+const connectButton = document.querySelector("#connect")
 
-  let socket = new Socket("/socket", { params: { player_id: playerId } })
-  socket.connect()
-  let channel = socket.channel(`player:${playerId}`)
+if (connectButton) {
+  connectButton.addEventListener("click", () => {
+    const playerId = document.querySelector("#player").value
+    let input = document.querySelector("#input")
+    let output = document.querySelector("#output")
 
-  document.querySelector("#player-id").innerText = playerId
-  document.querySelector("#join-form").classList.add("hidden")
-  document.querySelector("#console").classList.remove("hidden")
+    let socket = new Socket("/socket", { params: { player_id: playerId } })
+    socket.connect()
+    let channel = socket.channel(`player:${playerId}`)
 
-  channel.on("output", payload => {
-    if (payload.body) {
-      const atBottom =
-        output.scrollTop + output.offsetHeight === output.scrollHeight
+    document.querySelector("#player-id").innerText = playerId
+    document.querySelector("#join-form").classList.add("hidden")
+    document.querySelector("#console").classList.remove("hidden")
 
-      let messageItem = document.createElement("div")
-      messageItem.innerText = `${payload.body}`
-      output.appendChild(messageItem)
+    channel.on("output", payload => {
+      if (payload.body) {
+        const atBottom =
+          output.scrollTop + output.offsetHeight === output.scrollHeight
 
-      if (atBottom) {
-        output.scrollTop = output.scrollHeight
+        let messageItem = document.createElement("div")
+        messageItem.innerText = `${payload.body}`
+        output.appendChild(messageItem)
+
+        if (atBottom) {
+          output.scrollTop = output.scrollHeight
+        }
       }
-    }
-  })
+    })
 
-  channel
-    .join()
-    .receive("ok", resp => {
-      console.log("Joined successfully", resp)
+    channel
+      .join()
+      .receive("ok", resp => {
+        console.log("Joined successfully", resp)
+      })
+      .receive("error", resp => {
+        console.log("Unable to join", resp)
+      })
+    input.addEventListener("keypress", event => {
+      if (event.keyCode === 13) {
+        channel.push("cmd", { cmd: input.value })
+        input.value = ""
+      }
     })
-    .receive("error", resp => {
-      console.log("Unable to join", resp)
-    })
-  input.addEventListener("keypress", event => {
-    if (event.keyCode === 13) {
-      channel.push("cmd", { cmd: input.value })
-      input.value = ""
-    }
   })
-})
+}
