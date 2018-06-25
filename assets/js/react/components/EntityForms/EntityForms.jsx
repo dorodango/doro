@@ -2,6 +2,7 @@ import React, { Component } from "react";
 import { find, map, merge, omit, prepend, prop, propEq, join, addIndex,
          uniq, identity, filter, pipe, isNil, isEmpty, sortBy, reduce, flatten} from "ramda";
 import axios from 'axios';
+import download from 'downloadjs';
 
 import EntityForm from "../EntityForm/EntityForm";
 
@@ -94,6 +95,9 @@ class EntityForms extends Component {
     });
   };
 
+  handleDownload = (ev) => {
+    download(JSON.stringify({ entities: this.state.entities }), "game_state.json", "application/json");
+  };
 
   remapEntity = (entity) => {
     return {
@@ -163,6 +167,9 @@ class EntityForms extends Component {
       <div className="EntityForms">
         <section className="EntityForms-current">
           <h3>Entities</h3>
+          <button
+            className="EntityForms__download"
+            onClick={this.handleDownload}>Download</button>
           { this.renderExistingEntities() }
           { this.state.entities.count && (
               <div className="form-actions" >
