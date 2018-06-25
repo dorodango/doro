@@ -14,6 +14,8 @@ defmodule Doro.Behaviors.Portable do
     object[:location] == player.id
   end
 
+  def responds_to?(_, _), do: false
+
   def handle(%{verb: "take", object: object, player: player}) do
     Doro.World.move_entity(object, player)
     send_to_player(player, "Taken.")
