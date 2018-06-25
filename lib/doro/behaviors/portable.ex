@@ -6,10 +6,12 @@ defmodule Doro.Behaviors.Portable do
   import Doro.Comms
   alias Doro.Entity
 
-  @verbs MapSet.new(~w(take drop))
+  def responds_to?("take", %Doro.Context{player: player, object: object}) do
+    object[:location] != player.id
+  end
 
-  def responds_to?(verb, _) do
-    MapSet.member?(@verbs, verb)
+  def responds_to?("drop", %Doro.Context{player: player, object: object}) do
+    object[:location] == player.id
   end
 
   def handle(%{verb: "take", object: object, player: player}) do

@@ -25,6 +25,9 @@ defmodule Doro.CLI do
     {:ok, ctx = %{player: player, object_id: object_name}} =
       Doro.Context.create(s, player_id, verb, object_id)
 
+    # echo command back to player
+    send_to_player(player, "> #{s}")
+
     entity_behaviors =
       Doro.World.get_named_entities_in_locations(object_name, [player.id, player[:location]])
       |> Enum.map(fn entity -> {entity, Doro.Entity.first_responder(entity, ctx)} end)
@@ -50,11 +53,11 @@ defmodule Doro.CLI do
   end
 
   defp execute_entity_behavior(entity_behaviors, %Context{player: player}) do
-    entity_names =
-      entity_behaviors
-      |> Enum.map(fn {e, _} -> Entity.name(e) end)
-      |> Enum.join(", ")
+    entities = Enum.map(entity_behaviors, &elem(&1, 0))
 
-    send_to_player(player, "Which do you mean? #{entity_names}")
+    send_to_player(
+      player,
+      "Which do you mean? #{Doro.SentenceConstruction.definite_list(entities)}?"
+    )
   end
 end

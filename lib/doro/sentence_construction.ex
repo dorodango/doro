@@ -13,6 +13,30 @@ defmodule Doro.SentenceConstruction do
     end
   end
 
+  @doc "Returns something like, 'a blue couch, a red couch and a black couch'"
+  def indefinite_list(entities, conjunction \\ "and") do
+    comma_list(entities, conjunction, &indefinite/1)
+  end
+
+  @doc "Returns something like, 'the blue couch, the red couch or the black couch'"
+  def definite_list(entities, conjunction \\ "or") do
+    comma_list(entities, conjunction, &definite/1)
+  end
+
+  defp comma_list([first | rest], conjunction, article_phrase_fn) do
+    article_phrase_fn.(first) <> subsequent_items(rest, conjunction, article_phrase_fn)
+  end
+
+  defp subsequent_items([], _, _), do: ""
+
+  defp subsequent_items([entity | []], conjunction, article_phrase_fn) do
+    " #{conjunction} #{article_phrase_fn.(entity)}"
+  end
+
+  defp subsequent_items([entity | rest], conjunction, article_phrase_fn) do
+    ", #{article_phrase_fn.(entity)}" <> subsequent_items(rest, conjunction, article_phrase_fn)
+  end
+
   @physical_adjectives ~w(
     boiling
     broken
