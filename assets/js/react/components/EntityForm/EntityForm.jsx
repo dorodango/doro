@@ -75,7 +75,6 @@ class EntityForm extends Component {
   };
 
   handleAdd = (ev) => {
-    debugger
     this.props.add(this.state.entity)
   };
 

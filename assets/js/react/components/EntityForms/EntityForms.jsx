@@ -99,6 +99,20 @@ class EntityForms extends Component {
     download(JSON.stringify({ entities: this.state.entities }), "game_state.json", "application/json");
   };
 
+  handleUpdateWorld = (ev) => {
+    axios.post('/api/game_state', {entities: this.state.entities}).then(
+      (response) => console.log("[Game State Reload] success", response),
+      (error) => console.log("[Game State Reload] Failure", error)
+    );
+  };
+
+  handleReset = (ev) => {
+    axios.put('/api/game_state').then(
+      (response) => console.log("[Game State Reset] success", response),
+      (error) => console.log("[Game State Reset] Failure", error)
+    );
+  };
+
   remapEntity = (entity) => {
     return {
       id: entity.id,
@@ -109,15 +123,7 @@ class EntityForms extends Component {
     };
   };
 
-  /* currentGameState = () => {
-   *   const { entities } = this.state;
-   *   const formattedEntities = map( this.remapEntity, entities);
-   *   return {
-   *     entities: formattedEntities
-   *   };
-   * };
-   */
-  addEntity = (entity) => {
+  handleAddEntity = (entity) => {
     console.log("ADD ENTITY", entity);
     const currentState = this.state;
 
@@ -133,7 +139,7 @@ class EntityForms extends Component {
     });
   }
 
-  reset = (_ev) => {
+  handleClear = (_ev) => {
     this.setState({
       entities: []
     });
@@ -170,28 +176,28 @@ class EntityForms extends Component {
           <button
             className="EntityForms__download"
             onClick={this.handleDownload}>Download</button>
+          <button
+            className="EntityForms__reload"
+            onClick={this.handleUpdateWorld}>Update World</button>
+          <button
+            className="EntityForms__reset"
+            onClick={this.handleReset}>Reset</button>
           { this.renderExistingEntities() }
-          { this.state.entities.count && (
-              <div className="form-actions" >
-                <button onClick={this.reset}>Reset</button>
-              </div>
-          )
-          }
         </section>
         <aside className="EntityForms-addNew">
           { entity &&
             <EntityForm key="edit-form"
-              add={this.addEntity}
-              entity={entity}
-              availableEntities={ availableEntities }
-              availableBehaviors={ availableBehaviors }
+                        add={this.handleAddEntity}
+                        entity={entity}
+                        availableEntities={ availableEntities }
+                        availableBehaviors={ availableBehaviors }
             />
           }
           { !entity &&
             <EntityForm key="new-form"
-              add={this.addEntity}
-              availableEntities={ availableEntities }
-              availableBehaviors={ availableBehaviors }
+                        add={this.handleAddEntity}
+                        availableEntities={ availableEntities }
+                        availableBehaviors={ availableBehaviors }
             />
           }
         </aside>
