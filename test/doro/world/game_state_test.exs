@@ -6,18 +6,18 @@ defmodule Doro.World.GameStateTest do
 
   setup do
     GameState.set(%{
-      entities: %{
-        "iceman" => %Doro.Entity{
+      entities: [
+        %Entity{
           id: "iceman",
           name: "Ice Man",
           props: %{location: "Below the hard deck"}
         },
-        "maverick" => %Doro.Entity{
+        %Entity{
           id: "maverick",
           name: "Maverick",
           props: %{location: "Somewhere over the Indian Ocean"}
         }
-      }
+      ]
     })
 
     :ok
@@ -27,14 +27,14 @@ defmodule Doro.World.GameStateTest do
     test "clears the game state and sets the new one" do
       assert [%Entity{}, %Entity{}] = GameState.get_entities()
 
-      GameState.set(%{entities: %{"2" => %Doro.Entity{id: "2"}}})
-      assert [%Doro.Entity{id: "2"}] = GameState.get_entities()
+      GameState.set(%{entities: [%Entity{id: "2"}]})
+      assert [%Entity{id: "2"}] = GameState.get_entities()
     end
   end
 
   describe "get_entity/1" do
     test "returns an entity with the given id, or nil" do
-      assert %Doro.Entity{id: "iceman"} = GameState.get_entity("iceman")
+      assert %Entity{id: "iceman"} = GameState.get_entity("iceman")
       assert is_nil(GameState.get_entity(nil))
       assert is_nil(GameState.get_entity("unknown"))
     end
@@ -49,15 +49,15 @@ defmodule Doro.World.GameStateTest do
     end
 
     test "filters entities with filter function" do
-      assert [%Doro.Entity{id: "maverick"}] =
+      assert [%Entity{id: "maverick"}] =
                GameState.get_entities(&(&1[:location] == "Somewhere over the Indian Ocean"))
     end
   end
 
   describe "set_prop/3" do
     test "sets a property on the entity" do
-      entity = %Doro.Entity{id: "id"}
-      GameState.set(%{entities: %{"id" => entity}})
+      entity = %Entity{id: "id"}
+      GameState.set(%{entities: [entity]})
 
       entity = GameState.set_prop("id", :location, "Berkeley")
 
@@ -72,7 +72,7 @@ defmodule Doro.World.GameStateTest do
   describe "add_entity/1" do
     test "inserts an entity into the game state" do
       refute GameState.get_entity("new_entity")
-      GameState.add_entity(%Doro.Entity{id: "new_entity"})
+      GameState.add_entity(%Entity{id: "new_entity"})
 
       assert GameState.get_entity("new_entity")
     end
@@ -84,8 +84,8 @@ defmodule Doro.World.GameStateTest do
       refute GameState.get_entity("new_entity_2")
 
       GameState.add_entities([
-        %Doro.Entity{id: "new_entity_1"},
-        %Doro.Entity{id: "new_entity_2"}
+        %Entity{id: "new_entity_1"},
+        %Entity{id: "new_entity_2"}
       ])
 
       assert GameState.get_entity("new_entity_1")
@@ -94,7 +94,7 @@ defmodule Doro.World.GameStateTest do
   end
 
   test "filters entities with filter function" do
-    assert [%Doro.Entity{id: "maverick"}] =
+    assert [%Entity{id: "maverick"}] =
              GameState.get_entities(&(&1[:location] == "Somewhere over the Indian Ocean"))
   end
 end

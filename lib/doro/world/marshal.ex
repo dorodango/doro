@@ -12,8 +12,6 @@ defmodule Doro.World.Marshal do
       |> Poison.decode!(keys: :atoms)
       |> Map.get(:entities)
       |> Enum.map(&unmarshal_entity/1)
-      |> fixup_pointers()
-      |> Enum.reduce(%{}, fn entity, acc -> Map.put(acc, entity.id, entity) end)
 
     %{entities: entities}
   end
@@ -34,26 +32,5 @@ defmodule Doro.World.Marshal do
         &String.to_existing_atom("Elixir.Doro.Behaviors.#{Macro.camelize(&1)}")
       )
     )
-  end
-
-  defp fixup_pointers(entities) do
-    Enum.split_with(entities, &is_nil(&1.proto))
-    |> resolve_prototypes()
-  end
-
-  defp resolve_prototypes({resolved, []}), do: resolved
-
-  defp resolve_prototypes({resolved, unresolved}) do
-    {to_resolve, unresolved} =
-      Enum.split_with(unresolved, fn e ->
-        Enum.any?(resolved, &(&1.id == e.proto))
-      end)
-
-    resolved =
-      Enum.reduce(to_resolve, resolved, fn e, acc ->
-        [%{e | proto: Enum.find(resolved, &(&1.id == e.proto))} | acc]
-      end)
-
-    resolve_prototypes({resolved, unresolved})
   end
 end

@@ -1,44 +1,45 @@
 defmodule Doro.EntityTest do
-  use ExUnit.Case, async: true
+  use ExUnit.Case, async: false
 
   alias Doro.Entity
+  alias Doro.World
 
-  setup do
-    entity =
-      """
-      {
-        "entities": [
-          {
-            "id": "plant",
-            "name": "Fiddleleaf Fig",
-            "behaviors": ["visible", "portable", "vascular_plant"],
-            "props": {
-              "location": "office",
-              "description": "is herbaceous, glabrous, and four-pinnate."
-            }
-          }
-        ]
+  test "named?/2" do
+    plant =
+      %Entity{
+        id: "plant",
+        name: "Fiddleleaf Fig",
+        behaviors: ["visible", "portable", "vascular_plant"],
+        props: %{
+          location: "office",
+          description: "is herbaceous, glabrous, and four-pinnate."
+        }
       }
-      """
-      |> Doro.World.Marshal.unmarshal()
-      |> get_in([:entities, "plant"])
+      |> Entity.preprocess_name()
 
-    [entity: entity]
-  end
+    Doro.World.clobber(%{entities: [plant]})
 
-  test "named?/2", %{entity: entity} do
-    assert Entity.named?(entity, "fig")
-    assert Entity.named?(entity, "Fig")
-    assert Entity.named?(entity, "fiddleleaf")
-    assert Entity.named?(entity, "Fiddleleaf fig")
+    assert Entity.named?(plant, "fig")
+    assert Entity.named?(plant, "Fig")
+    assert Entity.named?(plant, "fiddleleaf")
+    assert Entity.named?(plant, "Fiddleleaf fig")
   end
 
   describe "behaviors/1" do
     test "returns an ordered list of all behaviors, up through the prototype chain" do
-      foo = %Entity{behaviors: [:foo]}
-      bar = %Entity{behaviors: [:bar, :bar2], proto: foo}
-      baz = %Entity{behaviors: [:baz], proto: bar}
-      instance = %Entity{proto: baz}
+      Doro.World.clobber(%{
+        entities: [
+          %Entity{id: "foo", behaviors: [:foo]},
+          %Entity{id: "bar", behaviors: [:bar, :bar2], proto: "foo"},
+          %Entity{id: "baz", behaviors: [:baz], proto: "bar"},
+          %Entity{id: "instance", proto: "baz"}
+        ]
+      })
+
+      foo = World.get_entity("foo")
+      bar = World.get_entity("bar")
+      baz = World.get_entity("baz")
+      instance = World.get_entity("instance")
 
       assert [:foo] = Entity.behaviors(foo)
       assert [:bar, :bar2, :foo] = Entity.behaviors(bar)
@@ -50,6 +51,7 @@ defmodule Doro.EntityTest do
   describe "get_prop/2 and Access behavior getter" do
     setup do
       foo = %Entity{
+        id: "foo",
         props: %{
           data: :foo_data,
           data2: :data2_set_on_foo,
@@ -59,19 +61,26 @@ defmodule Doro.EntityTest do
       }
 
       bar = %Entity{
-        proto: foo,
+        id: "bar",
+        proto: "foo",
         props: %{data: :bar_data}
       }
 
       baz = %Entity{
-        proto: bar,
+        id: "baz",
+        proto: "bar",
         props: %{data: :baz_data, data3: nil}
       }
 
       instance = %Entity{
-        proto: baz,
+        id: "instance",
+        proto: "baz",
         props: %{data: :instance_data, data4: nil}
       }
+
+      World.clobber(%{
+        entities: [foo, bar, baz, instance]
+      })
 
       %{foo: foo, bar: bar, baz: baz, instance: instance}
     end
@@ -109,8 +118,9 @@ defmodule Doro.EntityTest do
     end
 
     test "sets the value on the instance even when it exists on a prototype" do
-      {_, parent} = Entity.set_prop(%Entity{}, :data, 42)
-      entity = %Entity{proto: parent}
+      parent = %Entity{id: "parent", props: %{data: 42}}
+      entity = %Entity{id: "child", proto: "parent"}
+      World.clobber(%{entities: [parent, entity]})
 
       assert {43, entity} = Entity.set_prop(entity, :data, entity[:data] + 1)
       assert 43 = entity[:data]

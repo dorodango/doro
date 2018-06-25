@@ -8,18 +8,11 @@ defmodule Doro.World.MarshalTest do
       %{game_state: Marshal.unmarshal(read_fixture("world.json"))}
     end
 
-    test "transforms JSON into a usable game state", %{game_state: %{entities: entity_map}} do
-      assert 5 = Map.size(entity_map)
+    test "transforms JSON into a usable game state", %{game_state: %{entities: entities}} do
+      assert 5 = length(entities)
 
-      %{
-        "_player" => player_proto,
-        "_god" => god_proto,
-        "ice" => iceman
-      } = entity_map
-
+      player_proto = entities |> Enum.find(&(&1.id == "_player"))
       assert [Doro.Behaviors.Visible, Doro.Behaviors.Player] = Doro.Entity.behaviors(player_proto)
-      assert iceman.proto == god_proto
-      assert god_proto.proto == player_proto
     end
   end
 

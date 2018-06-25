@@ -1,5 +1,6 @@
 defmodule Doro.Entity do
   alias Doro.Entity
+  alias Doro.World
 
   defstruct proto: nil,
             id: nil,
@@ -13,13 +14,13 @@ defmodule Doro.Entity do
   end
 
   @doc "Creates an entity"
-  def create_entity(prototype_id, props, naming_fn) do
+  def create(prototype_id, props, naming_fn) do
     prototype = Doro.World.get_entity(prototype_id)
 
     %{
       id: generate_id(prototype_id),
       name: naming_fn.(prototype),
-      proto: prototype,
+      proto: prototype_id,
       props: props
     }
     |> preprocess_name()
@@ -36,14 +37,14 @@ defmodule Doro.Entity do
   def behaviors(nil), do: []
 
   def behaviors(entity = %Entity{}) do
-    entity.behaviors ++ behaviors(entity.proto)
+    entity.behaviors ++ behaviors(World.get_entity(entity.proto))
   end
 
   @doc "Returns a property for this entity, including looking up the prototype chain"
-  def get_prop(nil, _), do: :error
+  def(get_prop(nil, _), do: :error)
 
-  def get_prop(%Entity{proto: proto, props: props}, key) do
-    Map.get(props, key, get_prop(proto, key))
+  def get_prop(%Entity{proto: prototype_id, props: props}, key) do
+    Map.get_lazy(props, key, fn -> get_prop(World.get_entity(prototype_id), key) end)
   end
 
   @doc "Returns {<new value>, entity}"

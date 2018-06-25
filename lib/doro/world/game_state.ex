@@ -6,13 +6,13 @@ defmodule Doro.World.GameState do
   def start_link() do
     GenServer.start_link(
       __MODULE__,
-      read_debug_world() |> Map.get(:entities) |> Map.values(),
+      read_debug_world() |> Map.get(:entities),
       name: __MODULE__
     )
   end
 
   def set(new_state) do
-    GenServer.call(__MODULE__, {:set_entities, Map.values(new_state.entities)})
+    GenServer.call(__MODULE__, {:set_entities, new_state.entities})
   end
 
   def get_entity(nil), do: nil
