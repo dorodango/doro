@@ -1,6 +1,6 @@
 import React, { Component } from "react";
-import { find, map, merge, omit, append, prop, propEq, join,
-         uniq, identity, filter, pipe, isNil, isEmpty, reduce, flatten} from "ramda";
+import { find, map, merge, omit, prepend, prop, propEq, join, addIndex,
+         uniq, identity, filter, pipe, isNil, isEmpty, sortBy, reduce, flatten} from "ramda";
 import axios from 'axios';
 
 import EntityForm from "../EntityForm/EntityForm";
@@ -54,7 +54,16 @@ class EntityForms extends Component {
       entities: [],
       availableBehaviors: []
     }
-
+    axios.get('/api/game_state').then(
+      (response) => {
+        if (response.data.state) {
+          this.setState(response.data.state);
+        };
+      },
+      (error) => {
+        console.log("ERROR", error);
+      }
+    );
     axios.get('/api/behaviors').then(response => {
       if (response.data.behaviors) {
         const formattedBehaviors = map((behavior) => ({ value: behavior, label: behavior}), response.data.behaviors);
@@ -89,12 +98,13 @@ class EntityForms extends Component {
    * };
    */
   addEntity = (entity) => {
+    console.log("ADD ENTITY", entity);
     const currentState = this.state;
 
     const upsert = (obj, data) => {
       const mergeIfMatch = (entry) => ( (entry.id === obj.id) ? merge(entry, obj) : entry )
 
-      return find( propEq('id', obj.id), data ) ? map(mergeIfMatch, data) : append(obj, data);
+      return find( propEq('id', obj.id), data ) ? map(mergeIfMatch, data) : prepend(obj, data);
     }
 
     this.setState({
@@ -114,8 +124,9 @@ class EntityForms extends Component {
   };
 
   renderExistingEntities = () => {
+    var mapIndexed = addIndex(map);
     return (
-      map(
+      mapIndexed(
         (elem, idx) => <Entity key={idx} entity={elem} handleEdit={this.handleEdit} />
       )(this.state.entities)
     );
@@ -125,9 +136,10 @@ class EntityForms extends Component {
     const { entities, availableBehaviors, entity } = this.state;
     const availableEntities =
       pipe(
-        map(prop('name')),
+        map(prop('id')),
         uniq,
-        filter(identity)
+        filter(identity),
+        sortBy(identity)
       )(entities)
     return (
       <div className="EntityForms">
@@ -142,7 +154,7 @@ class EntityForms extends Component {
         </section>
         <aside className="EntityForms-addNew">
           { entity &&
-            <EntityForm
+            <EntityForm key="edit-form"
               add={this.addEntity}
               entity={entity}
               availableEntities={ availableEntities }
@@ -150,7 +162,7 @@ class EntityForms extends Component {
             />
           }
           { !entity &&
-            <EntityForm
+            <EntityForm key="new-form"
               add={this.addEntity}
               availableEntities={ availableEntities }
               availableBehaviors={ availableBehaviors }

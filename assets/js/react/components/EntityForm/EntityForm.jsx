@@ -1,17 +1,17 @@
 import React, { Component } from 'react';
-import { pipe, pick, prop, all, prepend, map, identity } from 'ramda';
+import { pipe, pick, prop, all, prepend, path, map, identity } from 'ramda';
 import classnames from "classnames";
 import Select from 'react-select';
-
-const REQUIRED_FIELDS = [
-  "name", "description", "id"
-];
 
 class EntityForm extends Component {
 
   constructor(props) {
     super(props);
-    this.state = {entity: this.props.entity || {}}
+    const entity = this.props.entity || {};
+    if (!entity.name) {
+      entity.name = entity.id
+    }
+    this.state = {entity: this.props.entity || { props: {} }}
   }
 
   handleChangeBehaviors = (behaviors) => {
@@ -24,13 +24,16 @@ class EntityForm extends Component {
     });
   };
 
-  handleChangeDropdown = (fieldname) => {
+  handleChangePropsDropdown = (fieldname) => {
     return (selectedValue) => {
       const currentState = this.state;
       this.setState( {
         entity: {
           ...currentState.entity,
-          [fieldname]: selectedValue.value
+          props: {
+            ...currentState.entity.props,
+            [fieldname]: selectedValue.value
+          }
         }
       })
     };
@@ -58,23 +61,32 @@ class EntityForm extends Component {
     } )
   };
 
+  handleChangeProps = (ev) => {
+    const currentState = this.state;
+    this.setState( {
+      entity: {
+        ...currentState.entity,
+        props: {
+          ...currentState.entity.props,
+          [ev.target.name]: ev.target.value
+        }
+      }
+    } )
+  };
+
   handleAdd = (ev) => {
+    debugger
     this.props.add(this.state.entity)
   };
 
   handleClear = (ev) => {
-
-    const emptyEntity = {
-      id: "",
-      name: "",
-      location: "",
-      destination_id: "",
-      description: "",
-    };
-    this.setState({entity: emptyEntity});
+    this.setState({entity: null});
   };
 
-  valid = () => pipe(map(f => prop(f, this.state.entity)), all(identity))(REQUIRED_FIELDS)
+  valid = () => {
+    const requiredPaths = [['id'], ['props','description']];
+    return all( (pth) => (path(pth, this.state.entity)), requiredPaths);
+  };
 
   render() {
     const {entity} = this.state;
@@ -116,8 +128,8 @@ class EntityForm extends Component {
           <textarea
             required={true}
             className="form-input"
-            onChange={this.handleChange}
-            value={entity.description}
+            onChange={this.handleChangeProps}
+            value={entity.props.description}
             name="description" />
         </div>
         <div className="form-row">
@@ -137,9 +149,9 @@ class EntityForm extends Component {
           <Select
             name="location"
             className="form-input"
-            value={entity.location}
+            value={entity.props.location}
             options={entitiesForSelect}
-            onChange={this.handleChangeDropdown("location")}
+            onChange={this.handleChangePropsDropdown("location")}
           />
         </div>
         <div className="form-row">
@@ -147,9 +159,9 @@ class EntityForm extends Component {
           <Select
             name="destination_id"
             className="form-input"
-            value={entity.destination_id}
+            value={entity.props.destination_id}
             options={entitiesForSelect}
-            onChange={this.handleChangeDropdown("destination_id")}
+            onChange={this.handleChangePropsDropdown("destination_id")}
           />
         </div>
         <div className="form-actions">
