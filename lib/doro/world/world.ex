@@ -41,9 +41,7 @@ defmodule Doro.World do
   end
 
   def entities_in_location_with_behavior(location_id, behavior) do
-    GameState.get_entities(fn e ->
-      e[:location] == location_id && Enum.member?(Entity.behaviors(e), behavior)
-    end)
+    GameState.get_entities(&(&1[:location] == location_id && Entity.has_behavior?(&1, behavior)))
   end
 
   @doc "Convenience function"
@@ -62,6 +60,22 @@ defmodule Doro.World do
   def set_prop(entity, key, value) do
     GameState.set_prop(entity.id, key, value)
     put_in(entity, [key], value)
+  end
+
+  @doc "Find or create by name"
+  def find_or_create_player(name, location_id) do
+    case GameState.get_entities(fn e ->
+           Entity.has_behavior?(e, Doro.Behaviors.Player) && Entity.named?(e, name)
+         end) do
+      [] ->
+        entity = Entity.create("_player", %{location: location_id}, fn _ -> name end)
+        GameState.add_entity(entity)
+        entity
+
+      # create player
+      [player] ->
+        player
+    end
   end
 
   @doc "Clobbers the current state of the world with this new state"

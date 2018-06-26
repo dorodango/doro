@@ -52,50 +52,51 @@ import { Socket } from "phoenix"
 // Now that you are connected, you can join channels with a topic:
 // let channel = socket.channel("topic:subtopic", {})
 
-const connectButton = document.querySelector("#connect")
+let socket = new Socket("/socket")
+socket.connect()
 
-if (connectButton) {
-  connectButton.addEventListener("click", () => {
-    const playerId = document.querySelector("#player").value
-    let input = document.querySelector("#input")
-    let output = document.querySelector("#output")
+const loginPlayer = (playerName, cb) => {
+  const ch = socket.channel(`hello:${playerName}`)
+  ch.on("player_info", payload => cb(payload.player_id))
+  ch.join()
+}
 
-    let socket = new Socket("/socket", { params: { player_id: playerId } })
-    socket.connect()
-    let channel = socket.channel(`player:${playerId}`)
+const connectPlayer = playerId => {
+  const channel = socket.channel(`player:${playerId}`)
+  const playerName = document.querySelector("#player").value
 
-    document.querySelector("#player-id").innerText = playerId
-    document.querySelector("#join-form").classList.add("hidden")
-    document.querySelector("#console").classList.remove("hidden")
+  document.querySelector("#player-id").innerText = playerName
+  document.querySelector("#join-form").classList.add("hidden")
+  document.querySelector("#console").classList.remove("hidden")
 
-    channel.on("output", payload => {
-      if (payload.body) {
-        const atBottom =
-          output.scrollTop + output.offsetHeight === output.scrollHeight
+  channel.on("output", payload => {
+    if (payload.body) {
+      const atBottom =
+        output.scrollTop + output.offsetHeight === output.scrollHeight
 
-        let messageItem = document.createElement("div")
-        messageItem.innerText = `${payload.body}`
-        output.appendChild(messageItem)
+      let messageItem = document.createElement("div")
+      messageItem.innerText = `${payload.body}`
+      output.appendChild(messageItem)
 
-        if (atBottom) {
-          output.scrollTop = output.scrollHeight
-        }
+      if (atBottom) {
+        output.scrollTop = output.scrollHeight
       }
-    })
+    }
+  })
 
-    channel
-      .join()
-      .receive("ok", resp => {
-        console.log("Joined successfully", resp)
-      })
-      .receive("error", resp => {
-        console.log("Unable to join", resp)
-      })
-    input.addEventListener("keypress", event => {
-      if (event.keyCode === 13) {
-        channel.push("cmd", { cmd: input.value })
-        input.value = ""
-      }
-    })
+  channel.join()
+  input.addEventListener("keypress", event => {
+    if (event.keyCode === 13) {
+      channel.push("cmd", { cmd: input.value })
+      input.value = ""
+    }
+  })
+}
+
+const joinForm = document.querySelector("#join-form")
+if (joinForm) {
+  joinForm.addEventListener("submit", e => {
+    loginPlayer(document.querySelector("#player").value, connectPlayer)
+    e.preventDefault()
   })
 }

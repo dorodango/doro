@@ -2,10 +2,9 @@ defmodule DoroWeb.PlayerChannel do
   require Logger
   use Phoenix.Channel
 
-  def join("player:" <> player_id, _auth_message, socket = %{assigns: %{player_id: player_id}}) do
-    Logger.info("Player(#{socket.assigns.player_id}) connected via Phoenix Channels")
+  def join("player:" <> player_id, _auth_message, socket) do
     {:ok, session} = Doro.Session.create_session(player_id)
-    {:ok, Phoenix.Socket.assign(socket, :session, session)}
+    {:ok, socket |> assign(:session, session)}
   end
 
   @doc "Input coming in from a channel just gets sent to this player's session"

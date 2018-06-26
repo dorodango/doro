@@ -40,6 +40,12 @@ defmodule Doro.Entity do
     entity.behaviors ++ behaviors(World.get_entity(entity.proto))
   end
 
+  def has_behavior?(entity, behavior) do
+    entity
+    |> behaviors()
+    |> Enum.member?(behavior)
+  end
+
   @doc "Returns a property for this entity, including looking up the prototype chain"
   def(get_prop(nil, _), do: :error)
 

@@ -3,6 +3,7 @@ defmodule DoroWeb.UserSocket do
 
   ## Channels
   channel("player:*", DoroWeb.PlayerChannel)
+  channel("hello:*", DoroWeb.HelloChannel)
 
   ## Transports
   transport(:websocket, Phoenix.Transports.WebSocket)
@@ -19,8 +20,8 @@ defmodule DoroWeb.UserSocket do
   #
   # See `Phoenix.Token` documentation for examples in
   # performing token verification on connect.
-  def connect(%{"player_id" => player_id}, socket) do
-    {:ok, assign(socket, :player_id, player_id)}
+  def connect(%{}, socket) do
+    {:ok, socket}
   end
 
   # Socket id's are topics that allow you to identify all sockets for a given user:

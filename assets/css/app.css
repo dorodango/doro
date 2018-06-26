@@ -11,6 +11,10 @@ body {
   overflow-y: scroll;
 }
 
+#player {
+  width: 50%;
+}
+
 #input {
   width: 100%;
 }
