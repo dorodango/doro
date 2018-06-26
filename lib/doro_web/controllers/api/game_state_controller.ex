@@ -7,7 +7,7 @@ defmodule DoroWeb.Api.GameStateController do
   end
 
   def show(conn, _params) do
-    render conn, "show.json", %{state: read_game_state_json()}
+    render conn, "show.json", %{state: %{ entities:  Doro.World.GameState.get_entities}}
   end
 
   def update(conn, params) do
@@ -27,14 +27,5 @@ defmodule DoroWeb.Api.GameStateController do
   end
 
   defp reload_world(json), do: json |> Doro.World.clobber_from_string
-  defp read_game_state_json do
-    Path.join(:code.priv_dir(:doro), "game_state.json")
-    |> File.read!()
-    |> Poison.decode
-    |> case do
-         {:ok, json} -> json
-         _ -> %{error: "failed to read game state.json"}
-       end
-  end
 
 end
