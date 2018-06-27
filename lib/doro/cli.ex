@@ -3,7 +3,7 @@ defmodule Doro.CLI do
   Main entry point for incoming player commands.
 
   When a command comes in, it is parsed and then flows through like:
-    1. Look for local entities (in room or inventory) named (ctx.object_id).
+    1. Look for local entities (in room or inventory) named (ctx.rest).
        If there is nothing named that we implicitly use the player.
     2. Transform the entities into a list of {<entity>, <behavior>}, where <behavior> is the behavior that
        can respond to `ctx.verb` in the current context.  For example, a `Portable` item that isn't
@@ -19,10 +19,10 @@ defmodule Doro.CLI do
   alias Doro.Context
 
   def interpret(player_id, s) do
-    {verb, object_id} = Doro.Parser.parse(s)
+    {verb, rest} = Doro.Parser.parse(s)
 
-    {:ok, ctx = %{player: player, object_id: object_name}} =
-      Doro.Context.create(s, player_id, verb, object_id)
+    {:ok, ctx = %{player: player, rest: object_name}} =
+      Doro.Context.create(s, player_id, verb, rest)
 
     # echo command back to player
     send_to_player(player, "> #{s}")

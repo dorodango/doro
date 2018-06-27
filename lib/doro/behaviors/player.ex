@@ -15,7 +15,7 @@ defmodule Doro.Behaviors.Player do
   end
 
   def responds_to?("look", ctx) do
-    is_nil(ctx.object_id)
+    is_nil(ctx.rest)
   end
 
   def responds_to?(verb, _) do
@@ -37,7 +37,7 @@ defmodule Doro.Behaviors.Player do
         send_to_player(player, "No one can hear you if you have nothing to say")
 
       [words] ->
-        what_i_said = words |> String.trim
+        what_i_said = words |> String.trim()
         send_to_player(player, "\"#{what_i_said}\"")
         send_to_others(player, "#{Doro.Entity.name(player)} says, \"#{what_i_said}\"")
     end
@@ -77,5 +77,4 @@ defmodule Doro.Behaviors.Player do
   def handle(%{verb: "help", player: player}) do
     send_to_player(player, "You are helpless.")
   end
-
 end

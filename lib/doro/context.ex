@@ -3,20 +3,20 @@ defmodule Doro.Context do
 
   defstruct original_command: nil,
             player: nil,
-            object_id: nil,
+            rest: nil,
             object: nil,
             verb: nil
 
   @doc "Creates a Context given some incoming request params"
   @spec create(String.t(), String.t(), String.t(), String.t() | nil) :: {:ok, %Doro.Context{}}
-  def create(original_command, player_id, verb, object_id) do
+  def create(original_command, player_id, verb, rest) do
     {
       :ok,
       %Doro.Context{
         original_command: original_command,
         player: find_entity_by_string(player_id),
-        object_id: object_id,
-        object: find_entity_by_string(object_id),
+        rest: rest,
+        object: find_entity_by_string(rest),
         verb: verb
       }
     }
