@@ -3,6 +3,12 @@ defmodule Doro.Behaviors.Exit do
   import Doro.Comms
   alias Doro.Entity
 
+  def synonyms do
+    %{
+      "exit" => ~w(go)
+    }
+  end
+
   def responds_to?(verb, _) do
     verb == "exit"
   end

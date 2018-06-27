@@ -4,10 +4,18 @@ defmodule Doro.Behaviors.Player do
   import Doro.SentenceConstruction
   alias Doro.World
 
-  @verbs MapSet.new(~w(look halp inv i emote /description say))
+  @verbs MapSet.new(~w(look help inventory emote /description say))
+
+  def synonyms do
+    %{
+      "help" => ~w(h halp),
+      "inventory" => ~w(inv i),
+      "look" => ~w(l)
+    }
+  end
 
   def responds_to?("look", ctx) do
-    ctx.original_command == "look"
+    is_nil(ctx.object_id)
   end
 
   def responds_to?(verb, _) do
@@ -50,10 +58,7 @@ defmodule Doro.Behaviors.Player do
     )
   end
 
-  # we *could* do synonyms this way
-  def handle(ctx = %{verb: "i"}), do: handle(%{ctx | verb: "inv"})
-
-  def handle(%{verb: "inv", player: player}) do
+  def handle(%{verb: "inventory", player: player}) do
     Doro.World.entities_in_location(player.id)
     |> Enum.each(fn e -> send_to_player(player, "You are carrying #{indefinite(e)}.") end)
   end
@@ -69,7 +74,7 @@ defmodule Doro.Behaviors.Player do
     end
   end
 
-  def handle(%{verb: "halp", player: player}) do
+  def handle(%{verb: "help", player: player}) do
     send_to_player(player, "You are helpless.")
   end
 
