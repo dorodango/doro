@@ -8,7 +8,11 @@ defmodule Doro.Behaviors.Visible do
   end
 
   def handle(%{verb: "look", player: player, object: object}) do
-    send_to_player(player, "#{definite(object)} #{object[:description]}")
+    send_to_player(player, first_person_description(object))
     send_to_others(player, "#{definite(player)} looks at #{definite(object)} thoughtfully.")
+  end
+
+  def first_person_description(entity) do
+    "#{definite(entity)} #{entity[:description]}"
   end
 end

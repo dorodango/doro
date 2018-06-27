@@ -4,7 +4,7 @@ defmodule Doro.Behaviors.Player do
   import Doro.SentenceConstruction
   alias Doro.World
 
-  @verbs MapSet.new(~w(look halp inv i emote))
+  @verbs MapSet.new(~w(look halp inv i emote /description))
 
   def responds_to?("look", ctx) do
     ctx.original_command == "look"
@@ -21,6 +21,21 @@ defmodule Doro.Behaviors.Player do
     Doro.World.entities_in_location(player[:location])
     |> Enum.filter(&(&1.id != player.id))
     |> Enum.each(fn e -> send_to_player(player, "#{indefinite(e)} is here.") end)
+  end
+
+  def handle(%{verb: "/description", player: player, original_command: original_command}) do
+    description =
+      Regex.run(~r/\/description (.*)/, original_command, capture: :all_but_first)
+      |> List.first()
+      |> String.trim()
+
+    player = Doro.World.set_prop(player, :description, description)
+
+    send_to_player(
+      player,
+      "Set. This is what others will see: " <>
+        Doro.Behaviors.Visible.first_person_description(player)
+    )
   end
 
   # we *could* do synonyms this way
