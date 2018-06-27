@@ -15,6 +15,8 @@ defmodule Doro.World.GameState do
     GenServer.call(__MODULE__, {:set_entities, new_state.entities})
   end
 
+  def get, do: all_entities
+
   def get_entity(nil), do: nil
 
   def get_entity(id) do

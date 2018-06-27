@@ -10,14 +10,11 @@ defmodule DoroWeb.Api.BehaviorsController do
       Code.ensure_loaded(module)
       case Keyword.get(module.__info__(:functions), :__behavior?) do
         nil -> acc
-        0 -> [ module |> to_underscore | acc]
+        0 -> [ module |> Modules.to_underscore | acc]
       end
     end)
 
     render conn, "index.json", %{ behaviors: behaviors }
   end
 
-  defp to_underscore(module) do
-    module |> Module.split |> Enum.at(-1) |> Macro.underscore
-  end
 end

@@ -12,8 +12,29 @@ defmodule Doro.World.Marshal do
       |> Poison.decode!(keys: :atoms)
       |> Map.get(:entities)
       |> Enum.map(&unmarshal_entity/1)
-
     %{entities: entities}
+  end
+
+  @doc "Marshal the world to a JSON string"
+  def marshal(data) do
+    data
+    |> Enum.map(&unresolve_behaviors/1)
+  end
+
+  defp marshal_entity(entity) do
+    entity
+    |> unresolve_behaviors
+  end
+
+  defp unresolve_behaviors( nil ), do: nil
+  defp unresolve_behaviors( entity = %{behaviors: []}), do: entity
+  defp unresolve_behaviors(entity) do
+    %{ entity | behaviors: entity |> Map.get(:behaviors, []) |> Enum.map(&canonicalize_behavior/1) }
+  end
+
+  defp canonicalize_behavior(behavior_module) do
+    behavior_module
+    |> Modules.to_underscore
   end
 
   defp unmarshal_entity(data) do

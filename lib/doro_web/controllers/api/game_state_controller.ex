@@ -7,7 +7,9 @@ defmodule DoroWeb.Api.GameStateController do
   end
 
   def show(conn, _params) do
-    render conn, "show.json", %{state: %{ entities:  Doro.World.GameState.get_entities}}
+    entities = Doro.World.GameState.get 
+    |> Doro.World.Marshal.marshal
+    render conn, "show.json", %{ entities: entities }
   end
 
   def update(conn, params) do
