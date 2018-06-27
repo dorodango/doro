@@ -74,12 +74,6 @@ defmodule Doro.Entity do
     entity.name || entity.id
   end
 
-  def has_behavior?(entity, behavior) do
-    entity
-    |> Entity.behaviors()
-    |> Enum.member?(behavior)
-  end
-
   def is_person?(entity) do
     entity
     |> has_behavior?(Doro.Behaviors.Player)

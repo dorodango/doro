@@ -9,15 +9,15 @@ defmodule Doro.Parser do
   """
   @spec parse(String.t()) :: {String.t(), String.t()} | :error
   def parse(s) do
-    case String.split(s) do
-      [verb, object_id] ->
-        {verb, object_id}
+    case Regex.run(~r/^\s*([\/\w]+)\s*(.*)/, s, capture: :all_but_first) do
+      [verb, ""] ->
+        {verb |> String.trim() |> String.downcase(), nil}
+
+      [verb, rest] ->
+        {verb |> String.trim() |> String.downcase(), rest |> String.trim()}
 
       [verb] ->
-        {verb, nil}
-
-      [verb | _] ->
-        {verb, nil}
+        {verb |> String.trim() |> String.downcase(), nil}
 
       _ ->
         :error

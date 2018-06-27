@@ -17,7 +17,6 @@ defmodule Doro.CLI do
 
   import Doro.Comms
   alias Doro.Context
-  alias Doro.Entity
 
   def interpret(player_id, s) do
     {verb, object_id} = Doro.Parser.parse(s)
