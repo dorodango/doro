@@ -29,7 +29,7 @@ defmodule Doro.Behaviors.Player do
       Doro.World.entities_in_location(player[:location])
       |> Enum.filter(&(&1.id != player.id))
       |> indefinite_list()
-      |> (&"#{room_desc}\nThere is #{&1} here.").()
+      |> (&"#{room_desc}\nAlso here is #{&1}.").()
 
     send_to_player(player, output)
   end
