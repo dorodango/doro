@@ -4,7 +4,7 @@ defmodule Doro.Behaviors.Player do
   import Doro.SentenceConstruction
   alias Doro.World
 
-  @verbs MapSet.new(~w(look halp inv i emote /description))
+  @verbs MapSet.new(~w(look halp inv i emote /description say))
 
   def responds_to?("look", ctx) do
     ctx.original_command == "look"
@@ -21,6 +21,17 @@ defmodule Doro.Behaviors.Player do
     Doro.World.entities_in_location(player[:location])
     |> Enum.filter(&(&1.id != player.id))
     |> Enum.each(fn e -> send_to_player(player, "#{indefinite(e)} is here.") end)
+  end
+
+  def handle(%{verb: "say", player: player, original_command: original_command}) do
+    case Regex.run(~r/say (.*)/, original_command, capture: :all_but_first) do
+      nil ->
+        send_to_player(player, "No one can hear you if you have nothing to say")
+
+      [words] ->
+        send_to_player(player, "\"#{words}\"")
+        send_to_others(player, "#{Doro.Entity.name(player)} says, \"#{words}\"")
+    end
   end
 
   def handle(%{verb: "/description", player: player, original_command: original_command}) do
