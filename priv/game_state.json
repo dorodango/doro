@@ -1,11 +1,9 @@
 {
-  "entities": [
-    {
+  "entities": [{
       "id": "bathroom",
       "behaviors": [],
       "props": {
-        "description":
-          "You are in a small, dingy bathroom; a flourescent light flickers overhead."
+        "description": "You are in a small, dingy bathroom; a flourescent light flickers overhead."
       }
     },
     {
@@ -23,6 +21,33 @@
       }
     },
     {
+      "id": "closet",
+      "behaviors": [],
+      "props": {
+        "description": "You are in a tiny dark closet"
+      }
+    },
+    {
+      "id": "closet-door",
+      "name": "Closet Door",
+      "behaviors": ["exit", "visible"],
+      "props": {
+        "location": "office",
+        "description": "A door with a sign that reads 'Brooms'",
+        "destination_id": "closet"
+      }
+    },
+    {
+      "id": "closet-exit-door",
+      "name": "Closet Door",
+      "behaviors": ["exit", "visible"],
+      "props": {
+        "location": "closet",
+        "description": "an unpainted door.",
+        "destination_id": "office"
+      }
+    },
+    {
       "id": "fire_escape",
       "behaviors": [],
       "props": {
@@ -36,7 +61,6 @@
         "description": "You are on a sidewalk."
       }
     },
-
     {
       "id": "office-conference-door",
       "name": "conference room door",
@@ -64,8 +88,7 @@
       "behaviors": ["exit", "visible"],
       "props": {
         "location": "office",
-        "description":
-          "is a small fire escape that looks like a fire hazard itself.",
+        "description": "is a small fire escape that looks like a fire hazard itself.",
         "destination_id": "fire_escape"
       }
     },
@@ -100,7 +123,6 @@
         "destination_id": "fire_escape"
       }
     },
-
     {
       "id": "bathroom-door",
       "name": "WC Door",
@@ -136,8 +158,7 @@
       "proto": "_player",
       "props": {
         "location": "office",
-        "description":
-          "is stern and trim.  He says, 'Top Gun rules of engagement are written for your safety and for that of your team.'"
+        "description": "is stern and trim.  He says, 'Top Gun rules of engagement are written for your safety and for that of your team.'"
       }
     },
     {
@@ -182,8 +203,7 @@
       "behaviors": ["visible", "slot_machine"],
       "props": {
         "location": "bathroom",
-        "description":
-          "is a Juki DNU-1541, threaded with some #69 bonded nylon.",
+        "description": "is a Juki DNU-1541, threaded with some #69 bonded nylon.",
         "slot_machine_rewards": ["_backpack"]
       }
     },
@@ -206,6 +226,14 @@
       "behaviors": ["visible", "portable"],
       "props": {
         "description": "is a generic backpack."
+      }
+    },
+    {
+      "id": "turntable",
+      "behaviors": ["visible", "turntable"],
+      "props": {
+        "description": "is a Technics 1200 DJ Turntable.  It looks a little dusty",
+        "location": "closet"
       }
     }
   ]
