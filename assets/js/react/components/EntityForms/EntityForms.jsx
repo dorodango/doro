@@ -79,8 +79,8 @@ class EntityForms extends Component {
     }
     axios.get("/api/game_state").then(
       response => {
-        if (response.data.state) {
-          this.setState(response.data.state)
+        if (response.data) {
+          this.setState(response.data)
         }
       },
       error => {
