@@ -16,6 +16,92 @@
       }
     },
     {
+      "id": "conference",
+      "behaviors": [],
+      "props": {
+        "description": "You are in a dimly lit, cramped conference room."
+      }
+    },
+    {
+      "id": "fire_escape",
+      "behaviors": [],
+      "props": {
+        "description": "You are on a precarious old fire escape."
+      }
+    },
+    {
+      "id": "sidewalk",
+      "behaviors": [],
+      "props": {
+        "description": "You are on a sidewalk."
+      }
+    },
+
+    {
+      "id": "office-conference-door",
+      "name": "conference room door",
+      "behaviors": ["exit", "visible"],
+      "props": {
+        "location": "office",
+        "description": "is a transluscent door to a conference room.",
+        "destination_id": "conference"
+      }
+    },
+    {
+      "id": "conference-office-door",
+      "name": "office door",
+      "behaviors": ["exit", "visible"],
+      "props": {
+        "location": "conference",
+        "description": "is a transluscent door to the office.",
+        "destination_id": "office"
+      }
+    },
+
+    {
+      "id": "office-fire_escape-door",
+      "name": "open window",
+      "behaviors": ["exit", "visible"],
+      "props": {
+        "location": "office",
+        "description":
+          "is a small fire escape that looks like a fire hazard itself.",
+        "destination_id": "fire_escape"
+      }
+    },
+    {
+      "id": "fire_escape-office-door",
+      "name": "window",
+      "behaviors": ["exit", "visible"],
+      "props": {
+        "location": "fire_escape",
+        "description": "is decomposing wooden window that slightly ajar.",
+        "destination_id": "office"
+      }
+    },
+
+    {
+      "id": "fire_escape-sidewalk-door",
+      "name": "ladder",
+      "behaviors": ["exit", "visible"],
+      "props": {
+        "location": "fire_escape",
+        "description": "is a metal ladder leading down to a sidewalk.",
+        "destination_id": "sidewalk"
+      }
+    },
+    {
+      "id": "sidewalk-fire_escape-door",
+      "name": "ladder",
+      "behaviors": ["exit", "visible"],
+      "props": {
+        "location": "sidewalk",
+        "description": "is a metal ladder leading up to a landing.",
+        "destination_id": "fire_escape"
+      }
+    },
+
+    {
       "id": "bathroom-door",
       "name": "WC Door",
       "behaviors": ["exit", "visible"],
@@ -49,7 +135,9 @@
       "name": "Viper",
       "proto": "_player",
       "props": {
-        "location": "office"
+        "location": "office",
+        "description":
+          "is stern and trim.  He says, 'Top Gun rules of engagement are written for your safety and for that of your team.'"
       }
     },
     {
@@ -77,6 +165,15 @@
       "props": {
         "location": "office",
         "description": "just looks like it wants to annoy you."
+      }
+    },
+    {
+      "id": "dead_bird",
+      "name": "dead bird",
+      "behaviors": ["visible", "portable"],
+      "props": {
+        "location": "sidewalk",
+        "description": "is a well-loved Bird scooter."
       }
     },
     {

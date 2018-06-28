@@ -51,6 +51,7 @@ defmodule Doro.SentenceConstructionTest do
 
       assert indefinite_list([dusty, iceman], "or") == "a Dusty Cake or Iceman"
       assert indefinite_list([aromatic], "or") == "an Aromatic Cake"
+      assert indefinite_list([]) == "nothing"
     end
   end
 
@@ -65,6 +66,7 @@ defmodule Doro.SentenceConstructionTest do
 
       assert definite_list([dusty, iceman], "and") == "the Dusty Cake and Iceman"
       assert definite_list([aromatic], "or") == "the Aromatic Cake"
+      assert indefinite_list([]) == "nothing"
     end
   end
 end

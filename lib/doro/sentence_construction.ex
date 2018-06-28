@@ -23,6 +23,10 @@ defmodule Doro.SentenceConstruction do
     comma_list(entities, conjunction, &definite/1)
   end
 
+  defp comma_list([], _, _) do
+    "nothing"
+  end
+
   defp comma_list([first | rest], conjunction, article_phrase_fn) do
     article_phrase_fn.(first) <> subsequent_items(rest, conjunction, article_phrase_fn)
   end
