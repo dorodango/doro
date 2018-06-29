@@ -1,0 +1,25 @@
+{
+  "entities": [
+    {
+      "id": "turntable",
+      "name": "Turntable",
+      "props": {
+        "description": "Description of turntable.",
+        "playing": null
+      }
+    },
+    { 
+      "id": "room"
+    },
+    {
+      "id": "player",
+      "name": "player prototype",
+      "proto": "_player",
+      "behaviors": ["visible", "player"],
+      "props": {
+        "location": "room",
+        "description": "is player prototype.  Put some props on the instance!"
+      }
+    }
+  ]
+}

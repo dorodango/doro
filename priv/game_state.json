@@ -232,7 +232,7 @@
       "id": "turntable",
       "behaviors": ["visible", "turntable"],
       "props": {
-        "description": "is a Technics 1200 DJ Turntable.  It looks a little dusty",
+        "description": "is a Technics 1200 DJ Turntable.  It looks a little dusty.",
         "location": "closet"
       }
     }
