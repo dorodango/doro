@@ -3,8 +3,6 @@ defmodule Doro.Behaviors.Turntable do
   import Doro.Comms
   import Doro.SentenceConstruction
 
-  import Inspector
-
   @spinning_message "The record is spinning at 33RPM."
 
   def synonyms, do: %{ "use" => ~w(play) }
@@ -19,6 +17,7 @@ defmodule Doro.Behaviors.Turntable do
        player |> send_to_player("It's already playing.")
     else
       object |> set_playing(true)
+
       send_to_player(player, "You hear some funky music.")
       send_to_others(player, "The room fills with funky music.")
     end
