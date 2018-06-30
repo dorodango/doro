@@ -1,0 +1,16 @@
+{
+  "entities": [
+    {
+      "id": "_player",
+      "behaviors": ["visible", "player"],
+      "props": {
+        "description": "is a generic player."
+      }
+    },
+    {
+      "id": "_god",
+      "proto": "_player",
+      "behaviors": ["god"]
+    }
+  ]
+}

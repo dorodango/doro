@@ -5,7 +5,7 @@ defmodule Doro.World.MarshalTest do
 
   describe "marshal/1" do
     setup do
-      read_fixture("world.json") |> Doro.World.clobber_from_string()
+      read_fixture("world.json") |> Doro.World.clobber()
 
       %{
         marshalled: %{"entities" => Doro.World.GameState.get() |> Marshal.marshal()}

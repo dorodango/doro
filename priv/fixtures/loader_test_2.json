@@ -1,0 +1,8 @@
+{
+  "entities": [
+    {
+      "id": "loader-test-entity",
+      "name": "Entity from loader test 2"
+    }
+  ]
+}

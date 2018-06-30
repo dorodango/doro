@@ -14,7 +14,7 @@ defmodule Doro.WorldTest do
       ]
     }
     |> Poison.encode!()
-    |> World.clobber_from_string()
+    |> World.clobber()
 
     :ok
   end
