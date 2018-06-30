@@ -28,6 +28,14 @@ defmodule Doro.World.Marshal do
     |> Enum.map(&unresolve_behaviors/1)
   end
 
+  @doc "convert Map to an %Entity"
+  def unmarshal_entity(data) do
+    data
+    |> resolve_behaviors()
+    |> (&Doro.Entity.preprocess_name(&1)).()
+    |> (&struct(Doro.Entity, &1)).()
+  end
+
   defp marshal_entity(entity) do
     entity
     |> unresolve_behaviors
@@ -45,21 +53,16 @@ defmodule Doro.World.Marshal do
     |> Modules.to_underscore()
   end
 
-  defp unmarshal_entity(data) do
-    data
-    |> resolve_behaviors()
-    |> (&Doro.Entity.preprocess_name(&1)).()
-    |> (&struct(Doro.Entity, &1)).()
-  end
-
   defp resolve_behaviors(data) do
+    behaviors =
+      Map.get(data, :behaviors, [])
+      |> Enum.map(&Doro.Behavior.find/1)
+      |> Enum.filter(& &1)
+
     Map.put(
       data,
       :behaviors,
-      Enum.map(
-        Map.get(data, :behaviors, []),
-        &String.to_existing_atom("Elixir.Doro.Behaviors.#{Macro.camelize(&1)}")
-      )
+      behaviors
     )
   end
 end

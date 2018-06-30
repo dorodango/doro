@@ -1,7 +1,6 @@
 defmodule Doro.Behaviors.Turntable do
   use Doro.Behavior
   import Doro.Comms
-  import Doro.SentenceConstruction
 
   @spinning_message "The record is spinning at 33RPM."
 

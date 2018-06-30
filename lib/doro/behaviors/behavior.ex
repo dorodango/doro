@@ -18,6 +18,16 @@ defmodule Doro.Behavior do
     |> Enum.filter(&Regex.match?(~r/^Elixir\.Doro\.Behaviors\./, Atom.to_string(&1)))
   end
 
+  def find(nil), do: nil
+  def find(""), do: nil
+
+  def find(behavior) when is_binary(behavior) do
+    all_behaviors()
+    |> Enum.find(fn entry ->
+      entry == String.to_atom("Elixir.Doro.Behaviors.#{Macro.camelize(behavior)}")
+    end)
+  end
+
   def execute(behavior, ctx = %Doro.Context{}) do
     behavior.handle(ctx)
   end
