@@ -3,34 +3,37 @@ defmodule Doro.World.MarshalTest do
 
   alias Doro.World.Marshal
 
-  describe "marshal/1" do    
-
+  describe "marshal/1" do
     setup do
-      read_fixture("world.json") |> Doro.World.clobber_from_string
+      read_fixture("world.json") |> Doro.World.clobber_from_string()
 
       %{
-        marshalled: %{"entities" => Doro.World.GameState.get |> Marshal.marshal}
+        marshalled: %{"entities" => Doro.World.GameState.get() |> Marshal.marshal()}
       }
     end
 
-    test "transforms the game state with canonical behaviors", %{marshalled: %{ "entities" => marshalled } } do
+    test "transforms the game state with canonical behaviors", %{
+      marshalled: %{"entities" => marshalled}
+    } do
       ice = marshalled |> find_entity_by_id("ice")
       assert ice |> Map.get(:behaviors) == []
       player = marshalled |> find_entity_by_id("_player")
-      assert player |> Map.get(:behaviors) == [ "visible", "player" ]
+      assert player |> Map.get(:behaviors) == ["visible", "player"]
       god = marshalled |> find_entity_by_id("_god")
-      assert god |> Map.get(:behaviors) == [ "god" ]
+      assert god |> Map.get(:behaviors) == ["god"]
     end
 
-    test "generate name_tokens as needed", %{marshalled: %{ "entities" => marshalled } } do
+    test "generate name_tokens as needed", %{marshalled: %{"entities" => marshalled}} do
       ice = marshalled |> find_entity_by_id("ice")
       assert ice |> Map.get(:name_tokens) == MapSet.new(~w[iceman])
       player = marshalled |> find_entity_by_id("_player")
-      assert player |> Map.get(:name_tokens) == MapSet.new(["player", "prototype", "player prototype"])
+
+      assert player |> Map.get(:name_tokens) ==
+               MapSet.new(["player", "prototype", "player prototype"])
+
       tomcat = marshalled |> find_entity_by_id("tomcat")
       assert tomcat |> Map.get(:name_tokens) == MapSet.new(["f14", "tomcat", "f14 tomcat"])
     end
-
   end
 
   describe "unmarshal/1" do
@@ -47,7 +50,7 @@ defmodule Doro.World.MarshalTest do
   end
 
   defp find_entity_by_id(entities, id) do
-    entities |> Enum.find(fn(entity) -> entity |> Map.get(:id) == id end)
+    entities |> Enum.find(fn entity -> entity |> Map.get(:id) == id end)
   end
 
   defp read_fixture(filename) do

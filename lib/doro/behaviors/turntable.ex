@@ -5,16 +5,16 @@ defmodule Doro.Behaviors.Turntable do
 
   @spinning_message "The record is spinning at 33RPM."
 
-  def synonyms, do: %{ "use" => ~w(play) }
+  def synonyms, do: %{"use" => ~w(play)}
 
-  def responds_to?(verb,_) do
-    ["stop","play","use"] 
-    |> Enum.find(fn(r) -> r == verb end)
+  def responds_to?(verb, _) do
+    ["stop", "play", "use"]
+    |> Enum.find(fn r -> r == verb end)
   end
 
   def handle(%{verb: "use", object: object, player: player}) do
-    if (object |> is_playing?) do
-       player |> send_to_player("It's already playing.")
+    if object |> is_playing? do
+      player |> send_to_player("It's already playing.")
     else
       object |> set_playing(true)
 
@@ -24,7 +24,7 @@ defmodule Doro.Behaviors.Turntable do
   end
 
   def handle(%{verb: "stop", object: object, player: player}) do
-    if (!(object |> is_playing?)) do
+    if !(object |> is_playing?) do
       player |> send_to_player("It's already not playing.")
     else
       object |> set_playing(false)
@@ -46,14 +46,16 @@ defmodule Doro.Behaviors.Turntable do
       "#{Doro.World.get_entity("turntable")[:description]} #{@spinning_message}"
     )
   end
+
   defp update_description(turntable, false) do
     turntable
     |> update_description(
-      Doro.World.get_entity("turntable")[:description] |> String.replace(~r[\s*#{@spinning_message}\s*], "")
+      Doro.World.get_entity("turntable")[:description]
+      |> String.replace(~r[\s*#{@spinning_message}\s*], "")
     )
   end
+
   defp update_description(turntable, desc) when is_binary(desc) do
     Doro.World.set_prop(turntable, :description, desc)
   end
-
 end

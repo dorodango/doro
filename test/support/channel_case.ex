@@ -25,13 +25,13 @@ defmodule DoroWeb.ChannelCase do
     end
   end
 
-
   setup tags do
     :ok = Ecto.Adapters.SQL.Sandbox.checkout(Doro.Repo)
+
     unless tags[:async] do
       Ecto.Adapters.SQL.Sandbox.mode(Doro.Repo, {:shared, self()})
     end
+
     :ok
   end
-
 end

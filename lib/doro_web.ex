@@ -28,8 +28,9 @@ defmodule DoroWeb do
 
   def view do
     quote do
-      use Phoenix.View, root: "lib/doro_web/templates",
-                        namespace: DoroWeb
+      use Phoenix.View,
+        root: "lib/doro_web/templates",
+        namespace: DoroWeb
 
       # Import convenience functions from controllers
       import Phoenix.Controller, only: [get_flash: 2, view_module: 1]
