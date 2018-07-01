@@ -17,3 +17,14 @@ jobs:
       - run: mix deps.get
       - run: mix ecto.create
       - run: mix test
+  deploy:
+    machine:
+      enabled: true
+    working_directory: ~/app
+    steps:
+      - checkout
+      - run:
+          name: Deploy to Gigalixir
+          command: |
+            git remote add gigalixir https://$GIGALIXIR_EMAIL:$GIGALIXIR_API_KEY@git.gigalixir.com/$GIGALIXIR_APP.git
+            git push -f gigalixir HEAD:refs/heads/master
