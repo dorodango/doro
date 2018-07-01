@@ -1,6 +1,8 @@
 defmodule Doro.World.Marshal do
   require Logger
 
+  import MapHelpers
+
   @moduledoc """
   Functions for loading the world from JSON
   """
@@ -32,6 +34,7 @@ defmodule Doro.World.Marshal do
   def unmarshal_entity(data) do
     data
     |> resolve_behaviors()
+    |> atomize_props_keys()
     |> (&Doro.Entity.preprocess_name(&1)).()
     |> (&struct(Doro.Entity, &1)).()
   end
@@ -53,16 +56,21 @@ defmodule Doro.World.Marshal do
     |> Modules.to_underscore()
   end
 
-  defp resolve_behaviors(data) do
-    behaviors =
-      Map.get(data, :behaviors, [])
-      |> Enum.map(&Doro.Behavior.find/1)
-      |> Enum.filter(& &1)
+  defp atomize_props_keys(data) do
+    Map.put(
+      data,
+      :props,
+      Map.get(data, :props, %{}) |> atomize_keys
+    )
+  end
 
+  defp resolve_behaviors(data) do
     Map.put(
       data,
       :behaviors,
-      behaviors
+      Map.get(data, :behaviors, [])
+      |> Enum.map(&Doro.Behavior.find/1)
+      |> Enum.filter(& &1)
     )
   end
 end

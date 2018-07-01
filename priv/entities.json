@@ -31,7 +31,7 @@
     },
     {
       "id": "closet-door",
-      "name": "Closet Door",
+      "name": "closet door",
       "behaviors": ["exit", "visible"],
       "props": {
         "location": "start",
@@ -41,7 +41,7 @@
     },
     {
       "id": "closet-exit-door",
-      "name": "Closet Door",
+      "name": "closet door",
       "behaviors": ["exit", "visible"],
       "props": {
         "location": "closet",

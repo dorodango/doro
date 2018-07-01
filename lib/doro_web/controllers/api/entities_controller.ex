@@ -1,6 +1,8 @@
 defmodule DoroWeb.Api.EntitiesController do
   use DoroWeb, :controller
 
+  import MapHelpers
+
   def create(conn, params) do
     params
     |> insert_visible_behavior
@@ -40,11 +42,5 @@ defmodule DoroWeb.Api.EntitiesController do
       |> Enum.filter(& &1)
 
     params |> Map.put("behaviors", behaviors)
-  end
-
-  defp atomize_keys(nil), do: %{}
-
-  defp atomize_keys(map) do
-    for {key, val} <- map, into: %{}, do: {String.to_atom(key), val}
   end
 end

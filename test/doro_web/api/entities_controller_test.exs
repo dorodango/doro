@@ -74,7 +74,7 @@ defmodule DoroWeb.Api.UserControllerTest do
       assert entity.id == "tomcat"
       assert entity.name == "the tomcat"
       assert entity.name_tokens == MapSet.new(["the", "tomcat", "the tomcat"])
-      assert entity["location"] == "room"
+      assert entity[:location] == "room"
       assert entity.behaviors |> Enum.member?(Doro.Behaviors.Visible)
     end
   end
@@ -100,7 +100,7 @@ defmodule DoroWeb.Api.UserControllerTest do
       assert response == %{"message" => "updated entity turntable"}
 
       updated = Doro.World.get_entity("turntable")
-      assert updated["playing"] == true
+      assert updated[:playing]
     end
 
     test "&update/2 updates the name and name tokens", %{
@@ -117,7 +117,7 @@ defmodule DoroWeb.Api.UserControllerTest do
       updated = Doro.World.get_entity("turntable")
       assert updated.name == "this name"
       assert updated.name_tokens == MapSet.new(["this", "name", "this name"])
-      assert updated["location"] == "somewhere"
+      assert updated[:location] == "somewhere"
     end
 
     test "&update/2 updates behaviors by clobbering old behavior list with the new list", %{
