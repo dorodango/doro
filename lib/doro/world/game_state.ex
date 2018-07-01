@@ -6,7 +6,7 @@ defmodule Doro.World.GameState do
   def start_link() do
     GenServer.start_link(
       __MODULE__,
-      read_debug_world() |> Map.get(:entities),
+      read_default_world() |> Map.get(:entities),
       name: __MODULE__
     )
   end
@@ -15,7 +15,7 @@ defmodule Doro.World.GameState do
     GenServer.call(__MODULE__, {:set_entities, new_state.entities})
   end
 
-  def get, do: all_entities
+  def get, do: all_entities()
 
   def get_entity(nil), do: nil
 
@@ -43,10 +43,10 @@ defmodule Doro.World.GameState do
     GenServer.call(__MODULE__, {:insert_entities, entities})
   end
 
-  defp read_debug_world do
-    Path.join(:code.priv_dir(:doro), "game_state.json")
-    |> File.read!()
-    |> Doro.World.Marshal.unmarshal()
+  defp read_default_world do
+    %{sources: ["priv_file://entities.json", "priv_file://base_prototypes.json"]}
+    |> Poison.encode!()
+    |> Doro.World.Loader.load()
   end
 
   defp all_entities do

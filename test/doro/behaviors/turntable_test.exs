@@ -3,7 +3,7 @@ defmodule Doro.Behaviors.TurntableTest do
 
   describe "handle(%{verb: use})/3" do
     setup do
-      read_fixture("turntable.json") |> Doro.World.clobber_from_string()
+      read_fixture("turntable.json") |> Doro.World.clobber()
       Doro.World.GameState.get() |> Doro.World.Marshal.marshal()
 
       %{
@@ -30,7 +30,7 @@ defmodule Doro.Behaviors.TurntableTest do
 
   describe "handle(%{verb: stop})/3" do
     setup do
-      read_fixture("turntable.json") |> Doro.World.clobber_from_string()
+      read_fixture("turntable.json") |> Doro.World.clobber()
       Doro.World.GameState.get() |> Doro.World.Marshal.marshal()
       Doro.World.get_entity("turntable") |> Doro.World.set_prop(:playing, true)
 

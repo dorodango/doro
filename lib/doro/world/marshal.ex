@@ -6,10 +6,16 @@ defmodule Doro.World.Marshal do
   """
 
   @doc "Unmarshals a world from a JSON string"
-  def unmarshal(json) do
+  def unmarshal(json) when is_binary(json) do
+    json
+    |> Poison.decode!(keys: :atoms)
+    |> unmarshal()
+  end
+
+  @doc "Unmarshals a world from a JSON string"
+  def unmarshal(json) when is_map(json) do
     entities =
       json
-      |> Poison.decode!(keys: :atoms)
       |> Map.get(:entities)
       |> Enum.map(&unmarshal_entity/1)
 

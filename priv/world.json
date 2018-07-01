@@ -1,0 +1,3 @@
+{
+  "sources": ["priv_file://entities.json", "priv_file://base_prototypes.json"]
+}

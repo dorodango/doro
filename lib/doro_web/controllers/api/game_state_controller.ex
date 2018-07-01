@@ -2,7 +2,7 @@ defmodule DoroWeb.Api.GameStateController do
   use DoroWeb, :controller
 
   def create(conn, _params) do
-    Doro.World.clobber_from_default()
+    Doro.World.load_default()
     send_resp(conn, :ok, "")
   end
 
@@ -31,5 +31,5 @@ defmodule DoroWeb.Api.GameStateController do
     end
   end
 
-  defp reload_world(json), do: json |> Doro.World.clobber_from_string()
+  defp reload_world(json), do: json |> Doro.World.clobber()
 end

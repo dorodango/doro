@@ -7,6 +7,7 @@ defmodule Doro.Entity do
             behaviors: [],
             name: nil,
             name_tokens: nil,
+            src: nil,
             props: %{}
 
   def execute_behaviors(ctx) do

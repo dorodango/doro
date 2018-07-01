@@ -3,6 +3,8 @@ defmodule Doro.World do
   Functions for interacting with the world state.
   """
 
+  require Logger
+
   alias Doro.World.GameState
   alias Doro.Entity
 
@@ -78,43 +80,37 @@ defmodule Doro.World do
     end
   end
 
-  @doc "Clobbers the current state of the world with this new state"
-  def clobber(new_state) do
-    GameState.set(new_state)
+  @doc "Loads a world file"
+  def load(s) do
+    s
+    |> Doro.World.Loader.load()
+    |> clobber()
   end
 
-  @doc "Loads a world from a gist"
-  def clobber_from_gist(gist_id) do
-    "https://api.github.com/gists/#{gist_id}"
-    |> HTTPoison.get!()
-    |> Map.get(:body)
-    |> Poison.decode!(keys: :atoms)
-    |> Map.get(:files)
-    |> Map.values()
-    |> List.first()
-    |> Map.get(:raw_url)
-    |> clobber_from_url()
+  @doc "Loads from gist"
+  def load_from_gist(gist_id) do
+    Logger.info("Loading world file from gist: #{gist_id}")
+
+    gist_id
+    |> Doro.Utils.load_gist()
+    |> load()
   end
 
-  @doc "Loads a world from a document located at <url>"
-  def clobber_from_url(url) do
-    url
-    |> HTTPoison.get!()
-    |> Map.get(:body)
-    |> clobber_from_string()
+  @doc "Loads a world from game_state.json"
+  def load_default() do
+    Path.join(:code.priv_dir(:doro), "world.json")
+    |> File.read!()
+    |> load()
   end
 
-  @doc "Loads a world from a JSON string"
-  def clobber_from_string(s) do
+  @doc "Replaces the current game state"
+  def clobber(s) when is_binary(s) do
     s
     |> Doro.World.Marshal.unmarshal()
     |> clobber()
   end
 
-  @doc "Loads a world from game_state.json"
-  def clobber_from_default() do
-    Path.join(:code.priv_dir(:doro), "game_state.json")
-    |> File.read!()
-    |> clobber_from_string()
+  def clobber(new_state) when is_map(new_state) do
+    GameState.set(new_state)
   end
 end

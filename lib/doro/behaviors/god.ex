@@ -9,14 +9,14 @@ defmodule Doro.Behaviors.God do
   end
 
   def handle(%{verb: "/reload", player: player}) do
-    Doro.World.clobber_from_default()
+    Doro.World.load_default()
     send_to_player(player, "Game state reloaded.")
   end
 
   def handle(ctx = %{verb: "/gistworld", player: player}) do
     Regex.run(~r/\/gistworld (\w+)/, ctx.original_command, capture: :all_but_first)
     |> List.first()
-    |> Doro.World.clobber_from_gist()
+    |> Doro.World.load_from_gist()
 
     send_to_player(player, "Game state reloaded from gist.")
   end

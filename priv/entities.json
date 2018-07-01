@@ -1,13 +1,15 @@
 {
-  "entities": [{
+  "entities": [
+    {
       "id": "bathroom",
       "behaviors": [],
       "props": {
-        "description": "You are in a small, dingy bathroom; a flourescent light flickers overhead."
+        "description":
+          "You are in a small, dingy bathroom; a flourescent light flickers overhead."
       }
     },
     {
-      "id": "office",
+      "id": "start",
       "behaviors": [],
       "props": {
         "description": "You are in a soul-crushing office."
@@ -88,7 +90,8 @@
       "behaviors": ["exit", "visible"],
       "props": {
         "location": "office",
-        "description": "is a small fire escape that looks like a fire hazard itself.",
+        "description":
+          "is a small fire escape that looks like a fire hazard itself.",
         "destination_id": "fire_escape"
       }
     },
@@ -158,7 +161,8 @@
       "proto": "_player",
       "props": {
         "location": "office",
-        "description": "is stern and trim.  He says, 'Top Gun rules of engagement are written for your safety and for that of your team.'"
+        "description":
+          "is stern and trim.  He says, 'Top Gun rules of engagement are written for your safety and for that of your team.'"
       }
     },
     {
@@ -203,22 +207,10 @@
       "behaviors": ["visible", "slot_machine"],
       "props": {
         "location": "bathroom",
-        "description": "is a Juki DNU-1541, threaded with some #69 bonded nylon.",
+        "description":
+          "is a Juki DNU-1541, threaded with some #69 bonded nylon.",
         "slot_machine_rewards": ["_backpack"]
       }
-    },
-
-    {
-      "id": "_player",
-      "behaviors": ["visible", "player"],
-      "props": {
-        "description": "is a generic player."
-      }
-    },
-    {
-      "id": "_god",
-      "proto": "_player",
-      "behaviors": ["god"]
     },
     {
       "id": "_backpack",
@@ -232,7 +224,8 @@
       "id": "turntable",
       "behaviors": ["visible", "turntable"],
       "props": {
-        "description": "is a Technics 1200 DJ Turntable.  It looks a little dusty.",
+        "description":
+          "is a Technics 1200 DJ Turntable.  It looks a little dusty.",
         "location": "closet"
       }
     }

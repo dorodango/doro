@@ -4,7 +4,7 @@ defmodule DoroWeb.HelloChannel do
 
   def join("hello:" <> player_name, _, socket) do
     Logger.info("Initializing Phoenix Channel for player named '#{player_name}'")
-    player = Doro.World.find_or_create_player(player_name, "office")
+    player = Doro.World.find_or_create_player(player_name, "start")
     send(self(), {:after_join, player.id})
     {:ok, Phoenix.Socket.assign(socket, :player_id, player.id)}
   end
