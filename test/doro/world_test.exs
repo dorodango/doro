@@ -6,11 +6,11 @@ defmodule Doro.WorldTest do
   setup do
     %{
       entities: [
-        %{id: "office"},
+        %{id: "start"},
         %{id: "basement"},
-        %{id: "player12", behaviors: ["player"], props: %{location: "office"}},
+        %{id: "player12", behaviors: ["player"], props: %{location: "start"}},
         %{id: "player34", behaviors: ["player"], props: %{location: "basement"}},
-        %{id: "plant", behaviors: ["visible"], props: %{location: "office"}}
+        %{id: "plant", behaviors: ["visible"], props: %{location: "start"}}
       ]
     }
     |> Poison.encode!()
@@ -36,7 +36,7 @@ defmodule Doro.WorldTest do
 
   test "entities_in_location_with_behavior/2" do
     assert [%{id: "player12"}] =
-             World.entities_in_location_with_behavior("office", Doro.Behaviors.Player)
+             World.entities_in_location_with_behavior("start", Doro.Behaviors.Player)
 
     assert [] = World.entities_in_location_with_behavior("nowhere", Doro.Behaviors.Player)
   end

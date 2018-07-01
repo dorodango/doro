@@ -34,7 +34,7 @@
       "name": "Closet Door",
       "behaviors": ["exit", "visible"],
       "props": {
-        "location": "office",
+        "location": "start",
         "description": "A door with a sign that reads 'Brooms'",
         "destination_id": "closet"
       }
@@ -46,7 +46,7 @@
       "props": {
         "location": "closet",
         "description": "an unpainted door.",
-        "destination_id": "office"
+        "destination_id": "start"
       }
     },
     {
@@ -68,7 +68,7 @@
       "name": "conference room door",
       "behaviors": ["exit", "visible"],
       "props": {
-        "location": "office",
+        "location": "start",
         "description": "is a transluscent door to a conference room.",
         "destination_id": "conference"
       }
@@ -80,7 +80,7 @@
       "props": {
         "location": "conference",
         "description": "is a transluscent door to the office.",
-        "destination_id": "office"
+        "destination_id": "start"
       }
     },
 
@@ -89,7 +89,7 @@
       "name": "open window",
       "behaviors": ["exit", "visible"],
       "props": {
-        "location": "office",
+        "location": "start",
         "description":
           "is a small fire escape that looks like a fire hazard itself.",
         "destination_id": "fire_escape"
@@ -102,7 +102,7 @@
       "props": {
         "location": "fire_escape",
         "description": "is decomposing wooden window that slightly ajar.",
-        "destination_id": "office"
+        "destination_id": "start"
       }
     },
 
@@ -131,7 +131,7 @@
       "name": "WC Door",
       "behaviors": ["exit", "visible"],
       "props": {
-        "location": "office",
+        "location": "start",
         "description": "A door emblazoned with 'WC'.",
         "destination_id": "bathroom"
       }
@@ -143,7 +143,7 @@
       "props": {
         "location": "bathroom",
         "description": "A red door.",
-        "destination_id": "office"
+        "destination_id": "start"
       }
     },
     {
@@ -151,7 +151,7 @@
       "name": "Goose",
       "proto": "_god",
       "props": {
-        "location": "office",
+        "location": "start",
         "description": "is disheveled and smelly."
       }
     },
@@ -160,7 +160,7 @@
       "name": "Viper",
       "proto": "_player",
       "props": {
-        "location": "office",
+        "location": "start",
         "description":
           "is stern and trim.  He says, 'Top Gun rules of engagement are written for your safety and for that of your team.'"
       }
@@ -170,7 +170,7 @@
       "name": "Fiddleleaf Fig",
       "behaviors": ["visible", "portable", "vascular_plant"],
       "props": {
-        "location": "office",
+        "location": "start",
         "description": "is herbaceous, glabrous, and four-pinnate."
       }
     },
@@ -179,7 +179,7 @@
       "name": "can of Lacroix",
       "behaviors": ["visible", "portable"],
       "props": {
-        "location": "office",
+        "location": "start",
         "description": "is coconut flavored.  Yuck."
       }
     },
@@ -188,7 +188,7 @@
       "name": "annoying clock",
       "behaviors": ["visible", "clock"],
       "props": {
-        "location": "office",
+        "location": "start",
         "description": "just looks like it wants to annoy you."
       }
     },

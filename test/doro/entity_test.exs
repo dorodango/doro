@@ -11,7 +11,7 @@ defmodule Doro.EntityTest do
         name: "Fiddleleaf Fig",
         behaviors: ["visible", "portable", "vascular_plant"],
         props: %{
-          location: "office",
+          location: "start",
           description: "is herbaceous, glabrous, and four-pinnate."
         }
       }
