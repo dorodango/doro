@@ -1,12 +1,12 @@
 version: 2.0
 jobs:
   build:
-	docker:
-  	- image: circleci/elixir:1.6.5-node-browsers
-  	- image: circleci/postgres:10-alpine-ram
-	working_directory: ~/app
-	steps:
-		- checkout
-		- run: mix deps.get
-		- run: mix ecto.create
-		- run: mix test
+		docker:
+			- image: circleci/elixir:1.6.5-node-browsers
+			- image: circleci/postgres:10-alpine-ram
+		working_directory: ~/app
+		steps:
+			- checkout
+			- run: mix deps.get
+			- run: mix ecto.create
+			- run: mix test
