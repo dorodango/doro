@@ -1,8 +1,1 @@
-<form id="join-form">
-    <input id="player" value="" placeholder="Player Name (new or existing)"><button id="connect">Connect</button>
-</form>
-<div id="console" class="hidden">
-    <span id="player-id"></span>
-    <div id="output"></div>
-    <input id="input" placeholder="Enter a command" autofocus>
-</div>
+<div id="GamePlayer"></div>

@@ -1,0 +1,16 @@
+.DoroOutput {
+  max-height: 100%;
+  font-family: monospace;
+  overflow-y: scroll;
+  min-height: 80vh;
+}
+.DoroOutput__push-footer {
+  min-width: 100%;
+}
+.DoroOutput__item-prefix {
+  padding-right: 10px;
+  font-weight: bold;
+}
+.DoroOutput__item-prefix:after {
+  content: ":"
+}

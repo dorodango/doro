@@ -1,9 +1,17 @@
 import React, { Component } from "react"
-import { pipe, pick, prop, all, prepend, path, map, identity } from "ramda"
+import PropTypes from "proptypes"
+import { prop, all, prepend, path, map } from "ramda"
 import classnames from "classnames"
 import Select from "react-select"
 
 class EntityForm extends Component {
+  static propTypes = {
+    entity: PropTypes.object,
+    displayOnly: PropTypes.bool,
+    availableEntities: PropTypes.arrayOf(PropTypes.string),
+    availableBehaviors: PropTypes.arrayOf(PropTypes.object),
+    add: PropTypes.func.isRequired,
+  }
   constructor(props) {
     super(props)
     const entity = this.props.entity || {}
@@ -23,7 +31,7 @@ class EntityForm extends Component {
     })
   }
 
-  handleChangePropsDropdown = fieldname => {
+  handleChangePropsDropdown = fieldName => {
     return selectedValue => {
       const currentState = this.state
       this.setState({
@@ -31,7 +39,7 @@ class EntityForm extends Component {
           ...currentState.entity,
           props: {
             ...currentState.entity.props,
-            [fieldname]: selectedValue.value,
+            [fieldName]: selectedValue.value,
           },
         },
       })
@@ -76,11 +84,11 @@ class EntityForm extends Component {
     })
   }
 
-  handleAdd = ev => {
+  handleAdd = _ev => {
     this.props.add(this.state.entity)
   }
 
-  handleClear = ev => {
+  handleClear = _ev => {
     this.setState({ entity: null })
   }
 
