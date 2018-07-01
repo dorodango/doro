@@ -81,7 +81,7 @@ defmodule DoroWeb.Api.UserControllerTest do
 
   describe "&update/2" do
     setup do
-      read_fixture("turntable.json") |> Doro.World.clobber_from_string()
+      read_fixture("turntable.json") |> Doro.World.clobber()
 
       %{params: %{id: "turntable", behaviors: ["visible", "slot_machine"]}}
     end
