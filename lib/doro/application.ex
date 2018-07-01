@@ -14,11 +14,24 @@ defmodule Doro.Application do
       supervisor(DoroWeb.Endpoint, []),
       # Start your own worker by calling: Doro.Worker.start_link(arg1, arg2, arg3)
       # worker(Doro.Worker, [arg1, arg2, arg3]),
+      worker(Registry, [[keys: :unique, name: Doro.Registry]]),
       worker(Doro.World.GameState, []),
-      worker(Doro.Parser, []),
-      worker(Doro.Heartbeat, []),
-      worker(Doro.Phenomena, [])
+      worker(Doro.Parser, [])
     ]
+
+    children =
+      case Mix.env() do
+        :test ->
+          children
+
+        _ ->
+          children ++
+            [
+              worker(Doro.Transports.Slack, []),
+              worker(Doro.Heartbeat, []),
+              worker(Doro.Phenomena, [])
+            ]
+      end
 
     # See https://hexdocs.pm/elixir/Supervisor.html
     # for other strategies and supported options

@@ -3,7 +3,7 @@ defmodule DoroWeb.PlayerChannel do
   use Phoenix.Channel
 
   def join("player:" <> player_id, _auth_message, socket) do
-    {:ok, session} = Doro.Session.create_session(player_id)
+    {:ok, session} = Doro.Session.find_or_create(player_id)
     {:ok, socket |> assign(:session, session)}
   end
 
