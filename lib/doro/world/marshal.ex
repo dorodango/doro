@@ -39,11 +39,6 @@ defmodule Doro.World.Marshal do
     |> (&struct(Doro.Entity, &1)).()
   end
 
-  defp marshal_entity(entity) do
-    entity
-    |> unresolve_behaviors
-  end
-
   defp unresolve_behaviors(nil), do: nil
   defp unresolve_behaviors(entity = %{behaviors: []}), do: entity
 
