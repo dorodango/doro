@@ -14,12 +14,12 @@ defmodule Doro.Entity do
     Enum.reduce(Entity.behaviors(ctx.object), ctx, fn behavior, acc -> behavior.handle(acc) end)
   end
 
-  @doc "Creates an entity based on a known prototype"
-  def create(prototype_id, props, naming_fn) do
+  @doc "Creates an entity"
+  def create(prototype_id, props, naming_fn, id \\ nil) do
     prototype = Doro.World.get_entity(prototype_id)
 
     %{
-      id: generate_id(prototype_id),
+      id: id || generate_id(prototype_id),
       name: naming_fn.(prototype),
       proto: prototype_id,
       props: props

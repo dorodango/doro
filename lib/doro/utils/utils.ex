@@ -18,9 +18,9 @@ defmodule Doro.Utils do
   end
 
   @doc "Returns the contents at a URL"
-  def load_url(url) do
+  def load_url(url, params \\ %{}) do
     url
-    |> HTTPoison.get!()
+    |> HTTPoison.get!([], params: params)
     |> Map.get(:body)
   end
 end

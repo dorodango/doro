@@ -14,6 +14,7 @@ defmodule Doro.World do
 
   def insert_entity(entity = %Doro.Entity{}) do
     GameState.add_entity(entity)
+    entity
   end
 
   @doc """

@@ -5,42 +5,30 @@ defmodule Doro.Session do
   require Logger
   use GenServer
 
-  def create_session(player_id) do
-    start_link(player_id, Process.whereis(server_name(player_id)))
-  end
+  def find_or_create(player_id) do
+    case Registry.lookup(Doro.Registry, session_key(player_id)) do
+      [] ->
+        GenServer.start_link(__MODULE__, player_id)
 
-  def set_socket(session, socket) do
-    GenServer.cast(session, {:set_socket, socket})
+      [{pid, _}] ->
+        {:ok, pid}
+    end
   end
 
   def player_input(session, s) do
     GenServer.cast(session, {:player_input, s})
   end
 
-  defp start_link(player_id, nil) do
-    Logger.info("Creating session for player #{player_id}.")
-    GenServer.start_link(__MODULE__, player_id, name: server_name(player_id))
-  end
-
-  defp start_link(player_id, existing_session) do
-    Logger.info("Existing session found for player #{player_id}.")
-    {:ok, existing_session}
-  end
-
-  defp server_name(player_id) do
-    "session-#{player_id}" |> String.to_atom()
+  def session_key(player_id) do
+    "session-#{player_id}"
   end
 
   # Callbacks
   @impl true
   def init(player_id) do
+    Registry.register(Doro.Registry, session_key(player_id), player_id)
     Phoenix.PubSub.subscribe(Doro.PubSub, "player-session:#{player_id}")
     {:ok, %{player_id: player_id, socket: nil}}
-  end
-
-  @impl true
-  def handle_cast({:set_socket, socket}, state) do
-    {:noreply, %{state | socket: socket}}
   end
 
   @impl true

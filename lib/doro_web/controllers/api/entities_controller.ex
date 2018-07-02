@@ -10,9 +10,9 @@ defmodule DoroWeb.Api.EntitiesController do
     |> Doro.World.Marshal.unmarshal_entity()
     |> Doro.World.insert_entity()
     |> case do
-      :ok ->
+      %Doro.Entity{id: id} ->
         conn
-        |> json(%{message: "created entity: #{params["id"]}"})
+        |> json(%{message: "created entity: #{id}"})
 
       _ ->
         conn

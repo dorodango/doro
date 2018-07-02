@@ -20,7 +20,7 @@ defmodule Doro.Mixfile do
   def application do
     [
       mod: {Doro.Application, []},
-      extra_applications: [:logger, :runtime_tools]
+      extra_applications: [:logger, :runtime_tools, :websockex]
     ]
   end
 
@@ -44,7 +44,8 @@ defmodule Doro.Mixfile do
       {:phoenix_pubsub, "~> 1.0"},
       {:phoenix, "~> 1.3.2"},
       {:poison, "~> 3.1"},
-      {:postgrex, ">= 0.0.0"}
+      {:postgrex, ">= 0.0.0"},
+      {:websockex, "~> 0.4.0"}
     ]
   end
 

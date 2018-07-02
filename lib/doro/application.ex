@@ -14,10 +14,7 @@ defmodule Doro.Application do
       supervisor(DoroWeb.Endpoint, []),
       # Start your own worker by calling: Doro.Worker.start_link(arg1, arg2, arg3)
       # worker(Doro.Worker, [arg1, arg2, arg3]),
-      worker(Doro.World.GameState, []),
-      worker(Doro.Parser, []),
-      worker(Doro.Heartbeat, []),
-      worker(Doro.Phenomena, [])
+      supervisor(Doro.MainLoopSupervisor, [])
     ]
 
     # See https://hexdocs.pm/elixir/Supervisor.html
