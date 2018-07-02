@@ -3,9 +3,11 @@
   text-align: left;
   font-size: 10px;
 }
-.EntityForms{
+
+.EntityForms {
   display: flex;
 }
+
 .EntityForms__addNew {
   padding: 0 20px;
   flex: 2;

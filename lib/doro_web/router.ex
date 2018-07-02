@@ -27,6 +27,8 @@ defmodule DoroWeb.Router do
     get("/game_state", Api.GameStateController, :show)
     post("/game_state", Api.GameStateController, :update)
     put("/game_state", Api.GameStateController, :create)
+    put("/entities", Api.EntitiesController, :create)
+    post("/entities/:id", Api.EntitiesController, :update)
     get("/behaviors", Api.BehaviorsController, :index)
   end
 end

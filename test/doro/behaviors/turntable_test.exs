@@ -1,6 +1,8 @@
 defmodule Doro.Behaviors.TurntableTest do
   use ExUnit.Case, async: false
 
+  import Doro.TestFixtures
+
   describe "handle(%{verb: use})/3" do
     setup do
       read_fixture("turntable.json") |> Doro.World.clobber()
@@ -54,11 +56,5 @@ defmodule Doro.Behaviors.TurntableTest do
       turntable = Doro.World.get_entity("turntable")
       refute ~r{33RPM} |> Regex.match?(turntable[:description])
     end
-  end
-
-  defp read_fixture(filename) do
-    "fixtures/#{filename}"
-    |> Path.expand(Application.app_dir(:doro, "priv"))
-    |> File.read!()
   end
 end

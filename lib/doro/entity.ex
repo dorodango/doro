@@ -14,7 +14,7 @@ defmodule Doro.Entity do
     Enum.reduce(Entity.behaviors(ctx.object), ctx, fn behavior, acc -> behavior.handle(acc) end)
   end
 
-  @doc "Creates an entity"
+  @doc "Creates an entity based on a known prototype"
   def create(prototype_id, props, naming_fn) do
     prototype = Doro.World.get_entity(prototype_id)
 
@@ -24,6 +24,13 @@ defmodule Doro.Entity do
       proto: prototype_id,
       props: props
     }
+    |> preprocess_name()
+    |> (&struct(Entity, &1)).()
+  end
+
+  @doc "Creates an entity from raw args"
+  def create(entity = %{id: _, name: _}) do
+    entity
     |> preprocess_name()
     |> (&struct(Entity, &1)).()
   end
@@ -38,7 +45,7 @@ defmodule Doro.Entity do
   def behaviors(nil), do: []
 
   def behaviors(entity = %Entity{}) do
-    entity.behaviors ++ behaviors(World.get_entity(entity.proto))
+    (entity.behaviors || []) ++ behaviors(World.get_entity(entity.proto))
   end
 
   def has_behavior?(entity, behavior) do

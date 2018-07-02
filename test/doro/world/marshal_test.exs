@@ -1,6 +1,8 @@
 defmodule Doro.World.MarshalTest do
   use ExUnit.Case, async: true
 
+  import Doro.TestFixtures
+
   alias Doro.World.Marshal
 
   describe "marshal/1" do
@@ -51,11 +53,5 @@ defmodule Doro.World.MarshalTest do
 
   defp find_entity_by_id(entities, id) do
     entities |> Enum.find(fn entity -> entity |> Map.get(:id) == id end)
-  end
-
-  defp read_fixture(filename) do
-    "fixtures/#{filename}"
-    |> Path.expand(Application.app_dir(:doro, "priv"))
-    |> File.read!()
   end
 end

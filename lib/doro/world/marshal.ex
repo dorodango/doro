@@ -1,6 +1,8 @@
 defmodule Doro.World.Marshal do
   require Logger
 
+  import MapHelpers
+
   @moduledoc """
   Functions for loading the world from JSON
   """
@@ -28,9 +30,13 @@ defmodule Doro.World.Marshal do
     |> Enum.map(&unresolve_behaviors/1)
   end
 
-  defp marshal_entity(entity) do
-    entity
-    |> unresolve_behaviors
+  @doc "convert Map to an %Entity"
+  def unmarshal_entity(data) do
+    data
+    |> resolve_behaviors()
+    |> atomize_props_keys()
+    |> (&Doro.Entity.preprocess_name(&1)).()
+    |> (&struct(Doro.Entity, &1)).()
   end
 
   defp unresolve_behaviors(nil), do: nil
@@ -45,21 +51,21 @@ defmodule Doro.World.Marshal do
     |> Modules.to_underscore()
   end
 
-  defp unmarshal_entity(data) do
-    data
-    |> resolve_behaviors()
-    |> (&Doro.Entity.preprocess_name(&1)).()
-    |> (&struct(Doro.Entity, &1)).()
+  defp atomize_props_keys(data) do
+    Map.put(
+      data,
+      :props,
+      Map.get(data, :props, %{}) |> atomize_keys
+    )
   end
 
   defp resolve_behaviors(data) do
     Map.put(
       data,
       :behaviors,
-      Enum.map(
-        Map.get(data, :behaviors, []),
-        &String.to_existing_atom("Elixir.Doro.Behaviors.#{Macro.camelize(&1)}")
-      )
+      Map.get(data, :behaviors, [])
+      |> Enum.map(&Doro.Behavior.find/1)
+      |> Enum.filter(& &1)
     )
   end
 end

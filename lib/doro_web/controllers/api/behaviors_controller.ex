@@ -1,8 +1,6 @@
 defmodule DoroWeb.Api.BehaviorsController do
   use DoroWeb, :controller
 
-  import Inspector
-
   def index(conn, _params) do
     {:ok, modules} = :application.get_key(:doro, :modules)
 
