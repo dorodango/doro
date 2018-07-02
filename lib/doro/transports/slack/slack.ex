@@ -3,6 +3,7 @@ defmodule Doro.Transports.Slack do
   use WebSockex
 
   def start_link do
+    Logger.info("Starting Slack transport")
     WebSockex.start_link(rtm_url(), __MODULE__, %{})
   end
 
@@ -71,7 +72,7 @@ defmodule Doro.Transports.Slack do
     |> Map.get(:url)
   end
 
-  defp api_key do
+  def api_key do
     Application.get_env(:doro, :slack_api_key)
   end
 end
