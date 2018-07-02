@@ -2,7 +2,7 @@ defmodule Doro.Transports.Slack do
   require Logger
   use WebSockex
 
-  def start_link do
+  def start_link(_) do
     Logger.info("Starting Slack transport")
     WebSockex.start_link(rtm_url(), __MODULE__, %{})
   end

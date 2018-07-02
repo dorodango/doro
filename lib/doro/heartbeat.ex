@@ -2,7 +2,7 @@ defmodule Doro.Heartbeat do
   require Logger
   use GenServer
 
-  def start_link do
+  def start_link(_) do
     GenServer.start_link(__MODULE__, 0, name: :heartbeat)
   end
 

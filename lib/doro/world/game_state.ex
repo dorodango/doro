@@ -3,7 +3,7 @@ defmodule Doro.World.GameState do
 
   @table_name :entities
 
-  def start_link() do
+  def start_link(_) do
     GenServer.start_link(
       __MODULE__,
       read_default_world() |> Map.get(:entities),

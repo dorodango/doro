@@ -3,22 +3,22 @@ defmodule Doro.MainLoopSupervisor do
   use Supervisor
 
   def start_link do
-    Supervisor.start_link(__MODULE__, [], [])
+    Supervisor.start_link(__MODULE__, [])
   end
 
   def init(_) do
     children = [
-      worker(Registry, [[keys: :unique, name: Doro.Registry]]),
-      worker(Doro.World.GameState, []),
-      worker(Doro.Parser, []),
-      worker(Doro.Heartbeat, []),
-      worker(Doro.Phenomena, [])
+      {Registry, keys: :unique, name: Doro.Registry},
+      Doro.World.GameState,
+      Doro.Parser,
+      Doro.Heartbeat,
+      Doro.Phenomena
     ]
 
     children =
       case Doro.Transports.Slack.api_key() do
         nil -> children
-        _ -> children ++ [worker(Doro.Transports.Slack, [])]
+        _ -> children ++ [Doro.Transports.Slack]
       end
 
     Supervisor.init(children, strategy: :one_for_one, name: __MODULE__)
