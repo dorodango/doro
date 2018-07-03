@@ -4,7 +4,7 @@ defmodule Doro.Behaviors.Player do
   import Doro.SentenceConstruction
   alias Doro.World
 
-  @verbs MapSet.new(~w(look help inventory emote /description say))
+  @verbs MapSet.new(~w(look help inventory emote /description /deify say))
 
   def synonyms do
     %{
@@ -59,6 +59,11 @@ defmodule Doro.Behaviors.Player do
       "Set. This is what others will see: " <>
         Doro.Behaviors.Visible.first_person_description(player)
     )
+  end
+
+  def handle(%{verb: "/deify", player: player}) do
+    Doro.World.add_behavior(player, Doro.Behaviors.God)
+    send_to_player(player, "You feel more capable.")
   end
 
   def handle(%{verb: "inventory", player: player}) do

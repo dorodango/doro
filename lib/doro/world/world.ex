@@ -14,7 +14,6 @@ defmodule Doro.World do
 
   def insert_entity(entity = %Doro.Entity{}) do
     GameState.add_entity(entity)
-    entity
   end
 
   @doc """
@@ -65,6 +64,16 @@ defmodule Doro.World do
     put_in(entity, [key], value)
   end
 
+  def add_behavior(entity, behavior) do
+    case Entity.has_behavior?(entity, behavior) do
+      false ->
+        GameState.add_entity(%{entity | behaviors: [behavior | entity.behaviors]})
+
+      _ ->
+        entity
+    end
+  end
+
   @doc "Find or create by name"
   def find_or_create_player(name, location_id) do
     case GameState.get_entities(fn e ->
@@ -73,7 +82,6 @@ defmodule Doro.World do
       [] ->
         entity = Entity.create("_player", %{location: location_id}, fn _ -> name end)
         GameState.add_entity(entity)
-        entity
 
       # create player
       [player] ->

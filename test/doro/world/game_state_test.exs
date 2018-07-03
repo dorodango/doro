@@ -72,8 +72,7 @@ defmodule Doro.World.GameStateTest do
   describe "add_entity/1" do
     test "inserts an entity into the game state" do
       refute GameState.get_entity("new_entity")
-      GameState.add_entity(%Entity{id: "new_entity"})
-
+      assert %Entity{id: "new_entity"} = GameState.add_entity(%Entity{id: "new_entity"})
       assert GameState.get_entity("new_entity")
     end
   end

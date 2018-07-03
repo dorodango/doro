@@ -37,6 +37,7 @@ defmodule Doro.World.GameState do
 
   def add_entity(entity = %Doro.Entity{}) do
     add_entities([entity])
+    entity
   end
 
   def add_entities(entities) do
