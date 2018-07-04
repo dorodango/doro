@@ -11,6 +11,10 @@
       "id": "_god",
       "proto": "_player",
       "behaviors": ["god"]
+    },
+    {
+      "id": "_exit",
+      "behaviors": ["visible", "exit"]
     }
   ]
 }
