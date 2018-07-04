@@ -2,14 +2,15 @@ defmodule Doro.WorldTest do
   use ExUnit.Case, async: true
 
   alias Doro.World
+  import Doro.World.EntityFilters
 
   setup do
     %{
       entities: [
         %{id: "start"},
         %{id: "basement"},
-        %{id: "player12", behaviors: ["player"], props: %{location: "start"}},
-        %{id: "player34", behaviors: ["player"], props: %{location: "basement"}},
+        %{id: "player12", name: "John Foo", behaviors: ["player"], props: %{location: "start"}},
+        %{id: "player34", name: "Foo Bar", behaviors: ["player"], props: %{location: "basement"}},
         %{id: "plant", behaviors: ["visible"], props: %{location: "start"}}
       ]
     }
@@ -24,20 +25,48 @@ defmodule Doro.WorldTest do
     assert is_nil(World.get_entity("bad id"))
   end
 
-  test "entities_in_location/1" do
-    assert [%{id: "player34"}] = World.entities_in_location("basement")
-    assert [] = World.entities_in_location("nowhere")
+  test "in_location filter" do
+    assert [%{id: "player34"}] = World.get_entities([in_location("basement")])
+    assert [] = World.get_entities([in_location("nowhere")])
   end
 
-  test "entities_with_behavior/1" do
-    assert [%{id: "plant"}] = World.entities_with_behavior(Doro.Behaviors.Visible)
-    assert [] = World.entities_with_behavior(Doro.Behaviors.God)
+  test "in_locations filter" do
+    entities = World.get_entities([in_locations(~w(start basement))])
+    assert length(entities) == 3
   end
 
-  test "entities_in_location_with_behavior/2" do
+  test "has_behavior filter" do
+    assert [%{id: "plant"}] = World.get_entities([has_behavior(Doro.Behaviors.Visible)])
+    assert [] = World.get_entities([has_behavior(Doro.Behaviors.God)])
+  end
+
+  test "except filter" do
+    assert [%{id: "plant"}] =
+             World.get_entities([
+               in_location("start"),
+               except("player12")
+             ])
+  end
+
+  test "named filter" do
+    assert [%{id: "player34"}] = World.get_entities([named("bar")])
+    assert [] = World.get_entities([named(nil)])
+
+    foos = World.get_entities([named("foo")])
+    assert length(foos) == 2
+  end
+
+  test "multiple filters" do
     assert [%{id: "player12"}] =
-             World.entities_in_location_with_behavior("start", Doro.Behaviors.Player)
+             World.get_entities([
+               in_location("start"),
+               player()
+             ])
 
-    assert [] = World.entities_in_location_with_behavior("nowhere", Doro.Behaviors.Player)
+    assert [] =
+             World.get_entities([
+               in_location("nowhere"),
+               player()
+             ])
   end
 end

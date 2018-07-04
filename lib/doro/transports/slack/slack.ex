@@ -46,7 +46,7 @@ defmodule Doro.Transports.Slack do
           fn _ -> real_name(slack_user_id) end,
           entity_id
         )
-        |> Doro.World.insert_entity()
+        |> Doro.World.add_entity()
 
       player ->
         player

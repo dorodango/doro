@@ -4,11 +4,12 @@ defmodule Doro.Behaviors.Clock do
   """
   use Doro.Behavior
   import Doro.Comms
+  import Doro.World.EntityFilters
 
   # Phenomenon Callbacks
   def tick(t) do
     if rem(t, 60) == 0 do
-      Doro.World.entities_with_behavior(__MODULE__)
+      Doro.World.get_entities([has_behavior(__MODULE__)])
       |> Enum.each(fn clock -> tell_time(clock, t) end)
     end
   end

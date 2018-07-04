@@ -8,55 +8,28 @@ defmodule Doro.World do
   alias Doro.World.GameState
   alias Doro.Entity
 
-  def get_entity(id) do
-    GameState.get_entity(id)
-  end
+  import Doro.World.EntityFilters
 
-  def insert_entity(entity = %Doro.Entity{}) do
-    GameState.add_entity(entity)
-  end
+  defdelegate get_entity(id), to: GameState
+  defdelegate add_entity(entity), to: GameState
 
-  @doc """
-  Finds named entities in specificied locations.
-  """
-  @spec get_named_entities_in_locations(String.t(), [String.t()]) :: [%Doro.Entity{}]
-  def get_named_entities_in_locations(nil, _), do: []
-
-  def get_named_entities_in_locations(name, location_ids) do
-    locations_set = MapSet.new(location_ids)
-
+  def get_entities(filters \\ []) do
     GameState.get_entities(fn e ->
-      MapSet.member?(locations_set, e[:location]) && Doro.Entity.named?(e, name)
+      Enum.all?(filters, & &1.(e))
     end)
   end
 
-  def entities_in_location(location_id) do
-    GameState.get_entities(fn e -> e[:location] == location_id end)
-  end
-
-  def entities_in_locations(location_ids) do
-    GameState.get_entities(fn e -> Enum.member?(location_ids, e[:location]) end)
-  end
-
-  def entities_with_behavior(behavior) do
-    GameState.get_entities(fn e -> Enum.member?(Entity.behaviors(e), behavior) end)
-  end
-
-  def entities_in_location_with_behavior(location_id, behavior) do
-    GameState.get_entities(&(&1[:location] == location_id && Entity.has_behavior?(&1, behavior)))
-  end
-
-  @doc "Convenience function"
   def players_in_location(location_id) do
-    entities_in_location_with_behavior(location_id, Doro.Behaviors.Player)
+    get_entities([
+      in_location(location_id),
+      player()
+    ])
   end
+
+  def move_entity(entity, destination = %Entity{}), do: move_entity(entity, destination.id)
 
   def move_entity(entity, destination_id) when is_binary(destination_id) do
     set_prop(entity, :location, destination_id)
-  end
-
-  def move_entity(entity, destination) do
-    move_entity(entity, destination.id)
   end
 
   def set_prop(entity, key, value) do
@@ -76,9 +49,7 @@ defmodule Doro.World do
 
   @doc "Find or create by name"
   def find_or_create_player(name, location_id) do
-    case GameState.get_entities(fn e ->
-           Entity.has_behavior?(e, Doro.Behaviors.Player) && Entity.named?(e, name)
-         end) do
+    case get_entities([player(), named(name)]) do
       [] ->
         entity = Entity.create("_player", %{location: location_id}, fn _ -> name end)
         GameState.add_entity(entity)

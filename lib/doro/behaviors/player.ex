@@ -2,6 +2,7 @@ defmodule Doro.Behaviors.Player do
   use Doro.Behavior
   import Doro.Comms
   import Doro.SentenceConstruction
+  import Doro.World.EntityFilters
   alias Doro.World
 
   @verbs MapSet.new(~w(look help inventory emote /description /deify say))
@@ -26,8 +27,10 @@ defmodule Doro.Behaviors.Player do
     room_desc = World.get_entity(player[:location])[:description]
 
     output =
-      Doro.World.entities_in_location(player[:location])
-      |> Enum.filter(&(&1.id != player.id))
+      World.get_entities([
+        in_location(player[:location]),
+        except(player.id)
+      ])
       |> indefinite_list()
       |> (&"#{room_desc}\nAlso here is #{&1}.").()
 
@@ -67,8 +70,9 @@ defmodule Doro.Behaviors.Player do
   end
 
   def handle(%{verb: "inventory", player: player}) do
-    Doro.World.entities_in_location(player.id)
-    |> Enum.each(fn e -> send_to_player(player, "You are carrying #{indefinite(e)}.") end)
+    World.get_entities([in_location(player.id)])
+    |> indefinite_list()
+    |> (&send_to_player(player, "You are carrying #{&1}.")).()
   end
 
   def handle(ctx = %{verb: "emote", player: player}) do

@@ -8,7 +8,7 @@ defmodule DoroWeb.Api.EntitiesController do
     |> insert_visible_behavior
     |> atomize_keys
     |> Doro.World.Marshal.unmarshal_entity()
-    |> Doro.World.insert_entity()
+    |> Doro.World.add_entity()
     |> case do
       %Doro.Entity{id: id} ->
         conn
@@ -28,7 +28,7 @@ defmodule DoroWeb.Api.EntitiesController do
       |> atomize_keys
       |> Doro.World.Marshal.unmarshal_entity()
     )
-    |> Doro.World.insert_entity()
+    |> Doro.World.add_entity()
 
     conn
     |> json(%{message: "updated entity #{params["id"]}"})

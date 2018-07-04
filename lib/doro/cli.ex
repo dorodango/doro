@@ -16,6 +16,7 @@ defmodule Doro.CLI do
   """
 
   import Doro.Comms
+  import Doro.World.EntityFilters
   alias Doro.Context
 
   def interpret(player_id, s) do
@@ -28,7 +29,10 @@ defmodule Doro.CLI do
     send_to_player(player, "> #{s}")
 
     entity_behaviors =
-      Doro.World.get_named_entities_in_locations(object_name, [player.id, player[:location]])
+      Doro.World.get_entities([
+        in_locations([player.id, player[:location]]),
+        named(object_name)
+      ])
       |> Enum.map(fn entity -> {entity, Doro.Entity.first_responder(entity, ctx)} end)
       |> Enum.filter(fn {_, behavior} -> behavior end)
 

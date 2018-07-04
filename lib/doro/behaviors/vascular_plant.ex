@@ -1,6 +1,7 @@
 defmodule Doro.Behaviors.VascularPlant do
   use Doro.Behavior
   import Doro.SentenceConstruction
+  import Doro.World.EntityFilters
 
   @prop :vascular_plant_hydration_level
   @default_hydration 10
@@ -19,7 +20,7 @@ defmodule Doro.Behaviors.VascularPlant do
   # Phenomenon
   def tick(t) do
     if rem(t, 10) == 0 do
-      Doro.World.entities_with_behavior(__MODULE__)
+      Doro.World.get_entities([has_behavior(__MODULE__)])
       |> Enum.each(fn plant -> dessicate(plant) end)
     end
   end

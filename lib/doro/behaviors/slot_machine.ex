@@ -12,7 +12,7 @@ defmodule Doro.Behaviors.SlotMachine do
       Enum.random(object[:slot_machine_rewards])
       |> Doro.Entity.create(%{location: object[:location]}, &generate_instance_name/1)
 
-    Doro.World.insert_entity(entity)
+    Doro.World.add_entity(entity)
     send_to_player(player, "You create #{indefinite(entity)}.")
   end
 
