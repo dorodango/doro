@@ -17,7 +17,10 @@ defmodule Doro.Transports.Slack do
   end
 
   # Websockex callback
-  def handle_frame(_, state), do: {:ok, state}
+  def handle_frame(frame, state) do
+    Logger.info("Unhandled WS frame from Slack: #{frame}")
+    {:ok, state}
+  end
 
   defp incoming_event(%{type: "message", user: slack_user_id, channel: channel, text: cmd}) do
     player = ensure_player(slack_user_id, channel)

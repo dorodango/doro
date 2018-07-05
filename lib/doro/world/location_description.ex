@@ -50,20 +50,13 @@ defmodule Doro.LocationDescription do
     "#{Enum.random(@items_sentence_starts)} #{indefinite_list(items)}."
   end
 
-  defp exits_sentence([]), do: nil
-
-  defp exits_sentence([exit | []]) do
-    case is_directional_exit?(exit) do
-      true -> "There is an exit to the #{exit.name}."
-      _ -> "You can leave via #{indefinite(exit)}."
-    end
-  end
-
   @nondirectional_exits_sentence_starts [
     "Looks like the only exits are",
     "You can leave via",
     "To get out of here, you can use"
   ]
+
+  defp exits_sentence([]), do: nil
 
   defp exits_sentence(exits) do
     case Enum.split_with(exits, &is_directional_exit?/1) do
@@ -81,8 +74,25 @@ defmodule Doro.LocationDescription do
   @directions MapSet.new(~w(n e s w))
   defp is_directional_exit?(exit), do: MapSet.member?(@directions, exit.name)
 
-  defp directional_exits_phrase([exit]), do: "You can see an exit to the #{exit.name}"
-  defp directional_exits_phrase(exits), do: "You can see exits to the #{proper_list(exits)}"
+  @direction_abbrevs %{"n" => "north", "e" => "east", "s" => "south", "w" => "west"}
+  @direction_order %{"n" => 1, "e" => 2, "s" => 3, "w" => 4}
+
+  defp directional_exits_phrase([exit]) do
+    "You can see an exit to the #{@direction_abbrevs[exit.name]}"
+  end
+
+  defp directional_exits_phrase(exits) do
+    directions =
+      comma_list(
+        exits
+        |> Enum.sort_by(&@direction_order[&1.name])
+        |> Enum.map(&@direction_abbrevs[&1.name]),
+        "and",
+        & &1
+      )
+
+    "You can see exits to the #{directions}"
+  end
 
   defp players_sentence([]), do: ""
   defp players_sentence([player]), do: "#{player.name} is here."
