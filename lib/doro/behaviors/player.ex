@@ -24,17 +24,8 @@ defmodule Doro.Behaviors.Player do
   end
 
   def handle(%{verb: "look", player: player}) do
-    room_desc = World.get_entity(player[:location])[:description]
-
-    output =
-      World.get_entities([
-        in_location(player[:location]),
-        except(player.id)
-      ])
-      |> indefinite_list()
-      |> (&"#{room_desc}\nAlso here is #{&1}.").()
-
-    send_to_player(player, output)
+    player
+    |> send_to_player(Doro.LocationDescription.describe(player[:location], player))
   end
 
   def handle(%{verb: "say", player: player, original_command: original_command}) do

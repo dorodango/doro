@@ -13,4 +13,6 @@ defmodule Doro.World.EntityFilters do
 
   def named(nil), do: fn _ -> false end
   def named(name), do: &Doro.Entity.named?(&1, name)
+
+  def nix(filter), do: &(not filter.(&1))
 end

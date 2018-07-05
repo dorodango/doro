@@ -27,13 +27,17 @@ defmodule Doro.Transports.Slack.Session do
   @impl true
   @doc "Handle messages for player"
   def handle_info({:send, s}, state = %{slack_channel: channel}) do
-    Doro.Utils.load_url("https://slack.com/api/chat.postMessage", %{
-      token: api_key(),
-      channel: channel,
-      text: s
-    })
-
+    Task.start(fn -> send_message(channel, s) end)
     {:noreply, state}
+  end
+
+  def send_message(channel, s) do
+    HTTPoison.post(
+      "https://slack.com/api/chat.postMessage",
+      Poison.encode!(%{channel: channel, text: s}),
+      Authorization: "Bearer #{api_key()}",
+      "Content-Type": "application/json; ; charset=utf-8"
+    )
   end
 
   defp api_key do

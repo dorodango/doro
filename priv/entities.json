@@ -10,6 +10,7 @@
     },
     {
       "id": "start",
+      "name": "Soul-Crushing Office",
       "behaviors": [],
       "props": {
         "description": "You are in a soul-crushing office."

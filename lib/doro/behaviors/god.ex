@@ -1,6 +1,7 @@
 defmodule Doro.Behaviors.God do
   use Doro.Behavior
   import Doro.Comms
+  import Doro.World.EntityFilters
 
   @verbs MapSet.new(~w(/reload /gistworld /entdump))
 
@@ -21,14 +22,12 @@ defmodule Doro.Behaviors.God do
     send_to_player(player, "Game state reloaded from gist.")
   end
 
-  def handle(ctx = %{verb: "/entdump", player: player}) do
-    dump =
-      Regex.run(~r/\/entdump id:(\S+)/, ctx.original_command, capture: :all_but_first)
-      |> List.first()
-      |> Doro.World.get_entity()
-      |> Poison.encode!(pretty: true)
-
-    send_to_player(player, dump)
+  def handle(%{verb: "/entdump", player: player}) do
+    Doro.World.get_entities([in_location(player[:location])])
+    |> Enum.chunk_every(5)
+    |> Enum.each(fn chunk ->
+      send_to_player(player, "```\n#{Poison.encode!(chunk, pretty: true)}\n```")
+    end)
   end
 
   def handle(ctx), do: super(ctx)

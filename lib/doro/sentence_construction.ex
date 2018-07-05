@@ -13,6 +13,10 @@ defmodule Doro.SentenceConstruction do
     end
   end
 
+  def proper(entity = %Doro.Entity{name: name}) do
+    name
+  end
+
   @doc "Returns something like, 'a blue couch, a red couch and a black couch'"
   def indefinite_list(entities, conjunction \\ "and") do
     comma_list(entities, conjunction, &indefinite/1)
@@ -21,6 +25,10 @@ defmodule Doro.SentenceConstruction do
   @doc "Returns something like, 'the blue couch, the red couch or the black couch'"
   def definite_list(entities, conjunction \\ "or") do
     comma_list(entities, conjunction, &definite/1)
+  end
+
+  def proper_list(entities, conjunction \\ "and") do
+    comma_list(entities, conjunction, &proper/1)
   end
 
   defp comma_list([], _, _) do

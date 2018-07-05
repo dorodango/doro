@@ -40,6 +40,11 @@ defmodule Doro.WorldTest do
     assert [] = World.get_entities([has_behavior(Doro.Behaviors.God)])
   end
 
+  test "nix filter" do
+    assert [%{id: "plant"}] =
+             World.get_entities([in_location("start"), nix(has_behavior(Doro.Behaviors.Player))])
+  end
+
   test "except filter" do
     assert [%{id: "plant"}] =
              World.get_entities([
