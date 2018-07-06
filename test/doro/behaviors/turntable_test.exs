@@ -15,7 +15,7 @@ defmodule Doro.Behaviors.TurntableTest do
     end
 
     test "sets turntable playing true", %{turntable: turntable, player: player} do
-      Doro.Behaviors.Turntable.handle(%{verb: "use", object: turntable, player: player})
+      Doro.Behaviors.Turntable.handle("use", %{object: turntable, player: player})
       turntable = Doro.World.get_entity("turntable")
       assert turntable[:playing]
     end
@@ -24,7 +24,7 @@ defmodule Doro.Behaviors.TurntableTest do
       turntable: turntable,
       player: player
     } do
-      Doro.Behaviors.Turntable.handle(%{verb: "use", object: turntable, player: player})
+      Doro.Behaviors.Turntable.handle("use", %{object: turntable, player: player})
       turntable = Doro.World.get_entity("turntable")
       assert ~r{33RPM} |> Regex.match?(turntable[:description])
     end
@@ -43,7 +43,7 @@ defmodule Doro.Behaviors.TurntableTest do
     end
 
     test "sets turntable playing false", %{turntable: turntable, player: player} do
-      Doro.Behaviors.Turntable.handle(%{verb: "stop", object: turntable, player: player})
+      Doro.Behaviors.Turntable.handle("stop", %{object: turntable, player: player})
       turntable = Doro.World.get_entity("turntable")
       refute turntable[:playing]
     end
@@ -52,7 +52,7 @@ defmodule Doro.Behaviors.TurntableTest do
       turntable: turntable,
       player: player
     } do
-      Doro.Behaviors.Turntable.handle(%{verb: "stop", object: turntable, player: player})
+      Doro.Behaviors.Turntable.handle("stop", %{object: turntable, player: player})
       turntable = Doro.World.get_entity("turntable")
       refute ~r{33RPM} |> Regex.match?(turntable[:description])
     end

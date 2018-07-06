@@ -3,11 +3,7 @@ defmodule Doro.Behaviors.SlotMachine do
   import Doro.Comms
   import Doro.SentenceConstruction
 
-  def responds_to?(verb, _) do
-    verb == "use"
-  end
-
-  def handle(%{verb: "use", object: object, player: player}) do
+  interact("use", %{object: object, player: player}) do
     entity =
       Enum.random(object[:slot_machine_rewards])
       |> Doro.Entity.create(%{location: object[:location]}, &generate_instance_name/1)

@@ -6,11 +6,7 @@ defmodule Doro.Behaviors.VascularPlant do
   @prop :vascular_plant_hydration_level
   @default_hydration 10
 
-  def responds_to?(verb, _) do
-    verb == "water"
-  end
-
-  def handle(%{verb: "water", object: plant, player: player}) do
+  interact("water", %{object: plant, player: player}) do
     plant = Doro.World.set_prop(plant, @prop, @default_hydration)
     Doro.Comms.send_to_player(player, "You water #{definite(plant)}.")
     Doro.Comms.send_to_others(player, "#{definite(player)} waters #{definite(plant)}.")

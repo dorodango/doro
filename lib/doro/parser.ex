@@ -36,19 +36,7 @@ defmodule Doro.Parser do
 
   @impl true
   def init(_) do
-    synonyms =
-      Doro.Behavior.all_behaviors()
-      |> Enum.reduce(%{}, &Map.merge(&1.synonyms(), &2))
-      |> Enum.reduce(%{}, fn {canonical, synonyms}, acc ->
-        Map.merge(
-          acc,
-          Enum.reduce(synonyms, %{}, fn synonym, acc2 ->
-            Map.put(acc2, synonym, canonical)
-          end)
-        )
-      end)
-
-    {:ok, %{synonyms: synonyms}}
+    {:ok, %{synonyms: synonym_map()}}
   end
 
   @impl true
@@ -59,5 +47,22 @@ defmodule Doro.Parser do
       |> String.downcase()
 
     {:reply, Map.get(synonyms, normalized, normalized), state}
+  end
+
+  def synonym_map do
+    Doro.Behavior.all_behaviors()
+    |> Enum.reduce(%{}, fn behavior, acc ->
+      Enum.reduce(behavior.synonyms(), acc, fn {k, v}, acc2 ->
+        Map.put(acc2, k, Map.get(acc2, k, []) ++ v)
+      end)
+    end)
+    |> Enum.reduce(%{}, fn {canonical, synonyms}, acc ->
+      Map.merge(
+        acc,
+        Enum.reduce(synonyms, %{}, fn synonym, acc2 ->
+          Map.put(acc2, synonym, canonical)
+        end)
+      )
+    end)
   end
 end

@@ -3,11 +3,11 @@ defmodule Doro.Behaviors.Visible do
   import Doro.Comms
   import Doro.SentenceConstruction
 
-  def responds_to?(verb, %{player: player, object: object}) do
-    verb == "look" && player != object
+  interact_if("look", %{player: player, object: object}) do
+    player != object
   end
 
-  def handle(%{verb: "look", player: player, object: object}) do
+  interact("look", %{player: player, object: object}) do
     send_to_player(player, first_person_description(object))
     send_to_others(player, "#{definite(player)} looks at #{definite(object)} thoughtfully.")
   end

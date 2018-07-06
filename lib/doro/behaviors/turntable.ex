@@ -4,14 +4,7 @@ defmodule Doro.Behaviors.Turntable do
 
   @spinning_message "The record is spinning at 33RPM."
 
-  def synonyms, do: %{"use" => ~w(play)}
-
-  def responds_to?(verb, _) do
-    ["stop", "play", "use"]
-    |> Enum.find(fn r -> r == verb end)
-  end
-
-  def handle(%{verb: "use", object: object, player: player}) do
+  interact("use", ~w(play), %{object: object, player: player}) do
     if object |> is_playing? do
       player |> send_to_player("It's already playing.")
     else
@@ -22,7 +15,7 @@ defmodule Doro.Behaviors.Turntable do
     end
   end
 
-  def handle(%{verb: "stop", object: object, player: player}) do
+  interact("stop", %{object: object, player: player}) do
     if !(object |> is_playing?) do
       player |> send_to_player("It's already not playing.")
     else
