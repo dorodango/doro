@@ -1,52 +1,42 @@
+/*eslint no-console: ["error", { allow: ["warn", "error"] }] */
+
 import React, { Component } from "react"
+import PropTypes from "proptypes"
 import {
   find,
   map,
   merge,
-  omit,
   prepend,
   prop,
   propEq,
-  join,
   addIndex,
   uniq,
   identity,
   filter,
   pipe,
-  isNil,
-  isEmpty,
   sortBy,
-  reduce,
-  flatten,
 } from "ramda"
 import axios from "axios"
 import download from "downloadjs"
 
 import EntityForm from "../EntityForm/EntityForm"
 
-const isBlank = x => !isNil(x) && !isEmpty(x)
-const compact = filter(isBlank)
-
 class Entity extends Component {
+  static propTypes = {
+    entity: PropTypes.object,
+    handleEdit: PropTypes.func.isRequired,
+    handleDelete: PropTypes.func.isRequired,
+  }
+
   constructor(props) {
     super(props)
   }
 
-  remapEntity = entity => {
-    return {
-      id: entity.id,
-      name: entity.name,
-      behaviors: [],
-      proto: null,
-      props: compact(omit(["name", "id"], entity)),
-    }
-  }
-
-  handleEdit = ev => {
+  handleEdit = _ev => {
     return this.props.handleEdit(this.props.entity)
   }
 
-  handleDelete = ev => {
+  handleDelete = _ev => {
     return this.props.handleDelete(this.props.entity)
   }
 
@@ -84,7 +74,7 @@ class EntityForms extends Component {
         }
       },
       error => {
-        console.log("ERROR", error)
+        console.warn("ERROR", error)
       }
     )
     axios.get("/api/behaviors").then(response => {
@@ -111,7 +101,7 @@ class EntityForms extends Component {
     })
   }
 
-  handleDownload = ev => {
+  handleDownload = _ev => {
     download(
       JSON.stringify({ entities: this.state.entities }),
       "game_state.json",
@@ -119,36 +109,25 @@ class EntityForms extends Component {
     )
   }
 
-  handleUpdateWorld = ev => {
+  handleUpdateWorld = _ev => {
     axios
       .post("/api/game_state", { entities: this.state.entities })
       .then(
-        response => console.log("[Game State Reload] success", response),
-        error => console.log("[Game State Reload] Failure", error)
+        response => console.warn("[Game State Reload] success", response),
+        error => console.warn("[Game State Reload] Failure", error)
       )
   }
 
-  handleReset = ev => {
+  handleReset = _ev => {
     axios
       .put("/api/game_state")
       .then(
-        response => console.log("[Game State Reset] success", response),
-        error => console.log("[Game State Reset] Failure", error)
+        response => console.warn("[Game State Reset] success", response),
+        error => console.warn("[Game State Reset] Failure", error)
       )
   }
 
-  remapEntity = entity => {
-    return {
-      id: entity.id,
-      name: entity.name,
-      behaviors: [],
-      proto: null,
-      props: compact(omit(["name", "id"], entity)),
-    }
-  }
-
   handleAddEntity = entity => {
-    console.log("ADD ENTITY", entity)
     const currentState = this.state
 
     const upsert = (obj, data) => {

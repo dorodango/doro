@@ -27,7 +27,7 @@
       "id": "closet",
       "behaviors": [],
       "props": {
-        "description": "You are in a tiny dark closet"
+        "description": "You are in a tiny dark closet."
       }
     },
     {
@@ -36,7 +36,7 @@
       "behaviors": ["exit", "visible"],
       "props": {
         "location": "start",
-        "description": "A door with a sign that reads 'Brooms'",
+        "description": "A door with a sign that reads 'Brooms'.",
         "destination_id": "closet"
       }
     },

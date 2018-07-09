@@ -1,14 +1,9 @@
 /* This file is for your main application css. */
-
+html,
 body {
-  padding: 20px;
-}
-
-#output {
-  height: 80vh;
-  font-family: monospace;
-  outline: 1px solid #eee;
-  overflow-y: scroll;
+   margin:0;
+   padding: 20px;
+   height:100%;
 }
 
 #player {
@@ -17,4 +12,9 @@ body {
 
 #input {
   width: 100%;
+  outline: 1px solid #eee;
+}
+
+#footer {
+  padding: 10px 0;
 }

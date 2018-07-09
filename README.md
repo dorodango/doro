@@ -11,6 +11,21 @@ Now you can visit [`localhost:4000`](http://localhost:4000) from your browser.
 
 Ready to run in production? Please [check our deployment guides](http://www.phoenixframework.org/docs/deployment).
 
+# Developers
+
+## JS
+
+### Lint
+
+We have eslint and prettier installed.  Please use
+
+```
+yarn lint-fix
+```
+
+while in the assets directory to run `prettier` before checking stuff in.
+
+
 ## Learn more
 
   * Official website: http://www.phoenixframework.org/
