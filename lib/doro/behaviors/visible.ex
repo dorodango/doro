@@ -3,16 +3,20 @@ defmodule Doro.Behaviors.Visible do
   import Doro.Comms
   import Doro.SentenceConstruction
 
-  interact_if("look", %{player: player, object: object}) do
-    player != object
-  end
-
-  interact("look", %{player: player, object: object}) do
-    send_to_player(player, first_person_description(object))
-    send_to_others(player, "#{definite(player)} looks at #{definite(object)} thoughtfully.")
+  interact_if("look", %{player: player, object: object, rest: rest}) do
+    player != object || Doro.Entity.named?(player, rest)
   end
 
   def first_person_description(entity) do
     "#{definite(entity)} #{entity[:description]}"
+  end
+
+  defp look_at(player, object) when player == object do
+    send_to_player(player, "You #{object[:description]}")
+  end
+
+  defp look_at(player, object) do
+    send_to_player(player, first_person_description(object))
+    send_to_others(player, "#{definite(player)} looks at #{definite(object)} thoughtfully.")
   end
 end

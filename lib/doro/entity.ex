@@ -75,6 +75,8 @@ defmodule Doro.Entity do
     'red' -> <redpen>
     'pen' -> <redpen>, <bluepen>
   """
+  def named?(_, nil), do: false
+
   def named?(entity, name) do
     entity.name_tokens
     |> MapSet.member?(String.downcase(name))
