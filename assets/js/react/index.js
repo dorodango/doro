@@ -1,14 +1,19 @@
 import React from "react"
 import ReactDOM from "react-dom"
-import GameStateEditor from "./GameStateEditor/GameStateEditor"
-import GamePlayer from "./GamePlayer/GamePlayer"
+import { Provider } from "react-redux"
+import configureApp from "./store/configureApp"
 
-const editorRoot = document.getElementById("GameStateEditor")
-if (editorRoot) {
-  ReactDOM.render(<GameStateEditor />, editorRoot)
-}
+import App from "./App"
 
-const gamePlayRoot = document.getElementById("GamePlayer")
-if (gamePlayRoot) {
-  ReactDOM.render(<GamePlayer />, gamePlayRoot)
+const doro = document.getElementById("Doro")
+if (doro) {
+  const store = configureApp({
+    /* initial state */
+  })
+  ReactDOM.render(
+    <Provider store={store}>
+      <App />
+    </Provider>,
+    doro
+  )
 }

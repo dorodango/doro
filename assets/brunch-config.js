@@ -61,6 +61,7 @@ exports.config = {
       ],
       // Do not use ES6 compiler in vendor code
       plugins: [
+        'transform-async-to-generator',
         "transform-object-rest-spread",
         [
           "transform-class-properties",
@@ -86,6 +87,9 @@ exports.config = {
       "react-select": [
         'dist/react-select.css'
       ]
+    },
+    aliases: {
+      'redux-saga/effects': 'redux-saga/lib/effects'
     }
   }
 };

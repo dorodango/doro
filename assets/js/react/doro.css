@@ -1,0 +1,20 @@
+.doro {
+  display: flex;
+}
+.doro-main {
+  flex: 1;
+  margin: 0 20px;
+}
+.doro-aside {
+  flex: 1;
+  padding: 20px;
+  border-left: 1px solid #eee;
+  border-bottom: 1px solid #eee;
+  background-color: #f0ffff;
+} 
+.doro-main__controls {
+  display: flex;
+  justify-content: flex-end;
+  position: sticky;
+  top: 10px;
+}

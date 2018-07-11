@@ -54,10 +54,10 @@ class CommandInput extends Component {
 
   render() {
     return (
-      <div id="footer">
+      <div className="CommandInput">
         <input
-          id="input"
           onKeyDown={this.handleKeyDown}
+          className="CommandInput__input"
           ref={this.input}
           placeholder="Enter a command"
           autoFocus={true}

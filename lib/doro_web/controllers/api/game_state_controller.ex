@@ -6,14 +6,6 @@ defmodule DoroWeb.Api.GameStateController do
     send_resp(conn, :ok, "")
   end
 
-  def show(conn, _params) do
-    entities =
-      Doro.World.GameState.get()
-      |> Doro.World.Marshal.marshal()
-
-    render(conn, "show.json", %{entities: entities})
-  end
-
   def update(conn, %{"entities" => entities}) do
     # atomize the keys all the way down
     entities

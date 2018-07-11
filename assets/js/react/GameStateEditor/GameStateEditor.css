@@ -1,0 +1,23 @@
+.GameStateEditor {
+  position: sticky;
+  top: 10px;
+}
+
+.GameStateEditor-current {
+  display: flex;
+  flex-direction: column;
+  text-align: left;
+  font-size: 10px;
+}
+
+.GameStateEditor__addNew {
+  padding: 0 20px;
+  top: 10px;
+  position: sticky
+}
+
+.GameStateEditor__actions {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 10px;
+}

@@ -32,6 +32,7 @@ const MessageItem = props => {
   }
   return <div className="DoroOutput__item">{items}</div>
 }
+
 MessageItem.propTypes = {
   message: PropTypes.shape({ text: PropTypes.string.isRequired }),
 }
@@ -71,7 +72,9 @@ class DoroOutput extends Component {
     return (
       <div className="DoroOutput">
         {mapIndexed(
-          (msg, index) => <MessageItem key={index} message={msg} />,
+          (msg, index) => (
+            <MessageItem key={index} message={msg} />
+          ),
           this.state.messages
         )}
         <div
