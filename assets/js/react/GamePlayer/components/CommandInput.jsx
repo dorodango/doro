@@ -15,16 +15,37 @@ class CommandInput extends Component {
     const channel = socket.channel(`player:${player.playerId}`)
     channel.join()
     this.channel = channel
+
+    this.history = []
+    this.historyIndex = -1
   }
 
-  handleKeyPress = ev => {
-    const cmd = this.input.current.value
-    if (ev.key === "Enter" && cmd.length) {
-      this.channel.push("cmd", {
-        cmd: cmd,
-      })
-      this.input.current.value = ""
+  handleKeyDown = ev => {
+    switch (ev.key) {
+      case "Enter":
+        const cmd = this.input.current.value
+        this.channel.push("cmd", { cmd: cmd })
+        this.history.unshift(cmd)
+        this.input.current.value = ""
+        break
+      case "ArrowUp":
+        this.restoreHistory(1)
+        ev.preventDefault()
+        break
+      case "ArrowDown":
+        this.restoreHistory(-1)
+        ev.preventDefault()
+        break
+      default:
+        this.historyIndex = -1
     }
+  }
+
+  restoreHistory = offset => {
+    let idx = this.historyIndex + offset
+    idx = Math.max(0, Math.min(idx, this.history.length - 1))
+    this.input.current.value = this.history[idx]
+    this.historyIndex = idx
   }
 
   render() {
@@ -32,7 +53,7 @@ class CommandInput extends Component {
       <div id="footer">
         <input
           id="input"
-          onKeyPress={this.handleKeyPress}
+          onKeyDown={this.handleKeyDown}
           ref={this.input}
           placeholder="Enter a command"
           autoFocus={true}
