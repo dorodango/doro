@@ -8,5 +8,6 @@
       "id": "loader-test-entity-2",
       "name": "Entity 2 from loader test 1"
     }
-  ]
+  ],
+  "sources": ["priv_file://fixtures/loader_test_2.json"]
 }

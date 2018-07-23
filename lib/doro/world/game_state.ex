@@ -4,11 +4,11 @@ defmodule Doro.World.GameState do
   @table_name :entities
 
   def start_link(_) do
-    GenServer.start_link(
-      __MODULE__,
-      read_default_world() |> Map.get(:entities),
-      name: __MODULE__
-    )
+    GenServer.start_link(__MODULE__, [], name: __MODULE__)
+  end
+
+  def clear do
+    GenServer.call(__MODULE__, :clear)
   end
 
   def set(new_state) do
@@ -44,12 +44,6 @@ defmodule Doro.World.GameState do
     GenServer.call(__MODULE__, {:insert_entities, entities})
   end
 
-  defp read_default_world do
-    %{sources: ["priv_file://entities.json", "priv_file://base_prototypes.json"]}
-    |> Poison.encode!()
-    |> Doro.World.Loader.load()
-  end
-
   defp all_entities do
     :ets.match(@table_name, {:_, :"$1"}) |> List.flatten()
   end
@@ -78,6 +72,12 @@ defmodule Doro.World.GameState do
   def handle_call({:set_entities, entities}, _from, {entities_table}) do
     :ets.delete_all_objects(entities_table)
     do_insert_entities(entities_table, entities)
+    {:reply, :ok, {entities_table}}
+  end
+
+  @impl true
+  def handle_call(:clear, _from, {entities_table}) do
+    :ets.delete_all_objects(entities_table)
     {:reply, :ok, {entities_table}}
   end
 

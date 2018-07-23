@@ -1,12 +1,9 @@
 defmodule Doro.Behaviors.TurntableTest do
   use ExUnit.Case, async: false
 
-  import Doro.TestFixtures
-
   describe "handle(%{verb: use})/3" do
     setup do
-      read_fixture("turntable.json") |> Doro.World.clobber()
-      Doro.World.GameState.get() |> Doro.World.Marshal.marshal()
+      Doro.World.load("priv_file://fixtures/turntable.json")
 
       %{
         turntable: Doro.World.get_entity("turntable"),
@@ -32,8 +29,7 @@ defmodule Doro.Behaviors.TurntableTest do
 
   describe "handle(%{verb: stop})/3" do
     setup do
-      read_fixture("turntable.json") |> Doro.World.clobber()
-      Doro.World.GameState.get() |> Doro.World.Marshal.marshal()
+      Doro.World.load("priv_file://fixtures/turntable.json")
       Doro.World.get_entity("turntable") |> Doro.World.set_prop(:playing, true)
 
       %{

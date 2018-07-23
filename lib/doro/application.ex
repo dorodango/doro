@@ -20,7 +20,11 @@ defmodule Doro.Application do
     # See https://hexdocs.pm/elixir/Supervisor.html
     # for other strategies and supported options
     opts = [strategy: :one_for_one, name: Doro.Supervisor]
-    Supervisor.start_link(children, opts)
+    {:ok, pid} = Supervisor.start_link(children, opts)
+
+    Doro.World.load_default()
+
+    {:ok, pid}
   end
 
   # Tell Phoenix to update the endpoint configuration

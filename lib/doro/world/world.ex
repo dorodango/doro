@@ -61,26 +61,18 @@ defmodule Doro.World do
   end
 
   @doc "Loads a world file"
-  def load(s) do
-    s
-    |> Doro.World.Loader.load()
-    |> clobber()
+  def load(source) do
+    clobber(%{entities: Doro.World.WorldFile.load_source(source)})
   end
 
   @doc "Loads from gist"
   def load_from_gist(gist_id) do
-    Logger.info("Loading world file from gist: #{gist_id}")
-
-    gist_id
-    |> Doro.Utils.load_gist()
-    |> load()
+    clobber(%{entities: Doro.World.WorldFile.load_source("gist://#{gist_id}")})
   end
 
   @doc "Loads a world from game_state.json"
   def load_default() do
-    Path.join(:code.priv_dir(:doro), "world.json")
-    |> File.read!()
-    |> load()
+    clobber(%{entities: Doro.World.WorldFile.load_source("priv_file://world.json")})
   end
 
   @doc "Replaces the current game state"
