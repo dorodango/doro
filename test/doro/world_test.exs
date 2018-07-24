@@ -5,17 +5,14 @@ defmodule Doro.WorldTest do
   import Doro.World.EntityFilters
 
   setup do
-    %{
-      entities: [
-        %{id: "start"},
-        %{id: "basement"},
-        %{id: "player12", name: "John Foo", behaviors: ["player"], props: %{location: "start"}},
-        %{id: "player34", name: "Foo Bar", behaviors: ["player"], props: %{location: "basement"}},
-        %{id: "plant", behaviors: ["visible"], props: %{location: "start"}}
-      ]
-    }
-    |> Poison.encode!()
-    |> World.clobber()
+    [
+      %{id: "start"},
+      %{id: "basement"},
+      %{id: "player12", name: "John Foo", behaviors: ["player"], props: %{location: "start"}},
+      %{id: "player34", name: "Foo Bar", behaviors: ["player"], props: %{location: "basement"}},
+      %{id: "plant", behaviors: ["visible"], props: %{location: "start"}}
+    ]
+    |> World.load_debug()
 
     :ok
   end

@@ -22,7 +22,7 @@ defmodule Doro.Application do
     opts = [strategy: :one_for_one, name: Doro.Supervisor]
     {:ok, pid} = Supervisor.start_link(children, opts)
 
-    Doro.World.load_default()
+    Doro.World.load()
 
     {:ok, pid}
   end

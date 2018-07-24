@@ -42,6 +42,11 @@ defmodule Doro.World.WorldFile do
     parse({source_spec, Doro.Utils.load_gist(gist_id)})
   end
 
+  def load_debug(entities) do
+    entities
+    |> Enum.map(&Doro.World.Marshal.unmarshal_entity/1)
+  end
+
   defp load_url(url) do
     Logger.info("Loading entities from url: #{url}")
     parse({url, Doro.Utils.load_url(url)})

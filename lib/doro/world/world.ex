@@ -61,28 +61,16 @@ defmodule Doro.World do
   end
 
   @doc "Loads a world file"
-  def load(source) do
-    clobber(%{entities: Doro.World.WorldFile.load_source(source)})
+  def load(source \\ "priv_file://world.json") do
+    clobber(Doro.World.WorldFile.load_source(source))
   end
 
-  @doc "Loads from gist"
-  def load_from_gist(gist_id) do
-    clobber(%{entities: Doro.World.WorldFile.load_source("gist://#{gist_id}")})
+  @doc "Loads a world from a list of entity specifications -- for debugging and testing"
+  def load_debug(entity_specs) do
+    clobber(Doro.World.WorldFile.load_debug(entity_specs))
   end
 
-  @doc "Loads a world from game_state.json"
-  def load_default() do
-    clobber(%{entities: Doro.World.WorldFile.load_source("priv_file://world.json")})
-  end
-
-  @doc "Replaces the current game state"
-  def clobber(s) when is_binary(s) do
-    s
-    |> Doro.World.Marshal.unmarshal()
-    |> clobber()
-  end
-
-  def clobber(new_state) when is_map(new_state) do
-    GameState.set(new_state)
+  defp clobber(entities) do
+    GameState.set(%{entities: entities})
   end
 end

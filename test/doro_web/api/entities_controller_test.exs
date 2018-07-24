@@ -1,11 +1,9 @@
 defmodule DoroWeb.Api.UserControllerTest do
   use DoroWeb.ConnCase, async: false
 
-  import Doro.TestFixtures
-
   describe "&create/2" do
     setup do
-      Doro.World.clobber(%{entities: []})
+      Doro.World.load_debug([])
       %{params: %{id: "tomcat"}}
     end
 
@@ -81,8 +79,7 @@ defmodule DoroWeb.Api.UserControllerTest do
 
   describe "&update/2" do
     setup do
-      read_fixture("turntable.json") |> Doro.World.clobber()
-
+      Doro.World.load("priv_file://fixtures/turntable.json")
       %{params: %{id: "turntable", behaviors: ["visible", "slot_machine"]}}
     end
 
