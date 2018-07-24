@@ -4,7 +4,7 @@ defmodule Doro.Entity do
 
   defstruct proto: nil,
             id: nil,
-            behaviors: [],
+            behaviors: %{},
             name: nil,
             name_tokens: nil,
             src: nil,
@@ -40,20 +40,19 @@ defmodule Doro.Entity do
   @doc "Returns the first behavior that can handle this verb in this context"
   def first_responder(entity = %Entity{}, ctx = %Doro.Context{verb: verb}) do
     behaviors(entity)
+    |> Map.keys()
     |> Enum.find(& &1.responds_to?(verb, %{ctx | object: entity}))
   end
 
   @doc "Returns all behaviors for this entity"
-  def behaviors(nil), do: []
+  def behaviors(nil), do: %{}
 
-  def behaviors(entity = %Entity{}) do
-    (entity.behaviors || []) ++ behaviors(World.get_entity(entity.proto))
+  def behaviors(entity = %Entity{behaviors: my_behaviors}) do
+    Map.merge(behaviors(World.get_entity(entity.proto)), my_behaviors)
   end
 
   def has_behavior?(entity, behavior) do
-    entity
-    |> behaviors()
-    |> Enum.member?(behavior)
+    match?(%{^behavior => _}, behaviors(entity))
   end
 
   @doc "Returns a property for this entity, including looking up the prototype chain"

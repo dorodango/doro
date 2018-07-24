@@ -2,18 +2,18 @@ defmodule Doro.SentenceConstructionTest do
   use ExUnit.Case, async: true
 
   import Doro.SentenceConstruction
-  alias Doro.Entity
 
   setup do
-    dusty = %Entity{name: "Dusty Cake"}
-    aromatic = %Entity{name: "Aromatic Cake"}
-    iceman = %Entity{name: "Iceman", behaviors: [Doro.Behaviors.Player]}
+    [
+      %{id: "dusty", name: "Dusty Cake"},
+      %{id: "aromatic", name: "Aromatic Cake"},
+      %{id: "iceman", name: "Iceman", behaviors: ["player"]}
+    ]
+    |> Doro.World.load_debug()
 
-    %{
-      dusty: dusty,
-      aromatic: aromatic,
-      iceman: iceman
-    }
+    ~w(dusty aromatic iceman)
+    |> Enum.map(&{String.to_atom(&1), Doro.World.get_entity(&1)})
+    |> Enum.into(%{})
   end
 
   describe("definite/1") do

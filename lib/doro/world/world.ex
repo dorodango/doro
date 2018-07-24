@@ -40,7 +40,10 @@ defmodule Doro.World do
   def add_behavior(entity, behavior) do
     case Entity.has_behavior?(entity, behavior) do
       false ->
-        GameState.add_entity(%{entity | behaviors: [behavior | entity.behaviors]})
+        GameState.add_entity(%{
+          entity
+          | behaviors: Map.put(entity.behaviors, behavior, struct(behavior))
+        })
 
       _ ->
         entity

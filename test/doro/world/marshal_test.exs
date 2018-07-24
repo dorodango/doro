@@ -2,6 +2,8 @@ defmodule Doro.World.MarshalTest do
   use ExUnit.Case, async: true
 
   alias Doro.World.Marshal
+  alias Doro.Behaviors.Visible
+  alias Doro.Behaviors.Player
 
   describe "marshal/1" do
     setup do
@@ -18,7 +20,7 @@ defmodule Doro.World.MarshalTest do
       ice = marshalled |> find_entity_by_id("ice")
       assert ice |> Map.get(:behaviors) == []
       player = marshalled |> find_entity_by_id("_player")
-      assert player |> Map.get(:behaviors) == ["visible", "player"]
+      assert MapSet.equal?(MapSet.new(player.behaviors), MapSet.new(["visible", "player"]))
       god = marshalled |> find_entity_by_id("_god")
       assert god |> Map.get(:behaviors) == ["god"]
     end
@@ -38,20 +40,26 @@ defmodule Doro.World.MarshalTest do
 
   describe "unmarshal_entity/1" do
     test "transforms an entity spec into an Entity ready to be added to the world" do
-      entity_spec = %{
-        id: "_player",
-        name: "Player prototype",
-        behaviors: ["visible", "player"],
-        props: %{
-          description: "is player prototype.  Put some props on the instance!"
+      entity =
+        %{
+          id: "_player",
+          name: "Player prototype",
+          behaviors: ["visible", "player"],
+          props: %{
+            description: "is player prototype.  Put some props on the instance!"
+          }
         }
-      }
+        |> Marshal.unmarshal_entity()
 
-      %Doro.Entity{} = entity = Marshal.unmarshal_entity(entity_spec)
-      assert entity.behaviors == [Doro.Behaviors.Visible, Doro.Behaviors.Player]
+      %Doro.Entity{behaviors: behaviors, name_tokens: name_tokens} = entity
+
+      assert match?(
+               %{Doro.Behaviors.Player => %Player{}, Doro.Behaviors.Visible => %Visible{}},
+               behaviors
+             )
 
       assert MapSet.equal?(
-               entity.name_tokens,
+               name_tokens,
                MapSet.new(["player", "prototype", "player prototype"])
              )
     end

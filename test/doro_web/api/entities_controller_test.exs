@@ -1,6 +1,8 @@
 defmodule DoroWeb.Api.UserControllerTest do
   use DoroWeb.ConnCase, async: false
 
+  alias Doro.Entity
+
   describe "&create/2" do
     setup do
       Doro.World.load_debug([])
@@ -18,16 +20,16 @@ defmodule DoroWeb.Api.UserControllerTest do
 
       assert response == %{"message" => "created entity: tomcat"}
 
-      expected_entity = %Doro.Entity{
-        behaviors: [Doro.Behaviors.Visible],
-        id: "tomcat",
-        name: "tomcat",
-        name_tokens: MapSet.new(["tomcat"]),
-        props: %{},
-        proto: nil
-      }
-
-      assert Doro.World.get_entity("tomcat") == expected_entity
+      assert match?(
+               %Entity{
+                 behaviors: %{Doro.Behaviors.Visible => _},
+                 id: "tomcat",
+                 name: "tomcat",
+                 props: %{},
+                 proto: nil
+               },
+               Doro.World.get_entity("tomcat")
+             )
     end
 
     test "&create/2 creates a new entity with specified behaviors", %{
@@ -42,16 +44,16 @@ defmodule DoroWeb.Api.UserControllerTest do
       |> put("/api/entities", params |> Map.merge(extra_params))
       |> json_response(200)
 
-      expected_entity = %Doro.Entity{
-        behaviors: [Doro.Behaviors.Visible, Doro.Behaviors.Turntable],
-        id: "tomcat",
-        name: "tomcat",
-        name_tokens: MapSet.new(["tomcat"]),
-        props: %{},
-        proto: nil
-      }
-
-      assert Doro.World.get_entity("tomcat") == expected_entity
+      assert match?(
+               %Entity{
+                 behaviors: %{Doro.Behaviors.Visible => _, Doro.Behaviors.Turntable => _},
+                 id: "tomcat",
+                 name: "tomcat",
+                 props: %{},
+                 proto: nil
+               },
+               Doro.World.get_entity("tomcat")
+             )
     end
 
     test "&create/2 creates a new entity with the right props", %{
@@ -73,7 +75,7 @@ defmodule DoroWeb.Api.UserControllerTest do
       assert entity.name == "the tomcat"
       assert entity.name_tokens == MapSet.new(["the", "tomcat", "the tomcat"])
       assert entity[:location] == "room"
-      assert entity.behaviors |> Enum.member?(Doro.Behaviors.Visible)
+      assert Entity.has_behavior?(entity, Doro.Behaviors.Visible)
     end
   end
 
@@ -122,8 +124,8 @@ defmodule DoroWeb.Api.UserControllerTest do
       params: params
     } do
       original = Doro.World.get_entity("turntable")
-      assert original.behaviors |> Enum.member?(Doro.Behaviors.Visible)
-      assert original.behaviors |> Enum.member?(Doro.Behaviors.Turntable)
+      assert Entity.has_behavior?(original, Doro.Behaviors.Visible)
+      assert Entity.has_behavior?(original, Doro.Behaviors.Turntable)
 
       conn
       |> post("/api/entities/#{params[:id]}", %{
@@ -132,7 +134,7 @@ defmodule DoroWeb.Api.UserControllerTest do
       |> json_response(200)
 
       updated = Doro.World.get_entity("turntable")
-      assert updated.behaviors == [Doro.Behaviors.God]
+      assert Entity.has_behavior?(updated, Doro.Behaviors.God)
     end
   end
 end

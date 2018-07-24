@@ -40,6 +40,13 @@ defmodule Doro.Behavior do
       def responds_to?(verb, _) do
         MapSet.member?(@canonical_verbs, verb)
       end
+
+      @key __MODULE__
+           |> Macro.underscore()
+           |> String.split("/")
+           |> List.last()
+           |> String.to_atom()
+      def key, do: @key
     end
   end
 
@@ -48,16 +55,6 @@ defmodule Doro.Behavior do
 
     modules
     |> Enum.filter(&Regex.match?(~r/^Elixir\.Doro\.Behaviors\./, Atom.to_string(&1)))
-  end
-
-  def find(nil), do: nil
-  def find(""), do: nil
-
-  def find(behavior) when is_binary(behavior) do
-    all_behaviors()
-    |> Enum.find(fn entry ->
-      entry == String.to_atom("Elixir.Doro.Behaviors.#{Macro.camelize(behavior)}")
-    end)
   end
 
   def execute(behavior, ctx = %Doro.Context{}) do

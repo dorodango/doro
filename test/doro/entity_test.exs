@@ -32,10 +32,14 @@ defmodule Doro.EntityTest do
       baz = World.get_entity("baz")
       instance = World.get_entity("instance")
 
-      assert [Visible] = Entity.behaviors(foo)
-      assert [Portable, Player, Visible] = Entity.behaviors(bar)
-      assert [God, Portable, Player, Visible] = Entity.behaviors(baz)
-      assert [God, Portable, Player, Visible] = Entity.behaviors(instance)
+      assert match?(%{Visible => _}, Entity.behaviors(foo))
+      assert match?(%{Portable => _, Player => _, Visible => _}, Entity.behaviors(bar))
+      assert match?(%{God => _, Portable => _, Player => _, Visible => _}, Entity.behaviors(baz))
+
+      assert match?(
+               %{God => _, Portable => _, Player => _, Visible => _},
+               Entity.behaviors(instance)
+             )
     end
   end
 

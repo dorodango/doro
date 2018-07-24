@@ -23,15 +23,15 @@ defmodule Doro.World.Marshal do
   end
 
   defp unresolve_behaviors(nil), do: nil
-  defp unresolve_behaviors(entity = %{behaviors: []}), do: entity
 
   defp unresolve_behaviors(entity) do
-    %{entity | behaviors: entity |> Map.get(:behaviors, []) |> Enum.map(&canonicalize_behavior/1)}
-  end
+    marshalled_behaviors =
+      entity.behaviors
+      |> Map.keys()
+      |> Enum.map(& &1.key())
+      |> Enum.map(&Atom.to_string/1)
 
-  defp canonicalize_behavior(behavior_module) do
-    behavior_module
-    |> Modules.to_underscore()
+    %{entity | behaviors: marshalled_behaviors}
   end
 
   defp atomize_props_keys(data) do
@@ -47,8 +47,18 @@ defmodule Doro.World.Marshal do
       data,
       :behaviors,
       Map.get(data, :behaviors, [])
-      |> Enum.map(&Doro.Behavior.find/1)
+      |> Enum.map(&resolve_behavior/1)
       |> Enum.filter(& &1)
+      |> Enum.into(%{})
     )
+  end
+
+  defp resolve_behavior(key) when is_binary(key), do: resolve_behavior(String.to_atom(key))
+
+  defp resolve_behavior(key) when is_atom(key) do
+    case Enum.find(Doro.Behavior.all_behaviors(), &(&1.key() == key)) do
+      nil -> nil
+      behavior -> {behavior, struct(behavior)}
+    end
   end
 end
