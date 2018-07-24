@@ -9,9 +9,22 @@ To start your Phoenix server:
 
 Now you can visit [`localhost:4000`](http://localhost:4000) from your browser.
 
-Ready to run in production? Please [check our deployment guides](http://www.phoenixframework.org/docs/deployment).
-
 # Developers
+
+## Slack Transport
+
+To connect the slack transport to your instance:
+
+1.  Create an app at https://api.slack.com/apps, and attach it to your workspace.
+2.  Under "Bot Users", click "Add a Bot User" and configure.
+3.  Under "OAuth & Permissions", click "Install App to Workspace"
+4.  Create a `config/dev.secret.exs` file if needed, and add the "Bot User OAuth Access Token" to it:
+    ```elixir
+    use Mix.Config
+
+    config :doro,
+      slack_api_key: "<Bot Access Token>"
+    ```
 
 ## JS
 
@@ -25,11 +38,3 @@ yarn lint-fix
 
 while in the assets directory to run `prettier` before checking stuff in.
 
-
-## Learn more
-
-  * Official website: http://www.phoenixframework.org/
-  * Guides: http://phoenixframework.org/docs/overview
-  * Docs: https://hexdocs.pm/phoenix
-  * Mailing list: http://groups.google.com/group/phoenix-talk
-  * Source: https://github.com/phoenixframework/phoenix
