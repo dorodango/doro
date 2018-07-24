@@ -13,7 +13,7 @@ defmodule Doro.SentenceConstruction do
     end
   end
 
-  def proper(entity = %Doro.Entity{name: name}) do
+  def proper(%Doro.Entity{name: name}) do
     name
   end
 

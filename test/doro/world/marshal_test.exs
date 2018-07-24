@@ -1,16 +1,14 @@
 defmodule Doro.World.MarshalTest do
   use ExUnit.Case, async: true
 
-  import Doro.TestFixtures
-
   alias Doro.World.Marshal
 
   describe "marshal/1" do
     setup do
-      read_fixture("world.json") |> Doro.World.clobber()
+      Doro.World.load("priv_file://fixtures/world.json")
 
       %{
-        marshalled: %{"entities" => Doro.World.GameState.get() |> Marshal.marshal()}
+        marshalled: %{"entities" => Doro.World.get_entities() |> Marshal.marshal()}
       }
     end
 
@@ -38,16 +36,24 @@ defmodule Doro.World.MarshalTest do
     end
   end
 
-  describe "unmarshal/1" do
-    setup do
-      %{game_state: Marshal.unmarshal(read_fixture("world.json"))}
-    end
+  describe "unmarshal_entity/1" do
+    test "transforms an entity spec into an Entity ready to be added to the world" do
+      entity_spec = %{
+        id: "_player",
+        name: "Player prototype",
+        behaviors: ["visible", "player"],
+        props: %{
+          description: "is player prototype.  Put some props on the instance!"
+        }
+      }
 
-    test "transforms JSON into a usable game state", %{game_state: %{entities: entities}} do
-      assert 5 = length(entities)
+      %Doro.Entity{} = entity = Marshal.unmarshal_entity(entity_spec)
+      assert entity.behaviors == [Doro.Behaviors.Visible, Doro.Behaviors.Player]
 
-      player_proto = entities |> Enum.find(&(&1.id == "_player"))
-      assert [Doro.Behaviors.Visible, Doro.Behaviors.Player] = Doro.Entity.behaviors(player_proto)
+      assert MapSet.equal?(
+               entity.name_tokens,
+               MapSet.new(["player", "prototype", "player prototype"])
+             )
     end
   end
 

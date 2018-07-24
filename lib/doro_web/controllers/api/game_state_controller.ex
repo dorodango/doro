@@ -2,7 +2,7 @@ defmodule DoroWeb.Api.GameStateController do
   use DoroWeb, :controller
 
   def create(conn, _params) do
-    Doro.World.load_default()
+    Doro.World.load()
     send_resp(conn, :ok, "")
   end
 
@@ -14,22 +14,13 @@ defmodule DoroWeb.Api.GameStateController do
     render(conn, "show.json", %{entities: entities})
   end
 
-  def update(conn, params) do
-    params
-    |> Poison.encode()
-    |> case do
-      {:ok, json} ->
-        json |> reload_world
-        send_resp(conn, :ok, "")
+  def update(conn, %{"entities" => entities}) do
+    # atomize the keys all the way down
+    entities
+    |> Poison.encode!()
+    |> Poison.decode!(keys: :atoms)
+    |> Doro.World.load_debug()
 
-      _ ->
-        send_resp(
-          conn,
-          :internal_server_error,
-          %{error: "failed to read game state.json"} |> Poison.encode!()
-        )
-    end
+    send_resp(conn, :ok, "")
   end
-
-  defp reload_world(json), do: json |> Doro.World.clobber()
 end

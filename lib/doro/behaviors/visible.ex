@@ -15,8 +15,4 @@ defmodule Doro.Behaviors.Visible do
   def first_person_description(entity) do
     "#{definite(entity)} #{entity[:description]}"
   end
-
-  defp look_at(player, object) when player == object do
-    send_to_player(player, "You #{object[:description]}")
-  end
 end

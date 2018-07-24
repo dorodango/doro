@@ -4,16 +4,13 @@ defmodule Doro.Behaviors.God do
   import Doro.World.EntityFilters
 
   interact("/reload", %{player: player}) do
-    Doro.World.load_default()
+    Doro.World.load()
     send_to_player(player, "Game state reloaded.")
   end
 
-  interact("/gistworld", %{player: player, original_command: original_command}) do
-    Regex.run(~r/\/gistworld (\w+)/, original_command, capture: :all_but_first)
-    |> List.first()
-    |> Doro.World.load_from_gist()
-
-    send_to_player(player, "Game state reloaded from gist.")
+  interact("/loadworld", %{player: player, rest: world_source}) do
+    Doro.World.load(world_source)
+    send_to_player(player, "Game state reloaded from #{world_source}.")
   end
 
   interact("/entdump", %{player: player}) do
