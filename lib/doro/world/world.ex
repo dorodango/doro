@@ -7,11 +7,16 @@ defmodule Doro.World do
 
   alias Doro.World.GameState
   alias Doro.Entity
+  alias Doro.World.EntityManagement
 
   import Doro.World.EntityFilters
 
   defdelegate get_entity(id), to: GameState
-  defdelegate add_entity(entity), to: GameState
+  defdelegate add_entity(entity), to: EntityManagement
+
+  def add_entities(entities) when is_list(entities) do
+    EntityManagement.add_entities(entities)
+  end
 
   def get_entities(filters \\ []) do
     GameState.get_entities(fn e ->
@@ -38,6 +43,7 @@ defmodule Doro.World do
   end
 
   def add_behavior(entity, behavior) do
+    # FIXME: don't access entity.behaviors
     case Entity.has_behavior?(entity, behavior) do
       false ->
         GameState.add_entity(%{
@@ -74,6 +80,7 @@ defmodule Doro.World do
   end
 
   defp clobber(entities) do
-    GameState.set(%{entities: entities})
+    GameState.clear()
+    Doro.World.add_entities(entities)
   end
 end

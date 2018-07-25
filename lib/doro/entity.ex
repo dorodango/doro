@@ -44,11 +44,12 @@ defmodule Doro.Entity do
     |> Enum.find(& &1.responds_to?(verb, %{ctx | object: entity}))
   end
 
-  @doc "Returns all behaviors for this entity"
-  def behaviors(nil), do: %{}
+  def behaviors(%Entity{behaviors: behaviors}), do: behaviors
 
-  def behaviors(entity = %Entity{behaviors: my_behaviors}) do
-    Map.merge(behaviors(World.get_entity(entity.proto)), my_behaviors)
+  def own_behaviors(%Entity{behaviors: behaviors}) do
+    behaviors
+    |> Enum.filter(&match?({_key, %{own: true}}, &1))
+    |> Enum.into(%{})
   end
 
   def has_behavior?(entity, behavior) do

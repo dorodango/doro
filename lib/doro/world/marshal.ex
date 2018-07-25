@@ -26,7 +26,8 @@ defmodule Doro.World.Marshal do
 
   defp unresolve_behaviors(entity) do
     marshalled_behaviors =
-      entity.behaviors
+      entity
+      |> Doro.Entity.own_behaviors()
       |> Map.keys()
       |> Enum.map(& &1.key())
       |> Enum.map(&Atom.to_string/1)
