@@ -54,6 +54,11 @@ defmodule Doro.World.Marshal do
     )
   end
 
+  defp resolve_behavior(%{type: key} = props) do
+    {behavior, data} = resolve_behavior(key)
+    {behavior, Map.merge(data, props)}
+  end
+
   defp resolve_behavior(key) when is_binary(key), do: resolve_behavior(String.to_atom(key))
 
   defp resolve_behavior(key) when is_atom(key) do
