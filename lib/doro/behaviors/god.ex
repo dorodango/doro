@@ -22,19 +22,18 @@ defmodule Doro.Behaviors.God do
     end)
   end
 
+  interact_if("/edit", %{player: player, rest: rest}) do
+    found_entity = Doro.World.get_entities([in_location(player[:location]), named(rest)])
+    |> Enum.at(0)
+    rest_present = (rest != nil) && (String.length(rest |> String.trim()) > 0)
+    rest_present && found_entity
+  end
+
   interact("/edit", %{player: player, rest: name}) do
     entity = Doro.World.get_entities([in_location(player[:location]), named(name)]) |> Enum.at(0)
-
-    cond do
-      entity != nil ->
-        send_to_player(player,
-          "You concentrate on #{definite(entity)}.  Nothing happens and you feel silly.",
-          entity
-        )
-      name == nil || ("" == (name |> String.trim)) ->
-        send_to_player(player, "Uh... can you be a bit more specific?")
-      true ->
-        send_to_player(player, "I don't see any #{name} here.")
-    end
+    send_to_player(player,
+      "You concentrate on #{definite(entity)}.  Nothing happens and you feel silly.",
+      entity
+    )
   end
 end
