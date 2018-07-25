@@ -167,30 +167,12 @@
       }
     },
     {
-      "id": "plant",
-      "name": "Fiddleleaf Fig",
-      "behaviors": ["visible", "portable", "vascular_plant"],
-      "props": {
-        "location": "start",
-        "description": "is herbaceous, glabrous, and four-pinnate."
-      }
-    },
-    {
       "id": "lacroix",
       "name": "can of Lacroix",
       "behaviors": ["visible", "portable"],
       "props": {
         "location": "start",
         "description": "is coconut flavored.  Yuck."
-      }
-    },
-    {
-      "id": "annoying_clock",
-      "name": "annoying clock",
-      "behaviors": ["visible", "clock"],
-      "props": {
-        "location": "start",
-        "description": "just looks like it wants to annoy you."
       }
     },
     {
