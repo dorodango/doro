@@ -6,7 +6,7 @@ const mapIndexed = addIndex(map)
 const eachWithIndex = addIndex(forEach)
 
 const MessageItem = props => {
-  const parts = props.message.split("\n")
+  const parts = props.message.text.split("\n")
   let items = []
   if (parts.length > 1) {
     items.push(
@@ -32,7 +32,9 @@ const MessageItem = props => {
   }
   return <div className="DoroOutput__item">{items}</div>
 }
-MessageItem.propTypes = { message: PropTypes.string.isRequired }
+MessageItem.propTypes = {
+  message: PropTypes.shape({text: PropTypes.string.isRequired })
+}
 
 class DoroOutput extends Component {
   static propTypes = {

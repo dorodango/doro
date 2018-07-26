@@ -26,7 +26,7 @@ defmodule Doro.Transports.Slack.Session do
 
   @impl true
   @doc "Handle messages for player"
-  def handle_info({:send, s}, state = %{slack_channel: channel}) do
+  def handle_info({:send, %{text: s} }, state = %{slack_channel: channel}) do
     Task.start(fn -> send_message(channel, s) end)
     {:noreply, state}
   end
