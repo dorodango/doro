@@ -33,7 +33,10 @@ defmodule Doro.Behaviors.God do
     entity = Doro.World.get_entities([in_location(player[:location]), named(name)]) |> Enum.at(0)
     send_to_player(player,
       "You concentrate on #{definite(entity)}.  Nothing happens and you feel silly.",
-      entity
+      %{
+        "type": "open_entity_editor",
+        "entity": entity
+      }
     )
   end
 end
