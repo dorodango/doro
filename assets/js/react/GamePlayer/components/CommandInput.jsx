@@ -1,5 +1,6 @@
 import React, { Component } from "react"
 import PropTypes from "proptypes"
+import { isEmpty } from "ramda"
 
 class CommandInput extends Component {
   static propTypes = {
@@ -21,12 +22,15 @@ class CommandInput extends Component {
   }
 
   handleKeyDown = ev => {
+    let cmd
     switch (ev.key) {
       case "Enter":
-        const cmd = this.input.current.value
-        this.channel.push("cmd", { cmd: cmd })
-        this.history.unshift(cmd)
-        this.input.current.value = ""
+        cmd = this.input.current.value
+        if (!isEmpty(cmd)) {
+          this.channel.push("cmd", { cmd: cmd })
+          this.history.unshift(cmd)
+          this.input.current.value = ""
+        }
         break
       case "ArrowUp":
         this.restoreHistory(1)

@@ -33,7 +33,7 @@ const MessageItem = props => {
   return <div className="DoroOutput__item">{items}</div>
 }
 MessageItem.propTypes = {
-  message: PropTypes.shape({text: PropTypes.string.isRequired })
+  message: PropTypes.shape({ text: PropTypes.string.isRequired }),
 }
 
 class DoroOutput extends Component {
