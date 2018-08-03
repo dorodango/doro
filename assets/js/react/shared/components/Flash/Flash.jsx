@@ -22,12 +22,11 @@ class Flash extends Component {
 
   render() {
     const { text, type } = this.props
-    console.log("FOUND", text, type)
     const clazzName = `Flash Flash--${type}`
     if (text && type) {
       return (
-        <div className={clazzName}>
-          <div className="Flash__close-button" onClick={this.handleClose}>
+        <div className={clazzName} onClick={this.handleClose}>
+          <div className="Flash__close-button">
             x
           </div>
           <div className="Flash__message">{text}</div>

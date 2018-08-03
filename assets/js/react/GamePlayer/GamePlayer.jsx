@@ -1,54 +1,69 @@
 import React, { Component } from "react"
-import { Socket as PhoenixSocket } from "phoenix"
+import PropTypes from "proptypes"
+import { connect } from "react-redux"
+import { bindActionCreators } from "redux"
 
+import { configureChannel } from "../shared/channel"
 import JoinForm from "./components/JoinForm"
 import CommandInput from "./components/CommandInput"
 import DoroConsole from "./components/DoroConsole"
-
-const socket = new PhoenixSocket("/socket")
-socket.connect()
+import { sendHello } from "../shared/actions/channel"
 
 class GamePlayer extends Component {
+  static propTypes = {
+    sendHello: PropTypes.func.isRequired
+  }
+
   constructor(props) {
     super(props)
-    this.state = {
-      player: null,
-    }
-    this.socket = socket
   }
 
-  join = playerName => {
-    const currentState = this.state
-    const cb = playerId => {
-      const newState = { player: { playerName, playerId } }
-      this.setState({ ...currentState, ...newState })
-    }
-    const ch = this.socket.channel(`hello:${playerName}`)
-    ch.on("player_info", payload => cb(payload.player_id))
-    ch.join()
-  }
+  /* join = playerName => {
+   *   const currentState = this.state
+   *   const cb = playerId => {
+   *     const newState = { player: { playerName, playerId } }
+   *     this.setState({ ...currentState, ...newState })
+   *   }
+   *   const ch = this.socket.channel(`hello:${playerName}`)
+   *   ch.on("player_info", payload => cb(payload.player_id))
+   *   ch.join()
+   * }
+
+   */
+  loggedIn = () => ( this.props.userSession && this.props.userSession.playerId )
 
   onLogin = playerName => {
-    this.join(playerName)
-  }
-
-  loggedIn = () => {
-    return this.state.player && this.state.player.playerId.length > 0
+    this.props.sendHello(playerName)
   }
 
   render() {
+    const {userSession} = this.props
     return (
       <div className="GamePlayer">
         {!this.loggedIn() && <JoinForm onLogin={this.onLogin} />}
-        {this.loggedIn() && (
-          <DoroConsole socket={this.socket} player={this.state.player} />
-        )}
-        {this.loggedIn() && (
-          <CommandInput socket={this.socket} player={this.state.player} />
-        )}
+        {this.loggedIn() && <DoroConsole /> }
+        {this.loggedIn() && <CommandInput />}
       </div>
     )
   }
 }
 
-export default GamePlayer
+const mapStateToProps = state => ({
+  userSession: state.userSession
+})
+
+const mapDispatchToProps = dispatch =>
+  bindActionCreators(
+    {
+      sendHello,
+    },
+    dispatch
+  )
+
+const connectedComponent = connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(GamePlayer)
+
+export { GamePlayer }
+export default connectedComponent
