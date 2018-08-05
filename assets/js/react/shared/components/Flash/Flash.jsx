@@ -12,7 +12,7 @@ class Flash extends Component {
   }
 
   componentDidMount() {
-    setTimeout( this.props.removeFlashMessage, 7000 )
+    setTimeout(this.props.removeFlashMessage, 7000)
   }
 
   handleClose = ev => {
@@ -26,9 +26,7 @@ class Flash extends Component {
     if (text && type) {
       return (
         <div className={clazzName} onClick={this.handleClose}>
-          <div className="Flash__close-button">
-            x
-          </div>
+          <div className="Flash__close-button">x</div>
           <div className="Flash__message">{text}</div>
         </div>
       )

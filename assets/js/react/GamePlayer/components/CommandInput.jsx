@@ -8,7 +8,7 @@ import { sendCommand } from "../../shared/actions/channel"
 
 class CommandInput extends Component {
   static propTypes = {
-    sendCommand: PropTypes.func.isRequired
+    sendCommand: PropTypes.func.isRequired,
   }
 
   constructor(props) {
@@ -24,7 +24,7 @@ class CommandInput extends Component {
       case "Enter":
         cmd = this.input.current.value
         if (!isEmpty(cmd)) {
-          this.props.sendCommand({cmd})
+          this.props.sendCommand({ cmd })
           this.history.unshift(cmd)
           this.input.current.value = ""
         }
@@ -65,13 +65,13 @@ class CommandInput extends Component {
 }
 
 const mapStateToProps = state => ({
-  userSession: state.userSession
+  userSession: state.userSession,
 })
 
 const mapDispatchToProps = dispatch =>
   bindActionCreators(
     {
-      sendCommand
+      sendCommand,
     },
     dispatch
   )

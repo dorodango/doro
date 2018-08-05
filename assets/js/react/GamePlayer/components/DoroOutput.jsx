@@ -37,7 +37,7 @@ const MessageItem = props => {
 }
 
 MessageItem.propTypes = {
-  message: PropTypes.string.isRequired
+  message: PropTypes.string.isRequired,
 }
 
 class DoroOutput extends Component {
@@ -47,8 +47,8 @@ class DoroOutput extends Component {
 
   static defaultProps = {
     userSession: {
-      messages: []
-    }
+      messages: [],
+    },
   }
 
   constructor(props) {
@@ -71,16 +71,16 @@ class DoroOutput extends Component {
     return (
       <div className="DoroOutput">
         {mapIndexed(
-           (msg, index) => (
-             <MessageItem key={index} message={msg} />
-           ),
-           this.props.userSession.messages
+          (msg, index) => (
+            <MessageItem key={index} message={msg} />
+          ),
+          this.props.userSession.messages
         )}
         <div
           style={{ float: "left", clear: "both" }}
           className="DoroOutput__push-footer"
           ref={el => {
-              this.messagesEnd = el
+            this.messagesEnd = el
           }}
         />
       </div>
@@ -89,15 +89,10 @@ class DoroOutput extends Component {
 }
 
 const mapStateToProps = state => ({
-  userSession: state.userSession
+  userSession: state.userSession,
 })
 
-const mapDispatchToProps = dispatch =>
-  bindActionCreators(
-    {
-    },
-    dispatch
-  )
+const mapDispatchToProps = dispatch => bindActionCreators({}, dispatch)
 
 const connectedComponent = connect(
   mapStateToProps,
@@ -105,4 +100,4 @@ const connectedComponent = connect(
 )(DoroOutput)
 
 export { DoroOutput }
-export default connectedComponent;
+export default connectedComponent

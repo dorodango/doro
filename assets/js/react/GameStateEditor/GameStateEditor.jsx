@@ -53,24 +53,6 @@ class GameStateEditor extends Component {
     )
   }
 
-  handleUpdateWorld = _ev => {
-    /* axios
-     *   .post("/api/game_state", { entities: this.state.entities })
-     *   .then(
-     *     response => console.warn("[Game State Reload] success", response),
-     *     error => console.warn("[Game State Reload] Failure", error)
-     *   )*/
-  }
-
-  handleReset = _ev => {
-    /* axios
-     *   .put("/api/game_state")
-     *   .then(
-     *     response => console.warn("[Game State Reset] success", response),
-     *     error => console.warn("[Game State Reset] Failure", error)
-     *   )*/
-  }
-
   handleClear = _ev => {
     this.setState({
       entities: [],
@@ -105,18 +87,6 @@ class GameStateEditor extends Component {
         <section className="GameStateEditor-current">
           <header>
             <div className="GameStateEditor__actions">
-              <button
-                className="GameStateEditor__reload button"
-                onClick={this.handleUpdateWorld}
-              >
-                Update World
-              </button>
-              <button
-                className="GameStateEditor__reset button"
-                onClick={this.handleReset}
-              >
-                Reset
-              </button>
               <button
                 className="GameStateEditor__download button"
                 onClick={this.handleDownload}

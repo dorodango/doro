@@ -22,8 +22,6 @@ defmodule DoroWeb.Router do
 
   scope "/api", DoroWeb do
     pipe_through(:api)
-    post("/game_state", Api.GameStateController, :update)
-    put("/game_state", Api.GameStateController, :create)
     get("/entities", Api.EntitiesController, :index)
     put("/entities", Api.EntitiesController, :create)
     post("/entities/:id", Api.EntitiesController, :update)

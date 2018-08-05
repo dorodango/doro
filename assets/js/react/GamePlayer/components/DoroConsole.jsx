@@ -26,21 +26,15 @@ class DoroConsole extends Component {
 }
 
 const mapStateToProps = state => ({
-  userSession: state.userSession
+  userSession: state.userSession,
 })
 
-const mapDispatchToProps = dispatch =>
-  bindActionCreators(
-    {
-    },
-    dispatch
-  )
+const mapDispatchToProps = dispatch => bindActionCreators({}, dispatch)
 
 const connectedComponent = connect(
   mapStateToProps,
   mapDispatchToProps
 )(DoroConsole)
-
 
 export { DoroConsole }
 export default connectedComponent

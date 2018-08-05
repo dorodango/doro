@@ -11,45 +11,37 @@ import { sendHello } from "../shared/actions/channel"
 
 class GamePlayer extends Component {
   static propTypes = {
-    sendHello: PropTypes.func.isRequired
+    sendHello: PropTypes.func.isRequired,
   }
 
   constructor(props) {
     super(props)
   }
 
-  /* join = playerName => {
-   *   const currentState = this.state
-   *   const cb = playerId => {
-   *     const newState = { player: { playerName, playerId } }
-   *     this.setState({ ...currentState, ...newState })
-   *   }
-   *   const ch = this.socket.channel(`hello:${playerName}`)
-   *   ch.on("player_info", payload => cb(payload.player_id))
-   *   ch.join()
-   * }
-
-   */
-  loggedIn = () => ( this.props.userSession && this.props.userSession.playerId )
+  loggedIn = () => this.props.userSession && this.props.userSession.playerId
 
   onLogin = playerName => {
     this.props.sendHello(playerName)
   }
 
   render() {
-    const {userSession} = this.props
+    const { userSession } = this.props
     return (
       <div className="GamePlayer">
         {!this.loggedIn() && <JoinForm onLogin={this.onLogin} />}
-        {this.loggedIn() && <DoroConsole /> }
-        {this.loggedIn() && <CommandInput />}
+        {this.loggedIn() && (
+          <div>
+            <DoroConsole />
+            <CommandInput />
+          </div>
+        )}
       </div>
     )
   }
 }
 
 const mapStateToProps = state => ({
-  userSession: state.userSession
+  userSession: state.userSession,
 })
 
 const mapDispatchToProps = dispatch =>
