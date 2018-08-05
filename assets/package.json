@@ -16,7 +16,8 @@
     "transform": {
       "^.+\\.jsx?$": "babel-jest"
     },
-    "setupTestFrameworkScriptFile": "./js/test_support/jestHelper.js"
+    "setupTestFrameworkScriptFile": "./js/test_support/jestHelper.js",
+    "testURL": "http://doro-test-url/"
   },
   "dependencies": {
     "auto-reload-brunch": "^2.7.1",

@@ -1,21 +1,21 @@
 import React from "react"
 import ReactDOM from "react-dom"
 import moxios from "moxios"
-
-import GameStateEditor from "./GameStateEditor"
+import { shallow } from "enzyme"
+import { GameStateEditor } from "./GameStateEditor"
 
 describe("GameStateEditor", () => {
-  beforeEach(function() {
-    moxios.install()
-  })
+  let fetchEntitiesSpy = jest.fn()
+  let wrapper
 
-  afterEach(function() {
-    moxios.uninstall()
+  beforeEach(() => {
+    wrapper = shallow(<GameStateEditor fetchEntities={fetchEntitiesSpy} />)
   })
 
   it("renders without crashing", () => {
-    const div = document.createElement("div")
-    ReactDOM.render(<GameStateEditor />, div)
-    ReactDOM.unmountComponentAtNode(div)
+    expect(wrapper).toBeTruthy()
+  })
+  it("fetches entities", () => {
+    expect(fetchEntitiesSpy).toHaveBeenCalled()
   })
 })
