@@ -1,11 +1,7 @@
 import { mergeDeepRight, mergeDeepWith, append } from "ramda"
 import {
-  SEND_HELLO,
   SEND_HELLO_SUCCESS,
-  SEND_HELLO_FAILURE,
-  SEND_COMMAND,
   SEND_COMMAND_SUCCESS,
-  SEND_COMMAND_FAILURE,
 } from "../actions/channel"
 
 export const defaultState = {
@@ -32,9 +28,6 @@ export default function(state = defaultState, action) {
         default:
           return mergeDeepWith(append, { messages: response.text }, state)
       }
-    case SEND_COMMAND_FAILURE:
-    case SEND_HELLO:
-    case SEND_COMMAND:
     default:
       return state
   }
