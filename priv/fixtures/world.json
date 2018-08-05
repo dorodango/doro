@@ -1,6 +1,15 @@
 {
   "entities": [
     {
+      "id": "bathroom",
+      "behaviors": [
+        {
+          "type": "visible",
+          "description": "a dingy bathroom"
+        }
+      ]
+    },
+    {
       "id": "ice",
       "proto": "_god",
       "name": "Iceman"
@@ -8,25 +17,11 @@
     {
       "id": "mav",
       "proto": "_player",
-      "name": "Maverick"
+      "name": "Mav e rick"
     },
     {
       "id": "tomcat",
       "name": "F14 Tomcat"
-    },
-
-    {
-      "id": "_player",
-      "name": "player prototype",
-      "behaviors": ["visible", "player"],
-      "props": {
-        "description": "is player prototype.  Put some props on the instance!"
-      }
-    },
-    {
-      "id": "_god",
-      "proto": "_player",
-      "behaviors": ["god"]
     }
   ]
 }

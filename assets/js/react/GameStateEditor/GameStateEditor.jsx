@@ -1,10 +1,10 @@
 import React, { Component } from "react"
-import PropTypes from "proptypes"
+import PropTypes from "prop-types"
 import { connect } from "react-redux"
 import { bindActionCreators } from "redux"
 import download from "downloadjs"
-import { isEmpty } from "ramda"
 
+import { isEmpty } from "../shared/utils/utilities"
 import FlashMessage from "../shared/components/Flash/Flash"
 import Spinner from "../shared/components/Spinner/Spinner"
 import CurrentEntities from "./components/CurrentEntities/CurrentEntities"
@@ -63,14 +63,14 @@ class GameStateEditor extends Component {
     const entities = []
 
     const tabs = [
-      // {
-      //   name: "Editor",
-      //   component: (
-      //     <div className="GameStateEditor__addNew">
-      //       <EntityForm />
-      //     </div>
-      //   ),
-      // },
+      {
+        name: "Editor",
+        component: (
+          <div className="GameStateEditor__addNew">
+            <EntityForm />
+          </div>
+        ),
+      },
       {
         name: "Entities",
         component: <CurrentEntities entities={entities} />
@@ -86,14 +86,14 @@ class GameStateEditor extends Component {
         <FlashMessage />
         <section className="GameStateEditor-current">
           <header>
-            {/* <div className="GameStateEditor__actions">
+            <div className="GameStateEditor__actions">
               <button
                 className="GameStateEditor__download button"
                 onClick={this.handleDownload}
               >
                 Download
               </button>
-            </div> */}
+            </div>
           </header>
           <main>{this.renderTabs()}</main>
         </section>

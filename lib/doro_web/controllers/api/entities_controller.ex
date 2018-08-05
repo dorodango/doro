@@ -2,7 +2,6 @@ defmodule DoroWeb.Api.EntitiesController do
   use DoroWeb, :controller
 
   import MapHelpers
-  import Inspector
 
   def index(conn, _params) do
     entities =
@@ -18,25 +17,28 @@ defmodule DoroWeb.Api.EntitiesController do
 
   Expects params at the entity level.
   e.g params = %{
-    "behaviors" => ["whatever"],
     "id" => "thing",
     "name" => "the thing",
     "props" => %{
-      "description" => "is a super thing",
       "location" => "bathroom"
     }
+    "behaviors" => [
+      %{
+        "type" => "visible",
+        "description": "a description"
+      }
+    ]
   }
   """
   def create(conn, params) do
     params
-    |> insert_visible_behavior
     |> atomize_keys
     |> Doro.World.Marshal.unmarshal_entity()
     |> Doro.World.add_entity()
     |> case do
       %Doro.Entity{id: id} ->
         conn
-        |> json(%{message: "created entity: #{id}"})
+        |> json(%{message: "created (or replaced) entity #{id}"})
 
       _ ->
         conn
@@ -58,13 +60,4 @@ defmodule DoroWeb.Api.EntitiesController do
     |> json(%{message: "updated entity #{params["id"]}"})
   end
 
-  defp insert_visible_behavior(params) do
-    behaviors =
-      (["visible"] ++ [params["behaviors"]])
-      |> List.flatten()
-      |> Enum.uniq()
-      |> Enum.filter(& &1)
-
-    params |> Map.put("behaviors", behaviors)
-  end
 end

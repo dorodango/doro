@@ -25,6 +25,7 @@ export default function(state = defaultState, action) {
       return mergeDeepRight(state, {
         loading: false
       })
+
     default:
       return state
   }

@@ -1,11 +1,7 @@
 import React, { Component } from "react"
-import PropTypes from "proptypes"
+import PropTypes from "prop-types"
 import { connect } from "react-redux"
 import { bindActionCreators } from "redux"
-import { addIndex, forEach, map } from "ramda"
-
-const mapIndexed = addIndex(map)
-const eachWithIndex = addIndex(forEach)
 
 const MessageItem = props => {
   const { message } = props
@@ -17,14 +13,12 @@ const MessageItem = props => {
         {parts[0]}
       </span>
     )
-    eachWithIndex(
-      (part, index) =>
-        items.push(
-          <span key={index} className="DoroOutput__item-content">
-            {part}
-          </span>
-        ),
-      parts.slice(1)
+    parts.slice(1).forEach((part, index) =>
+      items.push(
+        <span key={index} className="DoroOutput__item-content">
+          {part}
+        </span>
+      )
     )
   } else {
     items.push(
@@ -70,12 +64,9 @@ class DoroOutput extends Component {
   render() {
     return (
       <div className="DoroOutput">
-        {mapIndexed(
-          (msg, index) => (
-            <MessageItem key={index} message={msg} />
-          ),
-          this.props.userSession.messages
-        )}
+        {this.props.userSession.messages.map((msg, index) => (
+          <MessageItem key={index} message={msg} />
+        ))}
         <div
           style={{ float: "left", clear: "both" }}
           className="DoroOutput__push-footer"

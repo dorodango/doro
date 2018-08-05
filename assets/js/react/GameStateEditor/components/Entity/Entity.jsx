@@ -1,10 +1,11 @@
 import React from "react"
-import PropTypes from "proptypes"
-import { isEmpty, isNil } from "ramda"
+import PropTypes from "prop-types"
+
+import { isEmpty } from "../../../shared/utils/utilities"
 
 const highlightedJsonObject = (entity, highlightTerm) => {
   const json = JSON.stringify(entity, null, 2)
-  if (isEmpty(highlightTerm) || isNil(highlightTerm)) {
+  if (isEmpty(highlightTerm)) {
     return json
   } else {
     return json.replace(new RegExp(highlightTerm, "mg"), `*${highlightTerm}*`)
@@ -14,14 +15,14 @@ const highlightedJsonObject = (entity, highlightTerm) => {
 const Entity = ({ entity, handleEdit, handleDelete, highlightTerm }) => {
   return (
     <div className="Entity">
-      {/* <div className="Entity__actions">
+      <div className="Entity__actions">
         <button className="Entity__edit button" onClick={handleEdit}>
           Edit
         </button>
         <button className="Entity__delete button" onClick={handleDelete}>
           X
         </button>
-      </div> */}
+      </div>
       <pre>
         <code>{highlightedJsonObject(entity, highlightTerm)}</code>
       </pre>

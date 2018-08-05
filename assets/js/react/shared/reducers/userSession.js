@@ -18,13 +18,8 @@ export default function(state = defaultState, action) {
         playerName: action.data.player_name
       })
     case SEND_COMMAND_SUCCESS:
-      const response = action.data.body
-      switch (response.data.type) {
-        case "edit":
-        case "default":
-        default:
-          return mergeDeepWith(append, { messages: response.text }, state)
-      }
+      const msg = action.data.body && action.data.body.text
+      return mergeDeepWith(append, { messages: msg }, state)
     default:
       return state
   }

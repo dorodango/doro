@@ -3,7 +3,6 @@ defmodule Doro.World.EntityManagementTest do
 
   alias Doro.World
   alias Doro.World.EntityManagement
-  alias Doro.Entity
 
   setup do
     {

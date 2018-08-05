@@ -1,4 +1,5 @@
 import { mergeDeepRight } from "ramda"
+import { camelizeKeys } from "humps"
 import {
   FETCH_AVAILABLE_BEHAVIORS,
   FETCH_AVAILABLE_BEHAVIORS_SUCCESS,
@@ -7,6 +8,8 @@ import {
   ADD_ENTITY_SUCCESS,
   ADD_ENTITY_FAILURE
 } from "../actions/entityForm"
+import { EDIT_ENTITY, CLOSE_EDIT_PANE } from "../../actions/app"
+import { convertBehaviorsToHash } from "../selectors/entityForm"
 
 export const defaultState = {
   availableBehaviors: [],
@@ -14,7 +17,18 @@ export const defaultState = {
 }
 
 export default function(state = defaultState, action) {
+  const data = camelizeKeys(action.data)
   switch (action.type) {
+    case CLOSE_EDIT_PANE:
+      return mergeDeepRight(state, { entity: {} })
+
+    case EDIT_ENTITY:
+      if (data) {
+        const entity = convertBehaviorsToHash(data.body.data.entity)
+        return mergeDeepRight(state, { entity, editStarted: new Date() })
+      }
+      return state
+
     case ADD_ENTITY:
     case FETCH_AVAILABLE_BEHAVIORS:
       return mergeDeepRight(state, {
@@ -22,13 +36,14 @@ export default function(state = defaultState, action) {
       })
     case ADD_ENTITY_SUCCESS:
       return mergeDeepRight(state, {
-        entity: action.data.entity,
-        loading: false
+        entity: data.entity,
+        loading: false,
       })
     case FETCH_AVAILABLE_BEHAVIORS_SUCCESS:
       return mergeDeepRight(state, {
-        availableBehaviors: action.data.behaviors,
-        loading: false
+        availableBehaviors: data.behaviors,
+        behaviorShapes: data.behaviorShapes,
+        loading: false,
       })
     case ADD_ENTITY_FAILURE:
     case FETCH_AVAILABLE_BEHAVIORS_FAILURE:

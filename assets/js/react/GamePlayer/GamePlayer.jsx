@@ -1,9 +1,8 @@
 import React, { Component } from "react"
-import PropTypes from "proptypes"
+import PropTypes from "prop-types"
 import { connect } from "react-redux"
 import { bindActionCreators } from "redux"
 
-import { configureChannel } from "../shared/channel"
 import JoinForm from "./components/JoinForm"
 import CommandInput from "./components/CommandInput"
 import DoroConsole from "./components/DoroConsole"

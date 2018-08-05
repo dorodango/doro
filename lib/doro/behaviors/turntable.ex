@@ -29,27 +29,8 @@ defmodule Doro.Behaviors.Turntable do
 
   defp set_playing(object, playing) do
     Doro.World.set_prop(object, :playing, playing)
-    update_description(object, playing)
   end
 
   defp is_playing?(turntable), do: turntable.props[:playing]
 
-  defp update_description(turntable, true) do
-    turntable
-    |> update_description(
-      "#{Doro.World.get_entity("turntable")[:description]} #{@spinning_message}"
-    )
-  end
-
-  defp update_description(turntable, false) do
-    turntable
-    |> update_description(
-      Doro.World.get_entity("turntable")[:description]
-      |> String.replace(~r[\s*#{@spinning_message}\s*], "")
-    )
-  end
-
-  defp update_description(turntable, desc) when is_binary(desc) do
-    Doro.World.set_prop(turntable, :description, desc)
-  end
 end
