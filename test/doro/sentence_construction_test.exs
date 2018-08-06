@@ -1,5 +1,5 @@
 defmodule Doro.SentenceConstructionTest do
-  use ExUnit.Case, async: true
+  use ExUnit.Case, async: false
 
   import Doro.SentenceConstruction
 
