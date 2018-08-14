@@ -7,11 +7,16 @@ defmodule Doro.World do
 
   alias Doro.World.GameState
   alias Doro.Entity
+  alias Doro.World.EntityManagement
 
   import Doro.World.EntityFilters
 
   defdelegate get_entity(id), to: GameState
-  defdelegate add_entity(entity), to: GameState
+  defdelegate add_entity(entity), to: EntityManagement
+
+  def add_entities(entities) when is_list(entities) do
+    EntityManagement.add_entities(entities)
+  end
 
   def get_entities(filters \\ []) do
     GameState.get_entities(fn e ->
@@ -37,13 +42,18 @@ defmodule Doro.World do
     put_in(entity, [key], value)
   end
 
-  def add_behavior(entity, behavior) do
+  def add_behavior(entity, behavior, props \\ %{}) do
+    # FIXME: don't access entity.behaviors
     case Entity.has_behavior?(entity, behavior) do
       false ->
-        GameState.add_entity(%{
-          entity
-          | behaviors: Map.put(entity.behaviors, behavior, struct(behavior))
-        })
+        to_add =
+          struct(behavior)
+          |> Map.merge(props)
+          |> Map.put(:own, true)
+
+        entity
+        |> EntityManagement.add_behavior(to_add)
+        |> GameState.add_entity()
 
       _ ->
         entity
@@ -55,7 +65,7 @@ defmodule Doro.World do
     case get_entities([player(), named(name)]) do
       [] ->
         entity = Entity.create("_player", %{location: location_id}, fn _ -> name end)
-        GameState.add_entity(entity)
+        add_entity(entity)
 
       # create player
       [player] ->
@@ -65,15 +75,11 @@ defmodule Doro.World do
 
   @doc "Loads a world file"
   def load(source \\ "priv_file://world.json") do
-    clobber(Doro.World.WorldFile.load_source(source))
+    EntityManagement.reset(Doro.World.WorldFile.load_source(source))
   end
 
   @doc "Loads a world from a list of entity specifications -- for debugging and testing"
   def load_debug(entity_specs) do
-    clobber(Doro.World.WorldFile.load_debug(entity_specs))
-  end
-
-  defp clobber(entities) do
-    GameState.set(%{entities: entities})
+    EntityManagement.reset(Doro.World.WorldFile.load_debug(entity_specs))
   end
 end

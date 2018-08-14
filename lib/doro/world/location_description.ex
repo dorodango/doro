@@ -13,8 +13,10 @@ defmodule Doro.LocationDescription do
   """
 
   def describe(location_id, looker) do
-    location = World.get_entity(location_id)
-    location_entities = World.get_entities([visible(), in_location(location.id)])
+    %{name: name, behaviors: %{Doro.Behaviors.Visible => %{description: location_description}}} =
+      World.get_entity(location_id)
+
+    location_entities = World.get_entities([visible(), in_location(location_id)])
 
     items =
       location_entities
@@ -25,7 +27,7 @@ defmodule Doro.LocationDescription do
     exits = location_entities |> Enum.filter(has_behavior(Doro.Behaviors.Exit))
 
     [
-      "#{location.name}\n#{location[:description]}",
+      "#{name}\n#{location_description}",
       items_sentence(items),
       players_sentence(players),
       exits_sentence(exits)

@@ -26,7 +26,8 @@ defmodule Doro.World.Marshal do
 
   defp unresolve_behaviors(entity) do
     marshalled_behaviors =
-      entity.behaviors
+      entity
+      |> Doro.Entity.own_behaviors()
       |> Map.keys()
       |> Enum.map(& &1.key())
       |> Enum.map(&Atom.to_string/1)
@@ -51,6 +52,11 @@ defmodule Doro.World.Marshal do
       |> Enum.filter(& &1)
       |> Enum.into(%{})
     )
+  end
+
+  defp resolve_behavior(%{type: key} = props) do
+    {behavior, data} = resolve_behavior(key)
+    {behavior, Map.merge(data, props)}
   end
 
   defp resolve_behavior(key) when is_binary(key), do: resolve_behavior(String.to_atom(key))

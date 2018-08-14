@@ -2,233 +2,329 @@
   "entities": [
     {
       "id": "bathroom",
-      "behaviors": [],
-      "props": {
-        "description":
-          "You are in a small, dingy bathroom; a flourescent light flickers overhead."
-      }
+      "behaviors": [
+        {
+          "type": "visible",
+          "description":
+            "You are in a small, dingy bathroom; a flourescent light flickers overhead."
+        }
+      ]
     },
     {
-      "id": "start",
       "name": "Soul-Crushing Office",
-      "behaviors": [],
-      "props": {
-        "description": "You are in a soul-crushing office."
-      }
+      "id": "start",
+      "behaviors": [
+        {
+          "type": "visible",
+          "description": "You are in a soul-crushing office."
+        }
+      ]
     },
     {
       "id": "conference",
-      "behaviors": [],
-      "props": {
-        "description": "You are in a dimly lit, cramped conference room."
-      }
+      "behaviors": [
+        {
+          "type": "visible",
+          "description": "You are in a dimly lit, cramped conference room."
+        }
+      ]
     },
     {
-      "id": "closet",
-      "behaviors": [],
       "props": {
+        "type": "visible",
         "description": "You are in a tiny dark closet."
-      }
+      },
+      "id": "closet",
+      "behaviors": []
     },
     {
+      "props": {
+        "location": "start"
+      },
+      "name": "closet door",
       "id": "closet-door",
-      "name": "closet door",
-      "behaviors": ["exit", "visible"],
-      "props": {
-        "location": "start",
-        "description": "A door with a sign that reads 'Brooms'.",
-        "destination_id": "closet"
-      }
+      "behaviors": [
+        {
+          "type": "exit",
+          "destination_id": "closet"
+        },
+        {
+          "type": "visible",
+          "description": "A door with a sign that reads 'Brooms'."
+        }
+      ]
     },
     {
-      "id": "closet-exit-door",
-      "name": "closet door",
-      "behaviors": ["exit", "visible"],
       "props": {
-        "location": "closet",
-        "description": "an unpainted door.",
-        "destination_id": "start"
-      }
+        "location": "closet"
+      },
+      "name": "closet door",
+      "id": "closet-exit-door",
+      "behaviors": [
+        {
+          "type": "exit",
+          "destination_id": "start"
+        },
+        {
+          "type": "visible",
+          "description": "an unpainted door."
+        }
+      ]
     },
     {
       "id": "fire_escape",
-      "behaviors": [],
-      "props": {
-        "description": "You are on a precarious old fire escape."
-      }
+      "behaviors": [
+        {
+          "type": "visible",
+          "description": "You are on a precarious old fire escape."
+        }
+      ]
     },
     {
       "id": "sidewalk",
-      "behaviors": [],
-      "props": {
-        "description": "You are on a sidewalk."
-      }
+      "behaviors": [
+        {
+          "type": "visible",
+          "description": "You are on a sidewalk."
+        }
+      ]
     },
     {
-      "id": "office-conference-door",
+      "props": {
+        "location": "start"
+      },
       "name": "conference room door",
-      "behaviors": ["exit", "visible"],
-      "props": {
-        "location": "start",
-        "description": "is a transluscent door to a conference room.",
-        "destination_id": "conference"
-      }
+      "id": "office-conference-door",
+      "behaviors": [
+        {
+          "type": "exit",
+          "destination_id": "conference"
+        },
+        {
+          "type": "visible",
+          "description": "is a transluscent door to a conference room."
+        }
+      ]
     },
     {
-      "id": "conference-office-door",
+      "props": {
+        "location": "conference"
+      },
       "name": "office door",
-      "behaviors": ["exit", "visible"],
-      "props": {
-        "location": "conference",
-        "description": "is a transluscent door to the office.",
-        "destination_id": "start"
-      }
+      "id": "conference-office-door",
+      "behaviors": [
+        {
+          "type": "exit",
+          "destination_id": "start"
+        },
+        {
+          "type": "visible",
+          "description": "is a transluscent door to the office."
+        }
+      ]
     },
-
     {
-      "id": "office-fire_escape-door",
+      "props": {
+        "location": "start"
+      },
       "name": "open window",
-      "behaviors": ["exit", "visible"],
-      "props": {
-        "location": "start",
-        "description":
-          "is a small fire escape that looks like a fire hazard itself.",
-        "destination_id": "fire_escape"
-      }
+      "id": "office-fire_escape-door",
+      "behaviors": [
+        {
+          "type": "exit",
+          "destination_id": "fire_escape"
+        },
+        {
+          "type": "visible",
+          "description":
+            "is a small fire escape that looks like a fire hazard itself."
+        }
+      ]
     },
     {
-      "id": "fire_escape-office-door",
+      "props": {
+        "location": "fire_escape"
+      },
       "name": "window",
-      "behaviors": ["exit", "visible"],
-      "props": {
-        "location": "fire_escape",
-        "description": "is decomposing wooden window that slightly ajar.",
-        "destination_id": "start"
-      }
+      "id": "fire_escape-office-door",
+      "behaviors": [
+        {
+          "type": "exit",
+          "destination_id": "start"
+        },
+        {
+          "type": "visible",
+          "description": "is decomposing wooden window that slightly ajar."
+        }
+      ]
     },
-
     {
+      "props": {
+        "location": "fire_escape"
+      },
+      "name": "ladder",
       "id": "fire_escape-sidewalk-door",
-      "name": "ladder",
-      "behaviors": ["exit", "visible"],
-      "props": {
-        "location": "fire_escape",
-        "description": "is a metal ladder leading down to a sidewalk.",
-        "destination_id": "sidewalk"
-      }
+      "behaviors": [
+        {
+          "type": "exit",
+          "destination_id": "sidewalk"
+        },
+        {
+          "type": "visible",
+          "description": "is a metal ladder leading down to a sidewalk."
+        }
+      ]
     },
     {
+      "props": {
+        "location": "sidewalk"
+      },
+      "name": "ladder",
       "id": "sidewalk-fire_escape-door",
-      "name": "ladder",
-      "behaviors": ["exit", "visible"],
-      "props": {
-        "location": "sidewalk",
-        "description": "is a metal ladder leading up to a landing.",
-        "destination_id": "fire_escape"
-      }
+      "behaviors": [
+        {
+          "type": "exit",
+          "destination_id": "fire_escape"
+        },
+        {
+          "type": "visible",
+          "description": "is a metal ladder leading up to a landing."
+        }
+      ]
     },
     {
-      "id": "bathroom-door",
+      "props": {
+        "location": "start"
+      },
       "name": "WC Door",
-      "behaviors": ["exit", "visible"],
-      "props": {
-        "location": "start",
-        "description": "A door emblazoned with 'WC'.",
-        "destination_id": "bathroom"
-      }
+      "id": "bathroom-door",
+      "behaviors": [
+        {
+          "type": "exit",
+          "destination_id": "bathroom"
+        },
+        {
+          "type": "visible",
+          "description": "A door emblazoned with 'WC'."
+        }
+      ]
     },
     {
-      "id": "office-door",
+      "props": {
+        "location": "bathroom"
+      },
       "name": "Red Door",
-      "behaviors": ["exit", "visible"],
-      "props": {
-        "location": "bathroom",
-        "description": "A red door.",
-        "destination_id": "start"
-      }
+      "id": "office-door",
+      "behaviors": [
+        {
+          "type": "exit",
+          "destination_id": "start"
+        },
+        {
+          "type": "visible",
+          "description": "A red door."
+        }
+      ]
     },
     {
-      "id": "player1",
-      "name": "Goose",
       "proto": "_god",
       "props": {
-        "location": "start",
-        "description": "is disheveled and smelly."
-      }
+        "location": "start"
+      },
+      "name": "Goose",
+      "id": "player1",
+      "behaviors": [
+        {
+          "type": "visible",
+          "description": "is disheveled and smelly."
+        }
+      ]
     },
     {
-      "id": "player2",
-      "name": "Viper",
       "proto": "_player",
       "props": {
-        "location": "start",
-        "description":
-          "is stern and trim.  He says, 'Top Gun rules of engagement are written for your safety and for that of your team.'"
-      }
+        "location": "start"
+      },
+      "name": "Viper",
+      "id": "player2",
+      "behaviors": [
+        {
+          "type": "visible",
+          "description":
+            "is stern and trim.  He says, 'Top Gun rules of engagement are written for your safety and for that of your team.'"
+        }
+      ]
     },
     {
-      "id": "plant",
-      "name": "Fiddleleaf Fig",
-      "behaviors": ["visible", "portable", "vascular_plant"],
       "props": {
-        "location": "start",
-        "description": "is herbaceous, glabrous, and four-pinnate."
-      }
-    },
-    {
-      "id": "lacroix",
+        "location": "start"
+      },
       "name": "can of Lacroix",
-      "behaviors": ["visible", "portable"],
-      "props": {
-        "location": "start",
-        "description": "is coconut flavored.  Yuck."
-      }
+      "id": "lacroix",
+      "behaviors": [
+        {
+          "type": "visible",
+          "description": "is coconut flavored.  Yuck."
+        },
+        "portable"
+      ]
     },
     {
-      "id": "annoying_clock",
-      "name": "annoying clock",
-      "behaviors": ["visible", "clock"],
       "props": {
-        "location": "start",
-        "description": "just looks like it wants to annoy you."
-      }
-    },
-    {
-      "id": "dead_bird",
+        "location": "sidewalk"
+      },
       "name": "dead bird",
-      "behaviors": ["visible", "portable"],
-      "props": {
-        "location": "sidewalk",
-        "description": "is a well-loved Bird scooter."
-      }
+      "id": "dead_bird",
+      "behaviors": [
+        {
+          "type": "visible",
+          "description": "is a well-loved Bird scooter."
+        },
+        "portable"
+      ]
     },
     {
-      "id": "juki",
+      "props": {
+        "location": "bathroom"
+      },
       "name": "sewing machine",
-      "behaviors": ["visible", "slot_machine"],
-      "props": {
-        "location": "bathroom",
-        "description":
-          "is a Juki DNU-1541, threaded with some #69 bonded nylon.",
-        "slot_machine_rewards": ["_backpack"]
-      }
+      "id": "juki",
+      "behaviors": [
+        {
+          "type": "visible",
+          "description":
+            "is a Juki DNU-1541, threaded with some #69 bonded nylon."
+        },
+        {
+          "type": "slot_machine",
+          "slot_machine_rewards": ["_backpack"]
+        }
+      ]
     },
     {
-      "id": "_backpack",
       "name": "backpack",
-      "behaviors": ["visible", "portable"],
-      "props": {
-        "description": "is a generic backpack."
-      }
+      "id": "_backpack",
+      "behaviors": [
+        {
+          "type": "visible",
+          "description": "is a generic backpack."
+        },
+        "portable"
+      ]
     },
     {
-      "id": "turntable",
-      "behaviors": ["visible", "turntable"],
       "props": {
-        "description":
-          "is a Technics 1200 DJ Turntable.  It looks a little dusty.",
         "location": "closet"
-      }
+      },
+      "id": "turntable",
+      "behaviors": [
+        {
+          "type": "visible",
+          "description":
+            "is a Technics 1200 DJ Turntable.  It looks a little dusty."
+        },
+        "turntable"
+      ]
     }
   ]
 }

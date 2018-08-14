@@ -2,19 +2,15 @@
   "entities": [
     {
       "id": "_player",
-      "behaviors": ["visible", "player"],
-      "props": {
-        "description": "is a generic player."
-      }
+      "behaviors": [
+        { "type": "visible", "description": "is a generic player." },
+        "player"
+      ]
     },
     {
       "id": "_god",
       "proto": "_player",
       "behaviors": ["god"]
-    },
-    {
-      "id": "_exit",
-      "behaviors": ["visible", "exit"]
     }
   ]
 }

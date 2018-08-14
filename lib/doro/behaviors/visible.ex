@@ -12,7 +12,11 @@ defmodule Doro.Behaviors.Visible do
     send_to_others(player, "#{definite(player)} looks at #{definite(object)} thoughtfully.")
   end
 
-  def first_person_description(entity) do
-    "#{definite(entity)} #{entity[:description]}"
+  def first_person_description(
+        %Doro.Entity{
+          behaviors: %{Doro.Behaviors.Visible => %{description: description}}
+        } = entity
+      ) do
+    "#{definite(entity)} #{description}"
   end
 end
