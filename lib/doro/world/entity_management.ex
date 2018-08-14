@@ -41,6 +41,10 @@ defmodule Doro.World.EntityManagement do
     GameState.add_entity(entity)
   end
 
+  def add_behavior(entity, %{__struct__: behavior_module} = behavior) do
+    %{entity | behaviors: Map.put(entity.behaviors, behavior_module, behavior)}
+  end
+
   defp is_proto?(%Entity{id: id}), do: match?("_" <> _, id)
 
   defp roll_up_behaviors(nil), do: %{}
