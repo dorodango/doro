@@ -14,14 +14,14 @@ const highlightedJsonObject = (entity, highlightTerm) => {
 const Entity = ({ entity, handleEdit, handleDelete, highlightTerm }) => {
   return (
     <div className="Entity">
-      <div className="Entity__actions">
+      {/* <div className="Entity__actions">
         <button className="Entity__edit button" onClick={handleEdit}>
           Edit
         </button>
         <button className="Entity__delete button" onClick={handleDelete}>
           X
         </button>
-      </div>
+      </div> */}
       <pre>
         <code>{highlightedJsonObject(entity, highlightTerm)}</code>
       </pre>

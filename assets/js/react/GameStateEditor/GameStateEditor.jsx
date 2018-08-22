@@ -63,14 +63,14 @@ class GameStateEditor extends Component {
     const entities = []
 
     const tabs = [
-      {
-        name: "Editor",
-        component: (
-          <div className="GameStateEditor__addNew">
-            <EntityForm />
-          </div>
-        ),
-      },
+      // {
+      //   name: "Editor",
+      //   component: (
+      //     <div className="GameStateEditor__addNew">
+      //       <EntityForm />
+      //     </div>
+      //   ),
+      // },
       {
         name: "Entities",
         component: <CurrentEntities entities={entities} />,
@@ -86,14 +86,14 @@ class GameStateEditor extends Component {
         <FlashMessage />
         <section className="GameStateEditor-current">
           <header>
-            <div className="GameStateEditor__actions">
+            {/* <div className="GameStateEditor__actions">
               <button
                 className="GameStateEditor__download button"
                 onClick={this.handleDownload}
               >
                 Download
               </button>
-            </div>
+            </div> */}
           </header>
           <main>{this.renderTabs()}</main>
         </section>
