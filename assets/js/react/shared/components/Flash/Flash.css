@@ -1,0 +1,22 @@
+.Flash {
+  /* transform: translateX(-50%) translateY(-50%); */
+  align-items: center;
+  background-color: #FFF5E0;
+  border-bottom: 2px solid #fff;
+  display: flex;
+  justify-content: flex-start;
+
+  left: 0;
+  padding: 20px;
+  position: fixed;
+  top: 0;
+  width: 100%;
+  z-index: 100;
+}
+
+.Flash__close-button {
+  position: absolute;
+  padding: 20px;
+  top: 0px;
+  right: 10px;
+}

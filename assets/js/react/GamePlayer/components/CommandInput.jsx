@@ -1,22 +1,19 @@
 import React, { Component } from "react"
 import PropTypes from "proptypes"
+import { connect } from "react-redux"
+import { bindActionCreators } from "redux"
 import { isEmpty } from "ramda"
+
+import { sendCommand } from "../../shared/actions/channel"
 
 class CommandInput extends Component {
   static propTypes = {
-    player: PropTypes.object.isRequired,
-    socket: PropTypes.object.isRequired,
+    sendCommand: PropTypes.func.isRequired,
   }
 
   constructor(props) {
     super(props)
     this.input = React.createRef()
-
-    const { player, socket } = this.props
-    const channel = socket.channel(`player:${player.playerId}`)
-    channel.join()
-    this.channel = channel
-
     this.history = []
     this.historyIndex = -1
   }
@@ -27,7 +24,7 @@ class CommandInput extends Component {
       case "Enter":
         cmd = this.input.current.value
         if (!isEmpty(cmd)) {
-          this.channel.push("cmd", { cmd: cmd })
+          this.props.sendCommand({ cmd })
           this.history.unshift(cmd)
           this.input.current.value = ""
         }
@@ -54,10 +51,10 @@ class CommandInput extends Component {
 
   render() {
     return (
-      <div id="footer">
+      <div className="CommandInput">
         <input
-          id="input"
           onKeyDown={this.handleKeyDown}
+          className="CommandInput__input"
           ref={this.input}
           placeholder="Enter a command"
           autoFocus={true}
@@ -67,4 +64,22 @@ class CommandInput extends Component {
   }
 }
 
-export default CommandInput
+const mapStateToProps = state => ({
+  userSession: state.userSession,
+})
+
+const mapDispatchToProps = dispatch =>
+  bindActionCreators(
+    {
+      sendCommand,
+    },
+    dispatch
+  )
+
+const connectedComponent = connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(CommandInput)
+
+export { CommandInput }
+export default connectedComponent

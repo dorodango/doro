@@ -15,6 +15,7 @@ defmodule DoroWeb.Api.BehaviorsController do
         end
       end)
 
-    render(conn, "index.json", %{behaviors: behaviors})
+    conn
+    |> json(%{behaviors: behaviors})
   end
 end

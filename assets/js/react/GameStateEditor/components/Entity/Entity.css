@@ -1,0 +1,23 @@
+.Entity {
+  position: relative;
+}
+
+.Entity pre {
+  background-color: #fffcf3;
+  border: 1px solid #eee;
+}
+
+.Entity__actions {
+  display: flex;
+  justify-content: flex-end;
+  z-index: 1;
+  top: 1px;
+  position: relative;
+}
+
+.Entity__edit.button, .Entity__delete.button {
+  background-color: #fffcf3;
+  border-bottom: 0;
+  border-top-left-radius: 4px;
+  border-top-right-radius: 4px;
+}

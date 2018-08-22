@@ -1,12 +1,15 @@
 import React, { Component } from "react"
 import PropTypes from "proptypes"
+import { connect } from "react-redux"
+import { bindActionCreators } from "redux"
 import { addIndex, forEach, map } from "ramda"
 
 const mapIndexed = addIndex(map)
 const eachWithIndex = addIndex(forEach)
 
 const MessageItem = props => {
-  const parts = props.message.text.split("\n")
+  const { message } = props
+  const parts = message.split("\n")
   let items = []
   if (parts.length > 1) {
     items.push(
@@ -32,27 +35,24 @@ const MessageItem = props => {
   }
   return <div className="DoroOutput__item">{items}</div>
 }
+
 MessageItem.propTypes = {
-  message: PropTypes.shape({ text: PropTypes.string.isRequired }),
+  message: PropTypes.string.isRequired,
 }
 
 class DoroOutput extends Component {
   static propTypes = {
-    channel: PropTypes.object.isRequired,
-    player: PropTypes.object.isRequired,
+    userSession: PropTypes.object.isRequired,
+  }
+
+  static defaultProps = {
+    userSession: {
+      messages: [],
+    },
   }
 
   constructor(props) {
     super(props)
-
-    this.state = { messages: [] }
-    props.channel.on("output", payload => {
-      this.handleMessage(payload.body)
-    })
-  }
-
-  handleMessage(message) {
-    this.setState({ messages: this.state.messages.concat(message) })
   }
 
   scrollToBottom() {
@@ -71,8 +71,10 @@ class DoroOutput extends Component {
     return (
       <div className="DoroOutput">
         {mapIndexed(
-          (msg, index) => <MessageItem key={index} message={msg} />,
-          this.state.messages
+          (msg, index) => (
+            <MessageItem key={index} message={msg} />
+          ),
+          this.props.userSession.messages
         )}
         <div
           style={{ float: "left", clear: "both" }}
@@ -86,4 +88,16 @@ class DoroOutput extends Component {
   }
 }
 
-export default DoroOutput
+const mapStateToProps = state => ({
+  userSession: state.userSession,
+})
+
+const mapDispatchToProps = dispatch => bindActionCreators({}, dispatch)
+
+const connectedComponent = connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(DoroOutput)
+
+export { DoroOutput }
+export default connectedComponent

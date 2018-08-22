@@ -1,0 +1,9 @@
+.CommandInput {
+  display: flex;
+}
+
+.CommandInput__input { 
+  flex-basis: 100%;
+  outline: 1px solid #eee;
+  padding: 0 5px;
+}

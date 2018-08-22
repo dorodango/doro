@@ -10,7 +10,8 @@ defmodule DoroWeb.HelloChannel do
   end
 
   def handle_info({:after_join, player_id}, socket) do
-    push(socket, "player_info", %{player_id: player_id})
+    player = Doro.World.get_entity(player_id)
+    push(socket, "player_info", %{player_id: player.id, player_name: player.name})
     {:noreply, socket}
   end
 end

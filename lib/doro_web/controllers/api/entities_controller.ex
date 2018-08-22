@@ -2,7 +2,31 @@ defmodule DoroWeb.Api.EntitiesController do
   use DoroWeb, :controller
 
   import MapHelpers
+  import Inspector
 
+  def index(conn, _params) do
+    entities =
+      Doro.World.GameState.get()
+      |> Doro.World.Marshal.marshal()
+
+    conn
+    |> json(%{entities: entities})
+  end
+
+  @doc """
+  Create a new entity
+
+  Expects params at the entity level.
+  e.g params = %{
+    "behaviors" => ["whatever"],
+    "id" => "thing",
+    "name" => "the thing",
+    "props" => %{
+      "description" => "is a super thing",
+      "location" => "bathroom"
+    }
+  }
+  """
   def create(conn, params) do
     params
     |> insert_visible_behavior

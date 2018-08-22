@@ -1,5 +1,5 @@
 defmodule Doro.WorldTest do
-  use ExUnit.Case, async: true
+  use ExUnit.Case, async: false
 
   alias Doro.World
   import Doro.World.EntityFilters

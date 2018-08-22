@@ -1,0 +1,7 @@
+.CurrentEntites__search-input {
+  flex: 1;
+}
+.CurrentEntities form {
+  width: 100%;
+  display: flex;
+}

@@ -19,13 +19,16 @@ class JoinForm extends Component {
 
   render() {
     return (
-      <form id="join-form">
+      <form className="JoinForm">
         <input
-          id="player"
+          className="JoinForm__player"
           ref={this.input}
           placeholder="Player Name (new or existing)"
         />
-        <button id="connect" onClick={this.handleLogin}>
+        <button
+          className="button JoinForm__connect-button"
+          onClick={this.handleLogin}
+        >
           Connect
         </button>
       </form>

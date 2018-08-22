@@ -18,15 +18,11 @@ defmodule DoroWeb.Router do
     pipe_through(:browser)
 
     get("/", PageController, :index)
-
-    get("/game_state", GameStateController, :edit)
   end
 
   scope "/api", DoroWeb do
     pipe_through(:api)
-    get("/game_state", Api.GameStateController, :show)
-    post("/game_state", Api.GameStateController, :update)
-    put("/game_state", Api.GameStateController, :create)
+    get("/entities", Api.EntitiesController, :index)
     put("/entities", Api.EntitiesController, :create)
     post("/entities/:id", Api.EntitiesController, :update)
     get("/behaviors", Api.BehaviorsController, :index)

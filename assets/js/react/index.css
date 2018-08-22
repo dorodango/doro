@@ -1,12 +1,15 @@
 @import "components/Doro.css";
+@import "buttons.css";
+html,
 body {
   margin: 0;
   padding: 0;
+  height:100%;
   font-family: sans-serif;
 }
 
 #root {
-  padding: 20px;
+  padding: 0 20px;
 }
 
 .App {

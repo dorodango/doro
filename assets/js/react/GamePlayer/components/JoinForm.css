@@ -1,0 +1,9 @@
+.JoinForm {
+    display: flex;
+    width: 50%;
+    min-width: 280px;
+}
+.JoinForm__player {
+    flex-grow: 5;
+    padding: 0 5px;
+}
