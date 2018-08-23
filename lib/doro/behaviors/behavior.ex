@@ -1,9 +1,9 @@
 defmodule Doro.Behavior do
-  defmacro __using__(_opts) do
+  defmacro __using__(struct_props \\ []) do
     quote do
       import Doro.Behavior
 
-      defstruct [:props]
+      defstruct unquote(struct_props)
 
       @canonical_verbs []
       @synonyms %{}

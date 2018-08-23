@@ -1,5 +1,7 @@
 defmodule Doro.Behaviors.Exit do
-  use Doro.Behavior
+  use Doro.Behavior,
+    destination_id: nil
+
   import Doro.Comms
 
   interact("exit", ~w(go), %{
