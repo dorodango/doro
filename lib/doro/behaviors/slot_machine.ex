@@ -1,5 +1,7 @@
 defmodule Doro.Behaviors.SlotMachine do
-  use Doro.Behavior
+  use Doro.Behavior,
+    slot_machine_rewards: []
+
   import Doro.Comms
   import Doro.SentenceConstruction
 

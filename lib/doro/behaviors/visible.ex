@@ -1,5 +1,7 @@
 defmodule Doro.Behaviors.Visible do
-  use Doro.Behavior
+  use Doro.Behavior,
+    description: "is an entity"
+
   import Doro.Comms
   import Doro.SentenceConstruction
 
