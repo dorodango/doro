@@ -14,14 +14,20 @@ defmodule Doro.World.MarshalTest do
       }
     end
 
-    test "transforms the game state with canonical behaviors", %{
+    test "transforms the game state prototypes and behaviors", %{
       marshalled: %{"entities" => marshalled}
     } do
       ice = marshalled |> find_entity_by_id("ice")
       assert ice |> Map.get(:behaviors) == []
-      player = marshalled |> find_entity_by_id("bathroom")
+      assert ice |> Map.get(:proto) == "_god"
+
+      maverick = marshalled |> find_entity_by_id("mav")
+      assert maverick |> Map.get(:behaviors) == []
+      assert maverick |> Map.get(:proto) == "_player"
+
+      bathroom = marshalled |> find_entity_by_id("bathroom")
       assert MapSet.equal?(
-        MapSet.new(player.behaviors),
+        MapSet.new(bathroom.behaviors),
         MapSet.new([
           %{
             __struct__: Doro.Behaviors.Visible,
@@ -31,9 +37,6 @@ defmodule Doro.World.MarshalTest do
           }
         ])
       )
-
-      tomcat = marshalled |> find_entity_by_id("tomcat")
-      assert tomcat.behaviors == []
     end
 
     test "generate name_tokens as needed", %{marshalled: %{"entities" => marshalled}} do

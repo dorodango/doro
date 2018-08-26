@@ -7,6 +7,11 @@ import {
 } from "../actions/gameStateEditor"
 
 describe("gameStateEditor.reducer", () => {
+  const entities = [
+    { id: "a-location", name: "a location" },
+    { id: "not-a-location", props: { location: "a-location" }}
+  ]
+
   it("has a default state", () => {
     const state = reducer(undefined, {})
     expect(state).toEqual(defaultState)
@@ -26,9 +31,13 @@ describe("gameStateEditor.reducer", () => {
       )
     })
     it("sets the state to include the found entities", () => {
-      const entities = [{ name: "the name" }]
       expect(reducer({}, fetchEntitiesSuccess({ entities }))).toEqual(
         objectContaining({ entities })
+      )
+    })
+    it("sets the state to include the locations as extracted from the entities", () => {
+      expect(reducer({}, fetchEntitiesSuccess({ entities }))).toEqual(
+        objectContaining({ locations: ["a-location"] })
       )
     })
   })

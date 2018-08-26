@@ -9,13 +9,19 @@ describe("GameStateEditor", () => {
   let wrapper
 
   beforeEach(() => {
-    wrapper = shallow(<GameStateEditor fetchEntities={fetchEntitiesSpy} />)
+    fetchEntitiesSpy.mockReset();
   })
 
-  it("renders without crashing", () => {
-    expect(wrapper).toBeTruthy()
-  })
-  it("fetches entities", () => {
-    expect(fetchEntitiesSpy).toHaveBeenCalled()
+  describe("with no data", () => {
+    beforeEach(() => {
+      wrapper = shallow(<GameStateEditor fetchEntities={fetchEntitiesSpy} />)
+    })
+    it("renders without crashing", () => {
+      expect(wrapper).toBeTruthy()
+    })
+    it("fetches entities", () => {
+      expect(fetchEntitiesSpy).toHaveBeenCalled()
+    })
+
   })
 })

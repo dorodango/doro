@@ -12,7 +12,7 @@ class Flash extends Component {
   }
 
   componentDidMount() {
-    setTimeout(this.props.removeFlashMessage, 7000)
+    setTimeout(this.props.removeFlashMessage, 5000)
   }
 
   handleClose = ev => {

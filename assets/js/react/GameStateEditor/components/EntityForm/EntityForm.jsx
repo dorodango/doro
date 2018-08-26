@@ -3,8 +3,8 @@ import PropTypes from "prop-types"
 import { connect } from "react-redux"
 import { bindActionCreators } from "redux"
 import { mergeDeepRight, omit, assocPath } from "ramda"
-import { includes, map as mapIndexed, get, every as all } from "lodash"
-import { flow, map, sortBy, filter } from "lodash/fp"
+import { map as mapIndexed, get, every as all } from "lodash"
+import { flow, map, sortBy } from "lodash/fp"
 import Select from "react-select"
 
 import { isEmpty } from "../../../shared/utils/utilities"
@@ -46,21 +46,26 @@ class EntityForm extends Component {
 
   static defaultProps = {
     availableBehaviors: [],
-    locations: []
+    locations: [],
+    entity: emptyEntity
   }
 
   constructor(props) {
     super(props)
   }
 
-  render() {
-    const { loading, editStarted } = this.props
-
-    if (loading) {
-      return <Spinner />
-    } else {
-      return <_EntityForm {...this.props} key={editStarted || "newEntity"} />
+  componentDidMount() {
+    if (isEmpty(this.props.availableBehaviors)) {
+      this.props.fetchAvailableBehaviors()
     }
+  }
+
+  render() {
+    const { availableBehaviors, behaviorShapes, loading, entity } = this.props
+    if (loading || isEmpty(availableBehaviors) || isEmpty(behaviorShapes)) {
+      return <Spinner />
+    }
+    return <_EntityForm {...this.props} key={ (entity && entity.id) || "newEntity"} />
   }
 }
 
@@ -71,9 +76,6 @@ class _EntityForm extends Component {
   }
 
   componentDidMount() {
-    if (isEmpty(this.props.availableBehaviors)) {
-      this.props.fetchAvailableBehaviors()
-    }
     if (!isEmpty(this.props.entity)) {
       this.setState({ ...this.props.entity })
     }
@@ -101,7 +103,6 @@ class _EntityForm extends Component {
   handleChangeName = ev => {
     const currentState = this.state
     const newName = ev.target.value || ""
-    console.log("change name", ev, currentState, newName)
     this.setState(
       mergeDeepRight(currentState, {
         id: newName
@@ -273,14 +274,9 @@ class _EntityForm extends Component {
   locationDropdownValues = () => sortValuesForDropdown(this.props.locations)
 
   render() {
-    const { availableBehaviors, behaviorShapes, loading } = this.props
     const { id, name, props } = this.state
 
     const originalEntity = this.props.entity
-
-    if (loading || isEmpty(availableBehaviors) || isEmpty(behaviorShapes)) {
-      return <Spinner />
-    }
 
     const locationsForSelect = this.locationDropdownValues()
 
@@ -328,11 +324,13 @@ class _EntityForm extends Component {
           <button
             disabled={!this.valid()}
             onClick={this.handleAdd}
-            className="button"
+            className="button EntityForm__submit-entity"
           >
             Add/Update
           </button>
-          <button onClick={this.handleClear} className="button">
+          <button
+            onClick={this.handleClear}
+            className="button EntityForm__clear-entity">
             Clear
           </button>
         </div>
@@ -344,27 +342,11 @@ class _EntityForm extends Component {
   }
 }
 
-// this might go in a selectors file
-const hasNoLocation = entity => get(entity, "props.location") == null
-const isNotAPlayer = entity => !includes(entity.behaviors, "behaviors")
-const isNotPrivate = entity => !/^_/.test(entity.id)
-
-const extractLocationsFromEntities = entities => {
-  return flow(
-    filter(hasNoLocation),
-    filter(isNotAPlayer),
-    filter(isNotPrivate),
-    map("id")
-  )(entities)
-}
-
 const mapStateToProps = state => {
   return {
     availableBehaviors: state.entityForm.availableBehaviors,
     behaviorShapes: state.entityForm.behaviorShapes,
-    locations: extractLocationsFromEntities(
-      state.gameStateEditor.entities || []
-    ),
+    locations: state.gameStateEditor.locations,
     loading: state.entityForm.loading,
     editStarted: state.entityForm.editStarted,
     entity: state.entityForm.entity || emptyEntity

@@ -73,7 +73,7 @@ class CurrentEntities extends Component {
       <div className="CurrentEntities">
         <form>
           <input
-            className="CurrentEntites__search-input"
+            className="CurrentEntities__search-input"
             type="text"
             onChange={this.handleSearch}
             placeholder="filter..."

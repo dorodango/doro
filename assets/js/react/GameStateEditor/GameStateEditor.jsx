@@ -6,20 +6,22 @@ import download from "downloadjs"
 
 import { isEmpty } from "../shared/utils/utilities"
 import FlashMessage from "../shared/components/Flash/Flash"
-import Spinner from "../shared/components/Spinner/Spinner"
 import CurrentEntities from "./components/CurrentEntities/CurrentEntities"
 import EntityForm from "./components/EntityForm/EntityForm"
-import Entity from "./components/Entity/Entity"
 import TabSet from "../shared/components/TabSet/TabSet"
 import { fetchEntities } from "./actions/gameStateEditor"
 
 class GameStateEditor extends Component {
   static propTypes = {
-    entities: PropTypes.arrayOf(PropTypes.object)
+    entities: PropTypes.arrayOf(PropTypes.object),
+    locations: PropTypes.array,
+    loading: PropTypes.bool
   }
 
   static defaultProps = {
-    entities: []
+    entities: [],
+    locations: [],
+    loading: false
   }
 
   constructor(props) {

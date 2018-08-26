@@ -4,6 +4,7 @@ import {
   FETCH_ENTITIES_SUCCESS,
   FETCH_ENTITIES_FAILURE
 } from "../actions/gameStateEditor"
+import { extractLocationsFromEntities } from "../selectors"
 
 export const defaultState = {
   entities: []
@@ -19,6 +20,7 @@ export default function(state = defaultState, action) {
       // save entities and extract locations and destinations
       return mergeDeepRight(state, {
         entities: action.data.entities,
+        locations: extractLocationsFromEntities(action.data.entities),
         loading: false
       })
     case FETCH_ENTITIES_FAILURE:

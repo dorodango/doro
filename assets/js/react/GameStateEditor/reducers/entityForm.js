@@ -9,7 +9,7 @@ import {
   ADD_ENTITY_FAILURE
 } from "../actions/entityForm"
 import { EDIT_ENTITY, CLOSE_EDIT_PANE } from "../../actions/app"
-import { convertBehaviorsToHash } from "../selectors/entityForm"
+import { convertBehaviorsToHash } from "../selectors"
 
 export const defaultState = {
   availableBehaviors: [],

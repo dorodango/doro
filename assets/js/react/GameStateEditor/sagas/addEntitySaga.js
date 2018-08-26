@@ -6,7 +6,7 @@ import {
   addEntitySuccess,
   addEntityFailure
 } from "../actions/entityForm"
-import { convertBehaviorsToArray } from "../selectors/entityForm"
+import { convertBehaviorsToArray } from "../selectors"
 
 import { addFlashMessage } from "../../shared/actions/flashMessage"
 import { fetchEntities } from "../actions/gameStateEditor"

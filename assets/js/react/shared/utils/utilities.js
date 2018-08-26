@@ -5,7 +5,7 @@ export const isBlank = value => {
   let result = _isEmpty(value)
 
   if (_isString(value)) {
-    result = result && _isEmpty(result.trim())
+    result = result || _isEmpty(value.trim())
   }
 
   return Boolean(result)
