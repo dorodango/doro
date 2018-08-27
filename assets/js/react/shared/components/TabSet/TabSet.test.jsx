@@ -5,7 +5,7 @@ import TabSet from "./TabSet"
 const tabs = [
   { name: "First", component: <div className="first" /> },
   { name: "Second", component: <div className="second" /> },
-  { name: "Link", link: "https://example.com/somewhere" },
+  { name: "Link", link: "https://example.com/somewhere" }
 ]
 
 const requiredProps = { tabs }

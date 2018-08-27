@@ -2,7 +2,7 @@ import axios from "axios"
 
 const JSON_HEADERS = {
   "X-Requested-With": "XMLHttpRequest",
-  "Content-Type": "application/json",
+  "Content-Type": "application/json"
 }
 
 function request(url, method, data = {}) {
@@ -10,7 +10,7 @@ function request(url, method, data = {}) {
     method,
     url,
     headers: { ...JSON_HEADERS, "X-CSRF-Token": "none" },
-    data,
+    data
   })
 }
 

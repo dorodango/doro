@@ -4,7 +4,7 @@ import { takeLatest, put, call } from "redux-saga/effects"
 import {
   ADD_ENTITY,
   addEntitySuccess,
-  addEntityFailure,
+  addEntityFailure
 } from "../actions/entityForm"
 import { addFlashMessage } from "../../shared/actions/flashMessage"
 import { fetchEntities } from "../actions/gameStateEditor"
@@ -18,7 +18,7 @@ function* add(action) {
     yield put(
       addFlashMessage({
         type: "info",
-        text: `Success: ${JSON.stringify(response.data.message)}`,
+        text: `Success: ${JSON.stringify(response.data.message)}`
       })
     )
     yield put(fetchEntities())

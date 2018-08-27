@@ -5,12 +5,12 @@ import TabSetButtonList from "./TabSetButtonList"
 const tabs = [
   { name: "First", component: <div className="first" /> },
   { name: "Second", component: <div className="second" /> },
-  { name: "Link", link: "https://example.com/valuation" },
+  { name: "Link", link: "https://example.com/valuation" }
 ]
 
 const requiredProps = {
   tabs,
-  onButtonClick: () => {},
+  onButtonClick: () => {}
 }
 
 describe("TabSet", () => {

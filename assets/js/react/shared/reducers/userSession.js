@@ -4,7 +4,7 @@ import { SEND_HELLO_SUCCESS, SEND_COMMAND_SUCCESS } from "../actions/channel"
 export const defaultState = {
   playerId: null,
   playerName: null,
-  messages: [],
+  messages: []
 }
 
 export default function(state = defaultState, action) {
@@ -15,7 +15,7 @@ export default function(state = defaultState, action) {
       }
       return mergeDeepRight(state, {
         playerId: action.data.player_id,
-        playerName: action.data.player_name,
+        playerName: action.data.player_name
       })
     case SEND_COMMAND_SUCCESS:
       const response = action.data.body

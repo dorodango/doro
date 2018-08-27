@@ -11,7 +11,7 @@ import { sendHello } from "../shared/actions/channel"
 
 class GamePlayer extends Component {
   static propTypes = {
-    sendHello: PropTypes.func.isRequired,
+    sendHello: PropTypes.func.isRequired
   }
 
   constructor(props) {
@@ -41,13 +41,13 @@ class GamePlayer extends Component {
 }
 
 const mapStateToProps = state => ({
-  userSession: state.userSession,
+  userSession: state.userSession
 })
 
 const mapDispatchToProps = dispatch =>
   bindActionCreators(
     {
-      sendHello,
+      sendHello
     },
     dispatch
   )

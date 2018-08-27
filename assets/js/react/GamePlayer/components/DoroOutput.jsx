@@ -37,18 +37,18 @@ const MessageItem = props => {
 }
 
 MessageItem.propTypes = {
-  message: PropTypes.string.isRequired,
+  message: PropTypes.string.isRequired
 }
 
 class DoroOutput extends Component {
   static propTypes = {
-    userSession: PropTypes.object.isRequired,
+    userSession: PropTypes.object.isRequired
   }
 
   static defaultProps = {
     userSession: {
-      messages: [],
-    },
+      messages: []
+    }
   }
 
   constructor(props) {
@@ -89,7 +89,7 @@ class DoroOutput extends Component {
 }
 
 const mapStateToProps = state => ({
-  userSession: state.userSession,
+  userSession: state.userSession
 })
 
 const mapDispatchToProps = dispatch => bindActionCreators({}, dispatch)

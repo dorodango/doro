@@ -8,7 +8,7 @@ import { removeFlashMessage } from "../../../shared/actions/flashMessage"
 class Flash extends Component {
   static propTypes = {
     type: PropTypes.string,
-    text: PropTypes.string,
+    text: PropTypes.string
   }
 
   componentDidMount() {
@@ -40,7 +40,7 @@ const mapStateToProps = state => ({ ...state.flashMessage })
 const mapDispatchToProps = dispatch =>
   bindActionCreators(
     {
-      removeFlashMessage,
+      removeFlashMessage
     },
     dispatch
   )

@@ -15,7 +15,7 @@ describe("Flash Message reducer", () => {
       )
       expect(state).toEqual({
         text: "flash it",
-        type: "info",
+        type: "info"
       })
     })
   })

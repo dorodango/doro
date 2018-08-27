@@ -7,7 +7,7 @@ import DoroOutput from "./DoroOutput"
 
 class DoroConsole extends Component {
   static propTypes = {
-    userSession: PropTypes.object.isRequired,
+    userSession: PropTypes.object.isRequired
   }
 
   constructor(props) {
@@ -26,7 +26,7 @@ class DoroConsole extends Component {
 }
 
 const mapStateToProps = state => ({
-  userSession: state.userSession,
+  userSession: state.userSession
 })
 
 const mapDispatchToProps = dispatch => bindActionCreators({}, dispatch)

@@ -12,7 +12,7 @@ class TabSet extends Component {
     const { tabs } = this.props
 
     this.state = {
-      active: tabs[0].name,
+      active: tabs[0].name
     }
   }
 
@@ -45,7 +45,7 @@ class TabSet extends Component {
 TabSet.propTypes = {
   className: PropTypes.string,
   tabs: tabSetType.isRequired,
-  buttonListClassName: PropTypes.string,
+  buttonListClassName: PropTypes.string
 }
 
 export default TabSet

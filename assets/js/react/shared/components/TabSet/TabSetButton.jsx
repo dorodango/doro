@@ -15,7 +15,7 @@ export class TabSetButton extends Component {
     const { isActive, tab } = this.props
 
     const className = classnames("tab-set__button", {
-      "tab-set__button--active": isActive,
+      "tab-set__button--active": isActive
     })
 
     return tab.component ? (
@@ -33,19 +33,19 @@ export class TabSetButton extends Component {
 TabSetButton.propTypes = {
   isActive: PropTypes.bool,
   onClick: PropTypes.func.isRequired,
-  tab: tabType.isRequired,
+  tab: tabType.isRequired
 }
 
 const TabSetButtonContent = ({ tab, isActive }) => {
   const className = classnames("tab-set__button-content", {
-    "tab-set__button-content--active": isActive,
+    "tab-set__button-content--active": isActive
   })
   return <div className={className}>{tab.name}</div>
 }
 
 TabSetButtonContent.propTypes = {
   tab: tabType,
-  isActive: PropTypes.bool,
+  isActive: PropTypes.bool
 }
 
 export default TabSetButton

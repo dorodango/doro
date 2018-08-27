@@ -7,5 +7,5 @@ export default [
   fetchAvailableBehaviorsSaga,
   fetchEntitiesSaga,
   addEntitySaga,
-  joinChannelSaga,
+  joinChannelSaga
 ]

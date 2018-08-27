@@ -10,17 +10,17 @@ import { fetchEntities } from "../../actions/gameStateEditor"
 
 class CurrentEntities extends Component {
   static propTypes = {
-    entities: PropTypes.arrayOf(PropTypes.object),
+    entities: PropTypes.arrayOf(PropTypes.object)
   }
 
   static defaultProps = {
-    entities: [],
+    entities: []
   }
 
   constructor(props) {
     super(props)
     this.state = {
-      query: null,
+      query: null
     }
   }
 
@@ -60,7 +60,7 @@ class CurrentEntities extends Component {
     }
     this.setState({
       query: query,
-      filteredEntities: filteredEntities,
+      filteredEntities: filteredEntities
     })
   }
 
@@ -99,13 +99,13 @@ class CurrentEntities extends Component {
 }
 
 const mapStateToProps = state => ({
-  entities: state.gameStateEditor.entities,
+  entities: state.gameStateEditor.entities
 })
 
 const mapDispatchToProps = dispatch =>
   bindActionCreators(
     {
-      fetchEntities,
+      fetchEntities
     },
     dispatch
   )

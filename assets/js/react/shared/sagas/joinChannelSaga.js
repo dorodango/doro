@@ -8,7 +8,7 @@ import {
   sendCommandSuccess,
   sendCommandFailure,
   sendHelloSuccess,
-  sendHelloFailure,
+  sendHelloFailure
 } from "../actions/channel"
 
 /* for a selector? */
@@ -18,7 +18,7 @@ export function* configureChannel(url) {
   let socket = new Socket(url, {
     logger: (kind, msg, data) => {
       console.log(`${kind}: ${msg}`, data)
-    },
+    }
   })
   socket.connect()
   return socket
@@ -85,6 +85,6 @@ function* sendCommand(action) {
 export default function* joinSaga() {
   yield all([
     takeLatest(SEND_HELLO, sendHello),
-    takeLatest(SEND_COMMAND, sendCommand),
+    takeLatest(SEND_COMMAND, sendCommand)
   ])
 }

@@ -10,5 +10,5 @@ export default combineReducers({
   entityForm,
   gameStateEditor,
   flashMessage,
-  userSession,
+  userSession
 })

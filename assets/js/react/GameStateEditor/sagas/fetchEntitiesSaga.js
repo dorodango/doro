@@ -4,7 +4,7 @@ import { takeLatest, put, call } from "redux-saga/effects"
 import {
   FETCH_ENTITIES,
   fetchEntitiesSuccess,
-  fetchEntitiesFailure,
+  fetchEntitiesFailure
 } from "../actions/gameStateEditor"
 
 import api from "../../api"

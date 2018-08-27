@@ -15,11 +15,11 @@ import { fetchEntities } from "./actions/gameStateEditor"
 
 class GameStateEditor extends Component {
   static propTypes = {
-    entities: PropTypes.arrayOf(PropTypes.object),
+    entities: PropTypes.arrayOf(PropTypes.object)
   }
 
   static defaultProps = {
-    entities: [],
+    entities: []
   }
 
   constructor(props) {
@@ -34,14 +34,14 @@ class GameStateEditor extends Component {
 
   handleEdit = entity => {
     this.setState({
-      entity: entity,
+      entity: entity
     })
   }
 
   handleDelete = entity => {
     const { entities } = this.state
     this.setState({
-      entities: filter(entry => entry.id !== entity.id, entities),
+      entities: filter(entry => entry.id !== entity.id, entities)
     })
   }
 
@@ -55,7 +55,7 @@ class GameStateEditor extends Component {
 
   handleClear = _ev => {
     this.setState({
-      entities: [],
+      entities: []
     })
   }
 
@@ -73,8 +73,8 @@ class GameStateEditor extends Component {
       // },
       {
         name: "Entities",
-        component: <CurrentEntities entities={entities} />,
-      },
+        component: <CurrentEntities entities={entities} />
+      }
     ]
     return <TabSet tabs={tabs} />
   }
@@ -105,13 +105,13 @@ class GameStateEditor extends Component {
 const mapStateToProps = state => ({
   entities: state.gameStateEditor.entities,
   locations: state.gameStateEditor.locations,
-  loading: state.gameStateEditor.loading,
+  loading: state.gameStateEditor.loading
 })
 
 const mapDispatchToProps = dispatch =>
   bindActionCreators(
     {
-      fetchEntities,
+      fetchEntities
     },
     dispatch
   )

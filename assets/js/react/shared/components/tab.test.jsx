@@ -4,7 +4,7 @@ import { activeTab, isTabActive } from "./tab"
 const tabs = [
   { name: "Overview", component: <div className="overview" /> },
   { name: "Fundamentals", component: <div className="fundamentals" /> },
-  { name: "Valuation", link: "https://example.com/valuation" },
+  { name: "Valuation", link: "https://example.com/valuation" }
 ]
 
 describe("tab", () => {

@@ -10,15 +10,15 @@ export const ADD_ENTITY_FAILURE = "entityForm/ADD_ENTITY_FAILURE"
 
 export const fetchAvailableBehaviors = data => ({
   type: FETCH_AVAILABLE_BEHAVIORS,
-  data,
+  data
 })
 export const fetchAvailableBehaviorsSuccess = data => ({
   type: FETCH_AVAILABLE_BEHAVIORS_SUCCESS,
-  data,
+  data
 })
 export const fetchAvailableBehaviorsFailure = data => ({
   type: FETCH_AVAILABLE_BEHAVIORS_FAILURE,
-  data,
+  data
 })
 
 export const addEntity = data => ({ type: ADD_ENTITY, data })

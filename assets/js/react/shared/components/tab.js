@@ -5,7 +5,7 @@ export const tabType = PropTypes.shape({
   name: PropTypes.string.isRequired,
   component: PropTypes.component,
   link: PropTypes.string,
-  tabSetContentClass: PropTypes.string, // for extra classes on tab-set__content wrapper
+  tabSetContentClass: PropTypes.string // for extra classes on tab-set__content wrapper
 })
 
 export const tabSetType = PropTypes.arrayOf(tabType)

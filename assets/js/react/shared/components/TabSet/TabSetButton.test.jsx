@@ -7,7 +7,7 @@ const linkTab = { name: "Link", link: "https://example.com/valuation" }
 
 const requiredProps = {
   tab: componentTab,
-  onClick: () => {},
+  onClick: () => {}
 }
 
 describe("TabSet", () => {

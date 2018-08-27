@@ -18,7 +18,7 @@ import {
   sort,
   sortBy,
   toLower,
-  uniq,
+  uniq
 } from "ramda"
 import classnames from "classnames"
 import Select from "react-select"
@@ -28,7 +28,7 @@ import { fetchEntities } from "../../actions/gameStateEditor"
 import { fetchAvailableBehaviors, addEntity } from "../../actions/entityForm"
 import {
   addFlashMessage,
-  clearFlashMessage,
+  clearFlashMessage
 } from "../../../shared/actions/flashMessage"
 
 class EntityForm extends Component {
@@ -36,12 +36,12 @@ class EntityForm extends Component {
     availableBehaviors: PropTypes.arrayOf(PropTypes.string),
     locations: PropTypes.arrayOf(PropTypes.string),
     fetchAvailableBehaviors: PropTypes.func.isRequired,
-    addEntity: PropTypes.func.isRequired,
+    addEntity: PropTypes.func.isRequired
   }
 
   static defaultProps = {
     availableBehaviors: [],
-    locations: [],
+    locations: []
   }
 
   constructor(props) {
@@ -65,8 +65,8 @@ class EntityForm extends Component {
     this.setState({
       entity: {
         ...currentState.entity,
-        behaviors: map(prop("value"), behaviors),
-      },
+        behaviors: map(prop("value"), behaviors)
+      }
     })
   }
 
@@ -78,9 +78,9 @@ class EntityForm extends Component {
           ...currentState.entity,
           props: {
             ...currentState.entity.props,
-            [fieldName]: selectedValue.value,
-          },
-        },
+            [fieldName]: selectedValue.value
+          }
+        }
       })
     }
   }
@@ -95,8 +95,8 @@ class EntityForm extends Component {
           .trim()
           .replace(/[^\w\d]+/gi, "-")
           .toLowerCase(),
-        name: newName,
-      },
+        name: newName
+      }
     })
   }
 
@@ -105,8 +105,8 @@ class EntityForm extends Component {
     this.setState({
       entity: {
         ...currentState.entity,
-        [ev.target.name]: ev.target.value,
-      },
+        [ev.target.name]: ev.target.value
+      }
     })
   }
 
@@ -117,9 +117,9 @@ class EntityForm extends Component {
         ...currentState.entity,
         props: {
           ...currentState.entity.props,
-          [ev.target.name]: ev.target.value,
-        },
-      },
+          [ev.target.name]: ev.target.value
+        }
+      }
     })
   }
 
@@ -263,7 +263,7 @@ const mapStateToProps = state => {
     locations: extractLocationsFromEntities(
       state.gameStateEditor.entities || []
     ),
-    loading: state.entityForm.loading,
+    loading: state.entityForm.loading
   }
 }
 
@@ -273,7 +273,7 @@ const mapDispatchToProps = dispatch =>
       fetchAvailableBehaviors,
       addEntity,
       addFlashMessage,
-      clearFlashMessage,
+      clearFlashMessage
     },
     dispatch
   )

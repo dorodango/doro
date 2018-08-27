@@ -22,7 +22,7 @@ TabSetButtonList.propTypes = {
   active: PropTypes.string,
   onButtonClick: PropTypes.func.isRequired,
   tabs: tabSetType.isRequired,
-  className: PropTypes.string,
+  className: PropTypes.string
 }
 
 export default TabSetButtonList

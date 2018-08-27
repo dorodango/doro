@@ -11,11 +11,11 @@ import { toggleEditPane } from "./actions/app"
 class App extends Component {
   static propTypes = {
     showEditPane: PropTypes.bool,
-    toggleEditPane: PropTypes.func.isRequired,
+    toggleEditPane: PropTypes.func.isRequired
   }
 
   static defaultProps = {
-    showEditPane: false,
+    showEditPane: false
   }
 
   handleToggleEditPane = ev => {
@@ -47,13 +47,13 @@ class App extends Component {
 }
 
 const mapStateToProps = state => ({
-  showEditPane: state.app.showEditPane,
+  showEditPane: state.app.showEditPane
 })
 
 const mapDispatchToProps = dispatch =>
   bindActionCreators(
     {
-      toggleEditPane,
+      toggleEditPane
     },
     dispatch
   )

@@ -5,12 +5,12 @@ import {
   FETCH_AVAILABLE_BEHAVIORS_FAILURE,
   ADD_ENTITY,
   ADD_ENTITY_SUCCESS,
-  ADD_ENTITY_FAILURE,
+  ADD_ENTITY_FAILURE
 } from "../actions/entityForm"
 
 export const defaultState = {
   availableBehaviors: [],
-  entity: {},
+  entity: {}
 }
 
 export default function(state = defaultState, action) {
@@ -18,22 +18,22 @@ export default function(state = defaultState, action) {
     case ADD_ENTITY:
     case FETCH_AVAILABLE_BEHAVIORS:
       return mergeDeepRight(state, {
-        loading: true,
+        loading: true
       })
     case ADD_ENTITY_SUCCESS:
       return mergeDeepRight(state, {
         entity: action.data.entity,
-        loading: false,
+        loading: false
       })
     case FETCH_AVAILABLE_BEHAVIORS_SUCCESS:
       return mergeDeepRight(state, {
         availableBehaviors: action.data.behaviors,
-        loading: false,
+        loading: false
       })
     case ADD_ENTITY_FAILURE:
     case FETCH_AVAILABLE_BEHAVIORS_FAILURE:
       return mergeDeepRight(state, {
-        loading: false,
+        loading: false
       })
     default:
       return state

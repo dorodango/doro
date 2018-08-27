@@ -4,7 +4,7 @@ import { takeLatest, put, call } from "redux-saga/effects"
 import {
   FETCH_AVAILABLE_BEHAVIORS,
   fetchAvailableBehaviorsSuccess,
-  fetchAvailableBehaviorsFailure,
+  fetchAvailableBehaviorsFailure
 } from "../actions/entityForm"
 
 import api from "../../api"

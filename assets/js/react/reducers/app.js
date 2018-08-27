@@ -2,7 +2,7 @@ import { mergeDeepRight } from "ramda"
 import { TOGGLE_EDIT_PANE } from "../actions/app"
 
 export const defaultState = {
-  showEditPane: false,
+  showEditPane: false
 }
 
 export default function(state = defaultState, action) {

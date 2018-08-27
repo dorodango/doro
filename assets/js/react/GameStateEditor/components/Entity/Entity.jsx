@@ -33,11 +33,11 @@ Entity.propTypes = {
   entity: PropTypes.object.isRequired,
   handleEdit: PropTypes.func.isRequired,
   handleDelete: PropTypes.func.isRequired,
-  highlightTerm: PropTypes.string,
+  highlightTerm: PropTypes.string
 }
 
 Entity.defaultProps = {
-  highlightTerm: "",
+  highlightTerm: ""
 }
 
 export default Entity

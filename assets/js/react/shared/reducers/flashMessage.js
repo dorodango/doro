@@ -1,7 +1,7 @@
 import { mergeDeepRight } from "ramda"
 import {
   ADD_FLASH_MESSAGE,
-  REMOVE_FLASH_MESSAGE,
+  REMOVE_FLASH_MESSAGE
 } from "../actions/flashMessage"
 
 export const defaultState = {}

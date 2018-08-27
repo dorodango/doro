@@ -3,7 +3,7 @@ import PropTypes from "proptypes"
 
 class JoinForm extends Component {
   static propTypes = {
-    onLogin: PropTypes.func.isRequired,
+    onLogin: PropTypes.func.isRequired
   }
 
   constructor(props) {
