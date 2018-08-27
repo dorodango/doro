@@ -1,8 +1,5 @@
 import { mergeDeepRight, mergeDeepWith, append } from "ramda"
-import {
-  SEND_HELLO_SUCCESS,
-  SEND_COMMAND_SUCCESS,
-} from "../actions/channel"
+import { SEND_HELLO_SUCCESS, SEND_COMMAND_SUCCESS } from "../actions/channel"
 
 export const defaultState = {
   playerId: null,

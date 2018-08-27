@@ -11,11 +11,11 @@ describe("Flash Message reducer", () => {
     it("adds the message to the store", () => {
       const state = reducer(
         {},
-        sendHelloSuccess({ player_id: "the-player-id", player_name: "My Name"})
+        sendHelloSuccess({ player_id: "the-player-id", player_name: "My Name" })
       )
       expect(state).toEqual({
         playerId: "the-player-id",
-        playerName: "My Name"
+        playerName: "My Name",
       })
     })
   })
@@ -28,14 +28,16 @@ describe("Flash Message reducer", () => {
           body: {
             text: "> look over here",
             data: {
-              type: "default"
-            }
-          }
+              type: "default",
+            },
+          },
         })
       )
-      expect(state).toEqual(expect.objectContaining({
-        messages: [ "> look over here" ]
-      }))
+      expect(state).toEqual(
+        expect.objectContaining({
+          messages: ["> look over here"],
+        })
+      )
 
       state = reducer(
         state,
@@ -43,15 +45,16 @@ describe("Flash Message reducer", () => {
           body: {
             text: "you see nothing",
             data: {
-              type: "default"
-            }
-          }
+              type: "default",
+            },
+          },
         })
       )
-      expect(state).toEqual(expect.objectContaining({
-        messages: [ "> look over here", 'you see nothing' ]
-      }))
-
+      expect(state).toEqual(
+        expect.objectContaining({
+          messages: ["> look over here", "you see nothing"],
+        })
+      )
     })
   })
 })

@@ -16,8 +16,8 @@
   },
   "rules": {
     "no-unused-vars": ["error", { "argsIgnorePattern": "^_" }],
-    "jest/no-disabled-tests": 0
+    "jest/no-disabled-tests": 0,
+    "comma-dangle": ["error", "never"]
   },
   "extends": ["eslint:recommended", "plugin:react/recommended", "plugin:jest/recommended", "prettier"]
 }
-
