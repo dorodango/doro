@@ -30,12 +30,13 @@
       ]
     },
     {
-      "props": {
-        "type": "visible",
-        "description": "You are in a tiny dark closet."
-      },
       "id": "closet",
-      "behaviors": []
+      "behaviors": [
+        {
+          "type": "visible",
+          "description": "You are in a tiny dark closet."
+        }        
+      ]
     },
     {
       "props": {

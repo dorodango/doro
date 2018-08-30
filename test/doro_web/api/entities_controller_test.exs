@@ -6,108 +6,81 @@ defmodule DoroWeb.Api.UserControllerTest do
   describe "&create/2" do
     setup do
       Doro.World.load_debug([])
-      %{params: %{id: "tomcat"}}
     end
 
-    test "&create/2 creates a new entity in the game state with just an id", %{
-      conn: conn,
-      params: params
+    test "creates a new entity with the right props", %{
+      conn: conn
     } do
-      response =
-        conn
-        |> put("/api/entities", params)
-        |> json_response(200)
-
-      assert response == %{"message" => "created entity: tomcat"}
-
-      assert match?(
-               %Entity{
-                 behaviors: %{Doro.Behaviors.Visible => _},
-                 id: "tomcat",
-                 name: "tomcat",
-                 props: %{},
-                 proto: nil
-               },
-               Doro.World.get_entity("tomcat")
-             )
-    end
-
-    test "&create/2 creates a new entity with specified behaviors", %{
-      conn: conn,
-      params: params
-    } do
-      extra_params = %{
-        behaviors: ["this", "turntable"]
+      params = %{
+        "behaviors" => [
+          %{ "type" => "exit", "destination_id" => "fire_escape"},
+          %{ "type" => "visible", "description" => "the description"}
+        ],
+        "id" => "new-thing",
+        "name" => "new thing",
+        "props" => %{"location" => "closet"}
       }
 
       conn
-      |> put("/api/entities", params |> Map.merge(extra_params))
+      |> put("/api/entities", params)
       |> json_response(200)
 
-      assert match?(
-               %Entity{
-                 behaviors: %{Doro.Behaviors.Visible => _, Doro.Behaviors.Turntable => _},
-                 id: "tomcat",
-                 name: "tomcat",
-                 props: %{},
-                 proto: nil
-               },
-               Doro.World.get_entity("tomcat")
-             )
-    end
-
-    test "&create/2 creates a new entity with the right props", %{
-      conn: conn,
-      params: params
-    } do
-      extra_params = %{
-        name: "the tomcat",
-        behaviors: nil,
-        props: %{location: "room", description: "this is the description"}
-      }
-
-      conn
-      |> put("/api/entities", params |> Map.merge(extra_params))
-      |> json_response(200)
-
-      entity = Doro.World.get_entity("tomcat")
-      assert entity.id == "tomcat"
-      assert entity.name == "the tomcat"
-      assert entity.name_tokens == MapSet.new(["the", "tomcat", "the tomcat"])
-      assert entity[:location] == "room"
+      entity = Doro.World.get_entity("new-thing")
+      assert entity.id == "new-thing"
+      assert entity.name == "new thing"
+      assert entity.name_tokens == MapSet.new(["new", "thing", "new thing"])
+      assert entity[:location] == "closet"
       assert Entity.has_behavior?(entity, Doro.Behaviors.Visible)
+      visible_behavior = entity |> Map.get(:behaviors) |> Map.get(Doro.Behaviors.Visible)
+      assert Map.get(visible_behavior, :description) == "the description"
+      exit_behavior = entity |> Map.get(:behaviors) |> Map.get(Doro.Behaviors.Exit)
+      assert Map.get(exit_behavior, :destination_id) == "fire_escape"
     end
   end
 
   describe "&update/2" do
     setup do
       Doro.World.load("priv_file://fixtures/turntable.json")
-      %{params: %{id: "turntable", behaviors: ["visible", "slot_machine"]}}
+      %{ path: "/api/entities/turntable" }
     end
 
-    test "&update/2 updates the entity with the new properties", %{
+    test "updates the entity with the new properties", %{
       conn: conn,
-      params: params
+      path: path
     } do
       response =
         conn
-        |> post("/api/entities/#{params[:id]}", %{
-          props: %{description: "whatever", playing: true}
-        })
+        |> post(path, %{
+            id: "turntable",
+            props: %{playing: true},
+            behaviors: [
+              %{
+                 "type" => "exit",
+                 "destination_id" => "fire_escape"
+              },
+              %{
+                "type" => "visible",
+                "description" => "shiny new description"
+              }
+            ]
+          }
+        )
         |> json_response(200)
 
       assert response == %{"message" => "updated entity turntable"}
 
-      updated = Doro.World.get_entity("turntable")
-      assert updated[:playing]
+      turntable = Doro.World.get_entity("turntable")
+      assert turntable[:playing]
+      desc = (turntable |> Map.get(:behaviors) |> Map.get(Doro.Behaviors.Visible) |> Map.get(:description))
+      assert desc == "shiny new description"
     end
 
-    test "&update/2 updates the name and name tokens", %{
+    test "updates the name and name tokens", %{
       conn: conn,
-      params: params
+      path: path
     } do
       conn
-      |> post("/api/entities/#{params[:id]}", %{
+      |> post(path, %{
         name: "this name",
         props: %{location: "somewhere"}
       })
@@ -119,22 +92,27 @@ defmodule DoroWeb.Api.UserControllerTest do
       assert updated[:location] == "somewhere"
     end
 
-    test "&update/2 updates behaviors by clobbering old behavior list with the new list", %{
+    test "updates behaviors by clobbering old behavior list with the new list", %{
       conn: conn,
-      params: params
+      path: path
     } do
       original = Doro.World.get_entity("turntable")
       assert Entity.has_behavior?(original, Doro.Behaviors.Visible)
       assert Entity.has_behavior?(original, Doro.Behaviors.Turntable)
 
       conn
-      |> post("/api/entities/#{params[:id]}", %{
-        behaviors: ["god"]
+      |> post(path, %{
+        name: "new turntable",
+        behaviors: [
+          %{"type" => "god"}
+        ]
       })
       |> json_response(200)
 
       updated = Doro.World.get_entity("turntable")
       assert Entity.has_behavior?(updated, Doro.Behaviors.God)
+      refute Entity.has_behavior?(updated, Doro.Behaviors.Turntable)
+      refute Entity.has_behavior?(updated, Doro.Behaviors.Visible)
     end
   end
 end

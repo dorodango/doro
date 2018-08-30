@@ -35,7 +35,7 @@ defmodule Doro.Behaviors.God do
       "You concentrate on #{definite(entity)}.  Nothing happens and you feel silly.",
       %{
         "type": "open_entity_editor",
-        "entity": entity
+        "entity": entity |> Doro.World.Marshal.marshal
       }
     )
   end

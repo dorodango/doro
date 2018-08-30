@@ -6,6 +6,8 @@ import {
   addEntitySuccess,
   addEntityFailure
 } from "../actions/entityForm"
+import { convertBehaviorsToArray } from "../selectors"
+
 import { addFlashMessage } from "../../shared/actions/flashMessage"
 import { fetchEntities } from "../actions/gameStateEditor"
 
@@ -13,7 +15,9 @@ import api from "../../api"
 
 function* add(action) {
   try {
-    const response = yield call(api.entities.create, action.data)
+    /** incoming data has behaviors keyed by type in a hash.  Convert them for the controller */
+    const params = convertBehaviorsToArray(action.data)
+    const response = yield call(api.entities.create, params)
     yield put(addEntitySuccess(response.data))
     yield put(
       addFlashMessage({
@@ -23,8 +27,14 @@ function* add(action) {
     )
     yield put(fetchEntities())
   } catch (e) {
-    console.log("Not Added", e)
+    console.error("Entity not added", e)
     yield put(addEntityFailure(e.response.data))
+    yield put(
+      addFlashMessage({
+        type: "error",
+        text: `Failed to add entity: ${JSON.stringify(e.response.data)}`,
+      })
+    )
   }
 }
 

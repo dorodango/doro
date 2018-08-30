@@ -11,6 +11,10 @@ import {
   sendHelloFailure
 } from "../actions/channel"
 
+import { removeFlashMessage } from "../actions/flashMessage"
+
+import { editEntity } from "../../actions/app"
+
 /* for a selector? */
 const getUserSession = state => state.userSession
 
@@ -28,6 +32,7 @@ function createPlayerInfoChannel(channel) {
   return eventChannel(emit => {
     const handleHelloResponse = ev => {
       emit(sendHelloSuccess(ev))
+      emit(removeFlashMessage({}))
     }
 
     channel.on("player_info", handleHelloResponse)
@@ -40,8 +45,21 @@ function createPlayerInfoChannel(channel) {
 
 function createCommandChannel(channel) {
   return eventChannel(emit => {
+    const handleCustomEvents = ev => {
+      const customEventAction = {
+        open_entity_editor: editEntity,
+      }[ev.body.data.type]
+      if (customEventAction) {
+        emit(customEventAction(ev))
+      }
+    }
+
     const handleCommandResponse = ev => {
       emit(sendCommandSuccess(ev))
+      emit(removeFlashMessage({}))
+      if (ev.type != "default") {
+        handleCustomEvents(ev)
+      }
     }
     channel.on("output", handleCommandResponse)
     const unsubscribe = () => {

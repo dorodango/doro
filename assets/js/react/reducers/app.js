@@ -1,5 +1,5 @@
 import { mergeDeepRight } from "ramda"
-import { TOGGLE_EDIT_PANE } from "../actions/app"
+import { CLOSE_EDIT_PANE, EDIT_ENTITY } from "../actions/app"
 
 export const defaultState = {
   showEditPane: false
@@ -7,8 +7,10 @@ export const defaultState = {
 
 export default function(state = defaultState, action) {
   switch (action.type) {
-    case TOGGLE_EDIT_PANE:
-      return mergeDeepRight(state, { showEditPane: !state.showEditPane })
+    case EDIT_ENTITY:
+      return mergeDeepRight(state, { showEditPane: true })
+    case CLOSE_EDIT_PANE:
+      return mergeDeepRight(state, { showEditPane: false })
     default:
       return state
   }

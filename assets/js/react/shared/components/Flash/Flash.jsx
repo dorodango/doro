@@ -1,5 +1,5 @@
 import React, { Component } from "react"
-import PropTypes from "proptypes"
+import PropTypes from "prop-types"
 import { connect } from "react-redux"
 import { bindActionCreators } from "redux"
 
@@ -12,7 +12,7 @@ class Flash extends Component {
   }
 
   componentDidMount() {
-    setTimeout(this.props.removeFlashMessage, 7000)
+    setTimeout(this.props.removeFlashMessage, 5000)
   }
 
   handleClose = ev => {

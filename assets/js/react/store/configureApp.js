@@ -3,7 +3,6 @@ import createSagaMiddleware from "redux-saga"
 
 import reducers from "../reducers"
 import sagas from "../sagas"
-import mapObjIndexed from "ramda"
 
 const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose
 

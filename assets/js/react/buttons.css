@@ -36,6 +36,7 @@
   background-color: #f2f2f2;
 
 }
+
 .button:hover {
   transition: all 150ms linear;
 
@@ -56,4 +57,11 @@
 .button:focus {
   outline: 1px dotted #959595;
   outline-offset: -4px;
+}
+
+.button[disabled],
+.button[disabled]:hover {
+  color: #665544;
+  border: solid 1px #eee;
+  background-color: #cccccc;
 }

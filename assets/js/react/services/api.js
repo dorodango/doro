@@ -1,4 +1,5 @@
 import axios from "axios"
+import { decamelizeKeys } from "humps"
 
 const JSON_HEADERS = {
   "X-Requested-With": "XMLHttpRequest",
@@ -10,7 +11,7 @@ function request(url, method, data = {}) {
     method,
     url,
     headers: { ...JSON_HEADERS, "X-CSRF-Token": "none" },
-    data
+    data: decamelizeKeys(data)
   })
 }
 

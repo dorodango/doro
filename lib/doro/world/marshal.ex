@@ -3,15 +3,15 @@ defmodule Doro.World.Marshal do
 
   import MapHelpers
 
+  alias Doro.Entity
+
   @moduledoc """
   Functions for loading the world from JSON
   """
 
-  @doc "Marshal the world to a JSON string"
-  def marshal(data) do
-    data
-    |> Enum.map(&unresolve_behaviors/1)
-  end
+  @doc "Marshal the world (or an entity) so it's ready for JSON stringification"
+  def marshal(entity = %Entity{}), do: entity |> unresolve_behaviors
+  def marshal(data), do: data |> Enum.map(&marshal/1)
 
   @doc "convert Map to an %Entity"
   def unmarshal_entity(data) do
@@ -22,15 +22,18 @@ defmodule Doro.World.Marshal do
     |> (&struct(Doro.Entity, &1)).()
   end
 
-  defp unresolve_behaviors(nil), do: nil
 
+  defp unpack_behavior(nil), do: nil
+  defp unpack_behavior(behavior) do
+    behavior |> elem(1)
+  end
+
+  defp unresolve_behaviors(nil), do: nil
   defp unresolve_behaviors(entity) do
     marshalled_behaviors =
       entity
       |> Doro.Entity.own_behaviors()
-      |> Map.keys()
-      |> Enum.map(& &1.key())
-      |> Enum.map(&Atom.to_string/1)
+      |> Enum.map( &unpack_behavior/1 )
 
     %{entity | behaviors: marshalled_behaviors}
   end
@@ -53,6 +56,8 @@ defmodule Doro.World.Marshal do
       |> Enum.into(%{})
     )
   end
+
+  defp resolve_behavior(%{"type" => key} = props), do: resolve_behavior(props |> atomize_keys)
 
   defp resolve_behavior(%{type: key} = props) do
     {behavior, data} = resolve_behavior(key)

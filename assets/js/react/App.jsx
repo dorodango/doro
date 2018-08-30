@@ -6,12 +6,13 @@ import GamePlayer from "./GamePlayer/GamePlayer"
 import { connect } from "react-redux"
 import { bindActionCreators } from "redux"
 
-import { toggleEditPane } from "./actions/app"
+import { editEntity, closeEditPane } from "./actions/app"
 
 class App extends Component {
   static propTypes = {
+    editEntity: PropTypes.func.isRequired,
     showEditPane: PropTypes.bool,
-    toggleEditPane: PropTypes.func.isRequired
+    closeEditPane: PropTypes.func.isRequired
   }
 
   static defaultProps = {
@@ -20,7 +21,11 @@ class App extends Component {
 
   handleToggleEditPane = ev => {
     ev.preventDefault()
-    this.props.toggleEditPane()
+    if (this.props.showEditPane) {
+      this.props.closeEditPane()
+    } else {
+      this.props.editEntity()
+    }
   }
 
   render() {
@@ -39,7 +44,9 @@ class App extends Component {
           <GamePlayer />
         </main>
         <aside className="doro-aside" hidden={!showEditPane}>
-          <GameStateEditor toggleEditor={this.handleToggleEditPane} />
+          {showEditPane && (
+            <GameStateEditor toggleEditor={this.handleToggleEditPane} />
+          )}
         </aside>
       </div>
     )
@@ -53,7 +60,8 @@ const mapStateToProps = state => ({
 const mapDispatchToProps = dispatch =>
   bindActionCreators(
     {
-      toggleEditPane
+      closeEditPane,
+      editEntity
     },
     dispatch
   )

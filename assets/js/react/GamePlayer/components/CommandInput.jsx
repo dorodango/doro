@@ -1,9 +1,9 @@
 import React, { Component } from "react"
-import PropTypes from "proptypes"
+import PropTypes from "prop-types"
 import { connect } from "react-redux"
 import { bindActionCreators } from "redux"
-import { isEmpty } from "ramda"
 
+import { isEmpty } from "../../shared/utils/utilities"
 import { sendCommand } from "../../shared/actions/channel"
 
 class CommandInput extends Component {

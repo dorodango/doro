@@ -1,11 +1,12 @@
 import React, { Component } from "react"
-import PropTypes from "proptypes"
+import PropTypes from "prop-types"
 import { connect } from "react-redux"
 import { bindActionCreators } from "redux"
-import { map, addIndex, isEmpty, isNil, filter, any, path } from "ramda"
+import { isArray, some, filter, get, map } from "lodash"
+
+import { isEmpty } from "../../../shared/utils/utilities"
 
 import Entity from "../Entity/Entity"
-import { isArray } from "util"
 import { fetchEntities } from "../../actions/gameStateEditor"
 
 class CurrentEntities extends Component {
@@ -34,12 +35,12 @@ class CurrentEntities extends Component {
     const query = ev.target.value.trim()
     let filteredEntities = this.props.entities
 
-    if (query && !isEmpty(query)) {
+    if (!isEmpty(query)) {
       const fieldMatcher = (field, query) => entity => {
-        const val = path(field.split("."), entity)
+        const val = get(entity, field)
         if (val) {
           if (isArray(val)) {
-            return any(v => v.match(query), val)
+            return some(val, v => v.match(query))
           }
           return val.match(query)
         }
@@ -47,15 +48,13 @@ class CurrentEntities extends Component {
 
       const fieldsMatcher = (fields, query) => {
         return entity =>
-          any(field => {
-            const result = fieldMatcher(field, query)(entity)
-            return result
-          }, fields)
+          some(fields, field => fieldMatcher(field, query)(entity))
       }
+
       const fields = ["id", "name", "name_tokens"]
       filteredEntities = filter(
-        fieldsMatcher(fields, query),
-        this.props.entities
+        this.props.entities,
+        fieldsMatcher(fields, query)
       )
     }
     this.setState({
@@ -68,14 +67,13 @@ class CurrentEntities extends Component {
   handleDelete = () => {}
 
   render() {
-    let mapIndexed = addIndex(map)
     let { filteredEntities, query } = this.state
     filteredEntities = filteredEntities || this.props.entities
     return (
       <div className="CurrentEntities">
         <form>
           <input
-            className="CurrentEntites__search-input"
+            className="CurrentEntities__search-input"
             type="text"
             onChange={this.handleSearch}
             placeholder="filter..."
@@ -84,7 +82,7 @@ class CurrentEntities extends Component {
         <div className="CurrentEntities__search-matches">
           Matches: {filteredEntities.length}
         </div>
-        {mapIndexed((elem, idx) => (
+        {map(filteredEntities, (elem, idx) => (
           <Entity
             key={idx}
             entity={elem}
@@ -92,7 +90,7 @@ class CurrentEntities extends Component {
             handleDelete={this.handleDelete}
             highlightTerm={query}
           />
-        ))(filteredEntities)}
+        ))}
       </div>
     )
   }

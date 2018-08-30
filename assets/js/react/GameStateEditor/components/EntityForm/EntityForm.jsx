@@ -1,57 +1,57 @@
 import React, { Component } from "react"
-import PropTypes from "proptypes"
+import PropTypes from "prop-types"
 import { connect } from "react-redux"
 import { bindActionCreators } from "redux"
-import {
-  all,
-  compose,
-  contains,
-  filter,
-  find,
-  identity,
-  isEmpty,
-  map,
-  path,
-  pipe,
-  prepend,
-  prop,
-  sort,
-  sortBy,
-  toLower,
-  uniq
-} from "ramda"
-import classnames from "classnames"
+import { mergeDeepRight, omit, assocPath } from "ramda"
+import { map as mapIndexed, get, every as all } from "lodash"
+import { flow, map, sortBy } from "lodash/fp"
 import Select from "react-select"
 
+import { isEmpty } from "../../../shared/utils/utilities"
 import Spinner from "../../../shared/components/Spinner/Spinner"
-import { fetchEntities } from "../../actions/gameStateEditor"
 import { fetchAvailableBehaviors, addEntity } from "../../actions/entityForm"
 import {
   addFlashMessage,
   clearFlashMessage
 } from "../../../shared/actions/flashMessage"
 
+const emptyEntity = {
+  id: "",
+  name: "",
+  props: {},
+  behaviors: { visible: { description: "" } },
+}
+
+/** local helpers */
+const forSelect = val => ({ label: val, value: val })
+
+const getLowerCaseLabel = val => val.label.toLowerCase()
+const sortValuesForDropdown = values => {
+  return flow(
+    map(forSelect),
+    sortBy(getLowerCaseLabel)
+  )(values)
+}
+
 class EntityForm extends Component {
   static propTypes = {
     availableBehaviors: PropTypes.arrayOf(PropTypes.string),
+    behaviorShapes: PropTypes.object,
     locations: PropTypes.arrayOf(PropTypes.string),
     fetchAvailableBehaviors: PropTypes.func.isRequired,
-    addEntity: PropTypes.func.isRequired
+    addEntity: PropTypes.func.isRequired,
+    entity: PropTypes.object,
+    editStarted: PropTypes.instanceOf(Date),
   }
 
   static defaultProps = {
     availableBehaviors: [],
-    locations: []
+    locations: [],
+    entity: emptyEntity
   }
 
   constructor(props) {
     super(props)
-
-    const entity = this.props.entity || {}
-    if (!entity.name) {
-      entity.name = entity.id
-    }
-    this.state = { entity: this.props.entity || { props: {} } }
   }
 
   componentDidMount() {
@@ -60,110 +60,228 @@ class EntityForm extends Component {
     }
   }
 
-  handleChangeBehaviors = behaviors => {
+  render() {
+    const { availableBehaviors, behaviorShapes, loading, entity } = this.props
+    if (loading || isEmpty(availableBehaviors) || isEmpty(behaviorShapes)) {
+      return <Spinner />
+    }
+    return <_EntityForm {...this.props} key={ (entity && entity.id) || "newEntity"} />
+  }
+}
+
+class _EntityForm extends Component {
+  constructor(props) {
+    super(props)
+    this.state = emptyEntity
+  }
+
+  componentDidMount() {
+    if (!isEmpty(this.props.entity)) {
+      this.setState({ ...this.props.entity })
+    }
+  }
+
+  handleRemoveBehavior = ev => {
     const currentState = this.state
     this.setState({
-      entity: {
-        ...currentState.entity,
-        behaviors: map(prop("value"), behaviors)
-      }
+      behaviors: omit([ev.target.name], this.state.behaviors),
     })
   }
 
-  handleChangePropsDropdown = fieldName => {
-    return selectedValue => {
-      const currentState = this.state
-      this.setState({
-        entity: {
-          ...currentState.entity,
-          props: {
-            ...currentState.entity.props,
-            [fieldName]: selectedValue.value
-          }
-        }
+  handleAddNewBehavior = selectedOption => {
+    const currentState = this.state
+    this.setState(
+      mergeDeepRight(currentState, {
+        behaviors: { [selectedOption.value]: {} },
       })
-    }
+    )
   }
+
+  handleChangeLocation = selectedOption =>
+    this.setFieldState("props.location", selectedOption.value)
 
   handleChangeName = ev => {
     const currentState = this.state
     const newName = ev.target.value || ""
-    this.setState({
-      entity: {
-        ...currentState.entity,
+    this.setState(
+      mergeDeepRight(currentState, {
         id: newName
           .trim()
           .replace(/[^\w\d]+/gi, "-")
           .toLowerCase(),
         name: newName
-      }
-    })
+      })
+    )
   }
 
-  handleChange = ev => {
-    const currentState = this.state
-    this.setState({
-      entity: {
-        ...currentState.entity,
-        [ev.target.name]: ev.target.value
-      }
-    })
+  getFieldState = fieldName => {
+    return get(this.state, fieldName)
   }
 
-  handleChangeProps = ev => {
+  setFieldState = (fieldName, value) => {
     const currentState = this.state
-    this.setState({
-      entity: {
-        ...currentState.entity,
-        props: {
-          ...currentState.entity.props,
-          [ev.target.name]: ev.target.value
-        }
-      }
-    })
+    const nameBits = fieldName.split(".")
+    const update = assocPath(nameBits, value)({})
+    this.setState(mergeDeepRight(currentState, update))
   }
+
+  handleChange = ev => this.setFieldState(ev.target.name, ev.target.value)
+
+  handleChangeDestination = fieldName => selectedOption =>
+    this.setFieldState(fieldName, selectedOption.value)
 
   handleAdd = ev => {
     ev.preventDefault()
-    this.props.addEntity(this.state.entity)
+    this.props.addEntity(this.state)
   }
 
   handleClear = _ev => {
-    this.setState({ entity: null })
+    this.setState(emptyEntity)
   }
 
   valid = () => {
-    const requiredPaths = [["id"], ["props", "description"]]
-    return all(pth => path(pth, this.state.entity), requiredPaths)
+    const requiredPaths = ["id", "name"]
+    return (
+      all(requiredPaths, pth => !isEmpty(get(this.state, pth))) &&
+      !isEmpty(Object.keys(this.state.behaviors))
+    )
   }
 
-  render() {
-    const { availableBehaviors, locations, loading } = this.props
+  determineFieldType = (fieldName, value) => {
+    if (fieldName.match(/\.destinationId$/)) {
+      return {
+        fieldType: "destination",
+        changeCallback: this.handleChangeDestination(fieldName),
+      }
+    }
+    return { fieldType: "text", changeCallback: this.handleChange }
+  }
 
-    const entity = this.state.entity
+  renderFieldRow = (name, label, input) => {
+    return (
+      <div className="form-row--secondary" key={name}>
+        <label className="form-label--secondary">{label}</label>
+        {input}
+      </div>
+    )
+  }
 
-    if (loading) {
-      return <Spinner />
+  renderDestinationField = (name, label, changeCallback) => {
+    const locationsForSelect = this.locationDropdownValues()
+
+    return this.renderFieldRow(
+      name,
+      label,
+      <Select
+        name={name}
+        value={this.getFieldState(name)}
+        className="form-input"
+        options={locationsForSelect}
+        onChange={changeCallback}
+      />
+    )
+  }
+
+  renderTextField = (name, label, changeCallback) => {
+    return this.renderFieldRow(
+      name,
+      label,
+      <input
+        className="form-input"
+        name={name}
+        value={this.getFieldState(name)}
+        onChange={changeCallback}
+        type="text"
+      />
+    )
+  }
+
+  renderBehaviorField = (behavior, field, value, index) => {
+    const fieldName = `behaviors.${behavior}.${field}`
+    const fieldLabel = `${behavior}: ${field}`
+    const { fieldType, changeCallback } = this.determineFieldType(
+      fieldName,
+      value
+    )
+    switch (fieldType) {
+      case "destination":
+        return this.renderDestinationField(
+          fieldName,
+          fieldLabel,
+          changeCallback
+        )
+        break
+      default:
+        return this.renderTextField(fieldName, fieldLabel, changeCallback)
+    }
+  }
+
+  renderBehaviorFields = behavior => {
+    const { behaviorShapes } = this.props
+    const shape = behaviorShapes[behavior]
+    if (isEmpty(shape)) {
+      return <div className="form-input">No editable properties</div>
     }
 
-    const forSelect = val => ({ label: val, value: val })
-    const sortByLabel = sortBy(
-      compose(
-        toLower,
-        prop("label")
-      )
+    return Object.keys(shape).map((field, value, index) =>
+      this.renderBehaviorField(behavior, field, value, index)
     )
-    const behaviorsForSelect = pipe(
-      map(forSelect),
-      sortByLabel
-    )(availableBehaviors)
-    const locationsForSelect = pipe(
-      map(forSelect),
-      sortByLabel
-    )(locations)
+  }
+
+  renderBehaviorForm = (behaviorAttrs, behavior) => {
+    if (!behavior) {
+      return ""
+    }
 
     return (
-      <div className="EntityForm">
+      <div className="form-row" key={behavior}>
+        <label className="form-label">Behavior: {behavior}</label>
+        {this.renderBehaviorFields(behavior)}
+        <button
+          className="EntityForm__remove-behavior button"
+          title="Remove #{behavior}"
+          name={behavior}
+          onClick={this.handleRemoveBehavior}
+        >
+          x
+        </button>
+      </div>
+    )
+  }
+
+  renderAddNewBehavior = () => {
+    const { availableBehaviors } = this.props
+    const behaviorsForSelect = sortValuesForDropdown(availableBehaviors)
+
+    return (
+      <div className="form-row">
+        <label className="form-label">Add New Behavior</label>
+        <Select
+          name="new_behavior"
+          className="form-input"
+          options={behaviorsForSelect}
+          onChange={this.handleAddNewBehavior}
+        />
+      </div>
+    )
+  }
+
+  renderBehaviors = () => {
+    const behaviors = this.state.behaviors
+    return mapIndexed(behaviors, this.renderBehaviorForm)
+  }
+
+  locationDropdownValues = () => sortValuesForDropdown(this.props.locations)
+
+  render() {
+    const { id, name, props } = this.state
+
+    const originalEntity = this.props.entity
+
+    const locationsForSelect = this.locationDropdownValues()
+
+    return (
+      <div className="EntityForm" key={originalEntity.id}>
         <div className="form-row">
           <label required={true} className="form-label">
             Entity Name
@@ -171,7 +289,7 @@ class EntityForm extends Component {
           <input
             required={true}
             className="form-input"
-            value={entity.name}
+            value={name}
             onChange={this.handleChangeName}
             type="text"
             name="name"
@@ -184,86 +302,54 @@ class EntityForm extends Component {
           <input
             required={true}
             className="form-input"
-            value={entity.id}
+            value={id}
             onChange={this.handleChange}
             type="text"
             name="id"
           />
         </div>
         <div className="form-row">
-          <label required={true} className="form-label">
-            Description
-          </label>
-          <textarea
-            required={true}
-            className="form-input"
-            onChange={this.handleChangeProps}
-            value={entity.props.description}
-            name="description"
-          />
-        </div>
-        <div className="form-row">
-          <label className="form-label">Behaviors</label>
-          <Select
-            name="behaviors"
-            className="form-input"
-            multi={true}
-            removeSelected={true}
-            value={entity.behaviors}
-            options={behaviorsForSelect}
-            onChange={this.handleChangeBehaviors}
-          />
-        </div>
-        <div className="form-row">
           <label className="form-label">Location</label>
           <Select
-            name="location"
+            name="props.location"
             className="form-input"
-            value={entity.props.location}
+            value={props.location}
             options={locationsForSelect}
-            onChange={this.handleChangePropsDropdown("location")}
+            onChange={this.handleChangeLocation}
           />
         </div>
-        <div className="form-row">
-          <label className="form-label">Destination</label>
-          <Select
-            name="destination_id"
-            className="form-input"
-            value={entity.props.destination_id}
-            options={locationsForSelect}
-            onChange={this.handleChangePropsDropdown("destination_id")}
-          />
-        </div>
+        {this.renderBehaviors()}
+        {this.renderAddNewBehavior()}
         <div className="form-actions">
-          <button disabled={!this.valid()} onClick={this.handleAdd}>
-            Add
+          <button
+            disabled={!this.valid()}
+            onClick={this.handleAdd}
+            className="button EntityForm__submit-entity"
+          >
+            Add/Update
           </button>
-          <button onClick={this.handleClear}>Clear</button>
+          <button
+            onClick={this.handleClear}
+            className="button EntityForm__clear-entity">
+            Clear
+          </button>
+        </div>
+        <div className="EntityForm__state">
+          <pre>{JSON.stringify(this.state, null, 2)}</pre>
         </div>
       </div>
     )
   }
 }
 
-// this might go in a selectors file
-const getId = prop("id")
-const hasNoLocation = entity => path(["props", "location"], entity) == null
-const isNotAPlayer = entity => !contains("player", entity.behaviors)
-const isNotPrivate = entity => !/^_/.test(getId(entity))
-const extractLocationsFromEntities = pipe(
-  filter(hasNoLocation),
-  filter(isNotAPlayer),
-  filter(isNotPrivate),
-  map(getId)
-)
-
 const mapStateToProps = state => {
   return {
     availableBehaviors: state.entityForm.availableBehaviors,
-    locations: extractLocationsFromEntities(
-      state.gameStateEditor.entities || []
-    ),
-    loading: state.entityForm.loading
+    behaviorShapes: state.entityForm.behaviorShapes,
+    locations: state.gameStateEditor.locations,
+    loading: state.entityForm.loading,
+    editStarted: state.entityForm.editStarted,
+    entity: state.entityForm.entity || emptyEntity
   }
 }
 
