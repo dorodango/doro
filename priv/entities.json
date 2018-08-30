@@ -35,7 +35,7 @@
         {
           "type": "visible",
           "description": "You are in a tiny dark closet."
-        }        
+        }
       ]
     },
     {
@@ -267,7 +267,9 @@
           "type": "visible",
           "description": "is coconut flavored.  Yuck."
         },
-        "portable"
+        {
+          "type": "portable"
+        }
       ]
     },
     {
@@ -281,7 +283,9 @@
           "type": "visible",
           "description": "is a well-loved Bird scooter."
         },
-        "portable"
+        {
+          "type": "portable"
+        }
       ]
     },
     {
@@ -310,7 +314,9 @@
           "type": "visible",
           "description": "is a generic backpack."
         },
-        "portable"
+        {
+          "type": "portable"
+        }
       ]
     },
     {
@@ -324,7 +330,9 @@
           "description":
             "is a Technics 1200 DJ Turntable.  It looks a little dusty."
         },
-        "turntable"
+        {
+          "type": "turntable"
+        }
       ]
     }
   ]
