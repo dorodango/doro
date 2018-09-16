@@ -2,14 +2,14 @@ import React, { Component } from "react"
 import PropTypes from "prop-types"
 import { connect } from "react-redux"
 import { bindActionCreators } from "redux"
-import download from "downloadjs"
+import { filter } from "ramda"
 
 import { isEmpty } from "../shared/utils/utilities"
 import FlashMessage from "../shared/components/Flash/Flash"
 import CurrentEntities from "./components/CurrentEntities/CurrentEntities"
 import EntityForm from "./components/EntityForm/EntityForm"
 import TabSet from "../shared/components/TabSet/TabSet"
-import { fetchEntities } from "./actions/gameStateEditor"
+import { fetchEntities, downloadEntities } from "./actions/gameStateEditor"
 
 class GameStateEditor extends Component {
   static propTypes = {
@@ -35,30 +35,36 @@ class GameStateEditor extends Component {
   }
 
   handleEdit = entity => {
+    this.props.fetchEntities()
     this.setState({
       entity: entity
     })
   }
 
   handleDelete = entity => {
-    const { entities } = this.state
-    this.setState({
-      entities: filter(entry => entry.id !== entity.id, entities)
-    })
+    // const { entities } = this.props
+    // this.setState({
+    //   entities: filter(entry => entry.id !== entity.id, entities)
+    // })
   }
 
-  handleDownload = _ev => {
-    download(
-      JSON.stringify({ entities: this.state.entities }),
-      "game_state.json",
-      "application/json"
-    )
+  handleDownloadNewEntities = _ev => {
+    const { entities } = this.props
+    this.props.downloadEntities({
+      entities: filter(entry => entry.src == null, entities),
+      filename: "new-entities.json"
+    });
+  }
+
+  handleDownloadEntities = _ev => {
+    const { entities } = this.props
+    this.props.downloadEntities({ entities: entities })
   }
 
   handleClear = _ev => {
-    this.setState({
-      entities: []
-    })
+    // this.setState({
+    //   entities: []
+    // })
   }
 
   renderTabs = () => {
@@ -91,9 +97,15 @@ class GameStateEditor extends Component {
             <div className="GameStateEditor__actions">
               <button
                 className="GameStateEditor__download button"
-                onClick={this.handleDownload}
+                onClick={this.handleDownloadEntities}
               >
-                Download
+                Download All Entities
+              </button>
+              <button
+                className="GameStateEditor__download button"
+                onClick={this.handleDownloadNewEntities}
+              >
+                Download New Entities
               </button>
             </div>
           </header>
@@ -113,7 +125,8 @@ const mapStateToProps = state => ({
 const mapDispatchToProps = dispatch =>
   bindActionCreators(
     {
-      fetchEntities
+      fetchEntities,
+      downloadEntities
     },
     dispatch
   )

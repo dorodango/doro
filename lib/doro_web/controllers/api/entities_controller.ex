@@ -31,9 +31,8 @@ defmodule DoroWeb.Api.EntitiesController do
   }
   """
   def create(conn, params) do
-    params
-    |> atomize_keys
-    |> Doro.World.Marshal.unmarshal_entity()
+    params |>
+    to_entity
     |> Doro.World.add_entity()
     |> case do
       %Doro.Entity{id: id} ->
@@ -47,17 +46,10 @@ defmodule DoroWeb.Api.EntitiesController do
     end
   end
 
-  def update(conn, params) do
-    Doro.World.get_entity(params["id"])
-    |> Map.merge(
-      params
-      |> atomize_keys
-      |> Doro.World.Marshal.unmarshal_entity()
-    )
-    |> Doro.World.add_entity()
-
-    conn
-    |> json(%{message: "updated entity #{params["id"]}"})
+  defp to_entity(params) do
+    params
+    |> atomize_keys
+    |> Map.put(:src, nil)
+    |> Doro.World.Marshal.unmarshal_entity()
   end
-
 end
