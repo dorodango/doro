@@ -1,4 +1,4 @@
-import { mergeDeepRight } from "ramda"
+import { omit, mergeDeepRight } from "ramda"
 import { camelizeKeys } from "humps"
 import {
   FETCH_AVAILABLE_BEHAVIORS,
@@ -24,7 +24,7 @@ export default function(state = defaultState, action) {
 
     case EDIT_ENTITY:
       if (data) {
-        const entity = convertBehaviorsToHash(data.body.data.entity)
+        const entity = omit("src", convertBehaviorsToHash(data.body.data.entity))
         return mergeDeepRight(state, { entity, editStarted: new Date() })
       }
       return state
