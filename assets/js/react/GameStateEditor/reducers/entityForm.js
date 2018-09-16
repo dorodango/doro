@@ -8,7 +8,11 @@ import {
   ADD_ENTITY_SUCCESS,
   ADD_ENTITY_FAILURE
 } from "../actions/entityForm"
-import { EDIT_ENTITY, CLOSE_EDIT_PANE } from "../../actions/app"
+import {
+  EDIT_ENTITY,
+  CLOSE_EDIT_PANE
+} from "../../actions/app"
+
 import { convertBehaviorsToHash } from "../selectors"
 
 export const defaultState = {
@@ -24,7 +28,8 @@ export default function(state = defaultState, action) {
 
     case EDIT_ENTITY:
       if (data) {
-        const entity = omit("src", convertBehaviorsToHash(data.body.data.entity))
+        let entity = data.entity || data.body.data.entity;
+        entity = omit("src", convertBehaviorsToHash(entity))
         return mergeDeepRight(state, { entity, editStarted: new Date() })
       }
       return state

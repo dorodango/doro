@@ -1,26 +1,41 @@
 import React, { Component } from "react"
 import PropTypes from "prop-types"
+import { connect } from "react-redux"
+import { bindActionCreators } from "redux"
 import classnames from "classnames"
 
 import TabSetButtonList from "./TabSetButtonList"
 import { tabSetType, activeTab, activeTabInfo } from "../tab"
+import { activateTab } from "../../actions/tabs.js"
 
 class TabSet extends Component {
+
+  static propTypes = {
+    className: PropTypes.string,
+    tabs: tabSetType.isRequired,
+    activeTab: PropTypes.string,
+    buttonListClassName: PropTypes.string,
+    activateTab: PropTypes.func.isRequired
+  }
+
+  static defaultProps = {
+    activeTab: "Editor"
+  }
+
   constructor(props) {
     super(props)
 
     const { tabs } = this.props
-
-    this.state = {
-      active: tabs[0].name
-    }
   }
 
-  handleButtonClick = tabName => this.setState({ active: tabName })
+  handleButtonClick = tabName => this.props.activateTab(tabName)
 
   render() {
     const { className, tabs, buttonListClassName } = this.props
-    const { active } = this.state
+    const active = this.props.activeTab;
+    if (!active) {
+      return null;
+    }
     const theActiveTab = activeTab(active, tabs)
     const theActiveTabInfo = activeTabInfo(active, tabs)
     return (
@@ -42,10 +57,22 @@ class TabSet extends Component {
   }
 }
 
-TabSet.propTypes = {
-  className: PropTypes.string,
-  tabs: tabSetType.isRequired,
-  buttonListClassName: PropTypes.string
-}
+const mapStateToProps = state => ({
+  activeTab: state.tabs.activeTab,
+})
 
-export default TabSet
+const mapDispatchToProps = dispatch =>
+  bindActionCreators(
+    {
+      activateTab,
+    },
+    dispatch
+  )
+
+const connectedComponent = connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(TabSet)
+
+export { TabSet }
+export default connectedComponent

@@ -3,6 +3,8 @@
 }
 
 .Entity pre {
+  font-size: smaller;
+  max-width: 100%;
   background-color: #fffcf3;
   border: 1px solid #eee;
 }

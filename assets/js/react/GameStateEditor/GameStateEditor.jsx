@@ -9,7 +9,11 @@ import FlashMessage from "../shared/components/Flash/Flash"
 import CurrentEntities from "./components/CurrentEntities/CurrentEntities"
 import EntityForm from "./components/EntityForm/EntityForm"
 import TabSet from "../shared/components/TabSet/TabSet"
-import { fetchEntities, downloadEntities } from "./actions/gameStateEditor"
+import {
+  fetchEntities,
+  downloadEntities,
+  activateTab
+} from "./actions/gameStateEditor"
 
 class GameStateEditor extends Component {
   static propTypes = {
@@ -41,13 +45,6 @@ class GameStateEditor extends Component {
     })
   }
 
-  handleDelete = entity => {
-    // const { entities } = this.props
-    // this.setState({
-    //   entities: filter(entry => entry.id !== entity.id, entities)
-    // })
-  }
-
   handleDownloadNewEntities = _ev => {
     const { entities } = this.props
     this.props.downloadEntities({
@@ -59,12 +56,6 @@ class GameStateEditor extends Component {
   handleDownloadEntities = _ev => {
     const { entities } = this.props
     this.props.downloadEntities({ entities: entities })
-  }
-
-  handleClear = _ev => {
-    // this.setState({
-    //   entities: []
-    // })
   }
 
   renderTabs = () => {
@@ -109,7 +100,7 @@ class GameStateEditor extends Component {
               </button>
             </div>
           </header>
-          <main>{this.renderTabs()}</main>
+          <div>{this.renderTabs()}</div>
         </section>
       </div>
     )

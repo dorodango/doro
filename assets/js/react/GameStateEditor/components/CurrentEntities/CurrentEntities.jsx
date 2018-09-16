@@ -8,6 +8,7 @@ import { isEmpty } from "../../../shared/utils/utilities"
 
 import Entity from "../Entity/Entity"
 import { fetchEntities, deleteEntity } from "../../actions/gameStateEditor"
+import { editEntity } from "../../../actions/app"
 
 class CurrentEntities extends Component {
   static propTypes = {
@@ -66,7 +67,11 @@ class CurrentEntities extends Component {
     })
   }
 
-  handleEdit = () => {}
+  handleEdit = (entity) => {
+    return () => {
+      this.props.editEntity({entity: entity})
+    }
+  }
 
   handleDelete = (id) => {
     return () => {
@@ -94,7 +99,7 @@ class CurrentEntities extends Component {
           <Entity
             key={elem.id}
             entity={elem}
-            handleEdit={this.handleEdit}
+            handleEdit={this.handleEdit(elem)}
             handleDelete={this.handleDelete(elem.id)}
             highlightTerm={query}
           />
@@ -112,7 +117,8 @@ const mapDispatchToProps = dispatch =>
   bindActionCreators(
     {
       fetchEntities,
-      deleteEntity
+      deleteEntity,
+      editEntity
     },
     dispatch
   )

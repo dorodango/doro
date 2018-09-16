@@ -12,11 +12,12 @@ const highlightedJsonObject = (entity, highlightTerm) => {
   }
 }
 
-const renderEditButton = (entity, handleEdit) => {
+const renderEditButton = (entity, handleEdit) => (
   <button className="Entity__edit button" onClick={handleEdit}>
     Edit
   </button>
-}
+)
+
 
 const renderDeleteButton = (entity, handleDelete) => {
   if (entity.src !== null) {
