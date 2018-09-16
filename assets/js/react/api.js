@@ -8,7 +8,7 @@ const api = {
   entities: {
     index: () => get("/api/entities"),
     create: data => put("/api/entities", data),
-    destroy: (id) => () => del(`/api/entities/${id}`)
+    destroy: id => () => del(`/api/entities/${id}`)
   }
 }
 

@@ -40,7 +40,7 @@ class GameStateEditor extends Component {
 
   handleEdit = entity => {
     this.props.fetchEntities()
-    this.setState({entity})
+    this.setState({ entity })
   }
 
   handleDownloadNewEntities = _ev => {
@@ -48,7 +48,7 @@ class GameStateEditor extends Component {
     this.props.downloadEntities({
       entities: filter(entry => !entry.src, entities),
       filename: "new-entities.json"
-    });
+    })
   }
 
   handleDownloadEntities = _ev => {
@@ -66,7 +66,7 @@ class GameStateEditor extends Component {
           <div className="GameStateEditor__addNew">
             <EntityForm />
           </div>
-        ),
+        )
       },
       {
         name: "Entities",

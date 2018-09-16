@@ -32,7 +32,7 @@ function* add(action) {
     yield put(
       addFlashMessage({
         type: "error",
-        text: `Failed to add entity: ${JSON.stringify(e.response.data)}`,
+        text: `Failed to add entity: ${JSON.stringify(e.response.data)}`
       })
     )
   }

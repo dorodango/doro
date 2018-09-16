@@ -19,7 +19,7 @@ const emptyEntity = {
   id: "",
   name: "",
   props: {},
-  behaviors: { visible: { description: "" } },
+  behaviors: { visible: { description: "" } }
 }
 
 /** local helpers */
@@ -41,7 +41,7 @@ class EntityForm extends Component {
     fetchAvailableBehaviors: PropTypes.func.isRequired,
     addEntity: PropTypes.func.isRequired,
     entity: PropTypes.object,
-    editStarted: PropTypes.instanceOf(Date),
+    editStarted: PropTypes.instanceOf(Date)
   }
 
   static defaultProps = {
@@ -65,7 +65,9 @@ class EntityForm extends Component {
     if (loading || isEmpty(availableBehaviors) || isEmpty(behaviorShapes)) {
       return <Spinner />
     }
-    return <_EntityForm {...this.props} key={ (entity && entity.id) || "newEntity"} />
+    return (
+      <_EntityForm {...this.props} key={(entity && entity.id) || "newEntity"} />
+    )
   }
 }
 
@@ -84,7 +86,7 @@ class _EntityForm extends Component {
   handleRemoveBehavior = ev => {
     const currentState = this.state
     this.setState({
-      behaviors: omit([ev.target.name], this.state.behaviors),
+      behaviors: omit([ev.target.name], this.state.behaviors)
     })
   }
 
@@ -92,7 +94,7 @@ class _EntityForm extends Component {
     const currentState = this.state
     this.setState(
       mergeDeepRight(currentState, {
-        behaviors: { [selectedOption.value]: {} },
+        behaviors: { [selectedOption.value]: {} }
       })
     )
   }
@@ -151,7 +153,7 @@ class _EntityForm extends Component {
     if (fieldName.match(/\.destinationId$/)) {
       return {
         fieldType: "destination",
-        changeCallback: this.handleChangeDestination(fieldName),
+        changeCallback: this.handleChangeDestination(fieldName)
       }
     }
     return { fieldType: "text", changeCallback: this.handleChange }
@@ -330,7 +332,8 @@ class _EntityForm extends Component {
           </button>
           <button
             onClick={this.handleClear}
-            className="button EntityForm__clear-entity">
+            className="button EntityForm__clear-entity"
+          >
             Clear
           </button>
         </div>

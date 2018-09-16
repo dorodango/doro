@@ -47,7 +47,7 @@ function createCommandChannel(channel) {
   return eventChannel(emit => {
     const handleCustomEvents = ev => {
       const customEventAction = {
-        open_entity_editor: editEntity,
+        open_entity_editor: editEntity
       }[ev.body.data.type]
       if (customEventAction) {
         emit(customEventAction(ev))

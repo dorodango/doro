@@ -22,5 +22,4 @@ describe("Flash", () => {
     expect(wrapper.find(".Flash__message").text()).toContain("the message")
     expect(wrapper.find(".Flash__close-button")).toHaveLength(1)
   })
-
 })

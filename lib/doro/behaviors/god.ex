@@ -42,7 +42,6 @@ defmodule Doro.Behaviors.God do
   defp find_entity_in_location_or_location(player, rest) do
     found_entity = Doro.World.get_entities([in_location(player[:location]), named(rest)])
     |> Enum.at(0)
-    # try location if we couldn't find the thing in the location
     case found_entity do
       nil ->
         location = Doro.World.get_entity(player[:location])

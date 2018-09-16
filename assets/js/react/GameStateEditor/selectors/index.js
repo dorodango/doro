@@ -36,7 +36,7 @@ export const convertBehaviorsToArray = entity => {
   if (!isEmpty(entity.behaviors)) {
     behaviors = map(entity.behaviors || {}, (behaviorProps, key) => ({
       type: key,
-      ...behaviorProps,
+      ...behaviorProps
     }))
   }
   return { ...entity, behaviors }

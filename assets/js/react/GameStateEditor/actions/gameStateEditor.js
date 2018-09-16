@@ -32,4 +32,4 @@ export const deleteEntityFailure = data => ({
   data
 })
 
-export const activateTab = data => ({type: ACTIVATE_TAB, data})
+export const activateTab = data => ({ type: ACTIVATE_TAB, data })

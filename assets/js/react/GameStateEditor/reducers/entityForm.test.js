@@ -6,11 +6,9 @@ import {
   addEntitySuccess,
   fetchAvailableBehaviorsSuccess,
   addEntityFailure,
-  fetchAvailableBehaviorsFailure,
+  fetchAvailableBehaviorsFailure
 } from "../actions/entityForm"
-import {
-  editEntity
-} from "../../actions/app.js"
+import { editEntity } from "../../actions/app.js"
 
 describe("entityForm.reducer", () => {
   it("has a default state", () => {
@@ -18,43 +16,39 @@ describe("entityForm.reducer", () => {
     expect(state).toEqual(defaultState)
   })
 
-    // case EDIT_ENTITY:
-    //   if (data) {
-    //     let entity = data.entity || data.body.data.entity;
-    //     entity = omit("src", convertBehaviorsToHash(entity))
-    //     return mergeDeepRight(state, { entity, editStarted: new Date() })
-    //   }
-    //   return state
-
-  const entity = {
-    src: "somewhere",
-    id: "the-rock",
-    name: "Dwayne Johnson",
-    proto: "_player",
-    props: {
-      location: "room"
-    },
-    behaviors: [
-      {
-        type: "visible",
-        description: "is the biggest superstar in the history of WWE"
-      }
-    ]
-  }
-
   describe("EDIT_ENTITY", () => {
+    const entity = {
+      src: "somewhere",
+      id: "the-rock",
+      name: "Dwayne Johnson",
+      proto: "_player",
+      props: {
+        location: "room"
+      },
+      behaviors: [
+        {
+          type: "visible",
+          description: "is the biggest superstar in the history of WWE"
+        }
+      ]
+    }
+
     it("sets the entity if it comes from the phoenix side (data.body.data.entity)", () => {
-      const state = reducer({}, editEntity( { body: { data: { entity }}}))
-      expect(state.entity.behaviors).toEqual({visible: { description: "is the biggest superstar in the history of WWE"}})
+      const state = reducer({}, editEntity({ body: { data: { entity } } }))
+      expect(state.entity.behaviors).toEqual({
+        visible: {
+          description: "is the biggest superstar in the history of WWE"
+        }
+      })
       expect(state.editStarted).toBeTruthy()
     })
     it("sets the entity if it comes from the editor side (data.entity)", () => {
-      const state = reducer({}, editEntity( { entity }))
+      const state = reducer({}, editEntity({ entity }))
       expect(state.entity).toBeTruthy()
       expect(state.editStarted).toBeTruthy()
     })
     it("removes the `src` value from entity before putting it in the store", () => {
-      const state = reducer({}, editEntity( { entity }))
+      const state = reducer({}, editEntity({ entity }))
       expect(state.entity.src).toEqual(undefined)
     })
   })

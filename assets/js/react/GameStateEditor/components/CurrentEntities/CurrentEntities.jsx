@@ -33,7 +33,7 @@ class CurrentEntities extends Component {
   }
 
   filterEntities = (entities, query) => {
-    let filteredEntities = entities || [];
+    let filteredEntities = entities || []
 
     if (!isEmpty(query)) {
       const fieldMatcher = (field, query) => entity => {
@@ -57,7 +57,7 @@ class CurrentEntities extends Component {
         fieldsMatcher(fields, query)
       )
     }
-    return filteredEntities;
+    return filteredEntities
   }
 
   handleSearch = ev => {
@@ -67,13 +67,13 @@ class CurrentEntities extends Component {
     })
   }
 
-  handleEdit = (entity) => {
+  handleEdit = entity => {
     return () => {
-      this.props.editEntity({entity})
+      this.props.editEntity({ entity })
     }
   }
 
-  handleDelete = (id) => {
+  handleDelete = id => {
     return () => {
       this.props.deleteEntity(id)
     }

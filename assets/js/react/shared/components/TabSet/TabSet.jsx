@@ -9,7 +9,6 @@ import { tabSetType, activeTab, activeTabInfo } from "../tab"
 import { activateTab } from "../../actions/tabs.js"
 
 class TabSet extends Component {
-
   static propTypes = {
     className: PropTypes.string,
     tabs: tabSetType.isRequired,
@@ -33,12 +32,12 @@ class TabSet extends Component {
   render() {
     const { className, tabs, buttonListClassName } = this.props
     if (!tabs.length) {
-      return "";
+      return ""
     }
 
-    let active = this.props.activeTab;
+    let active = this.props.activeTab
     if (!active) {
-      active = tabs[0].name;
+      active = tabs[0].name
     }
     const theActiveTab = activeTab(active, tabs)
     const theActiveTabInfo = activeTabInfo(active, tabs)
@@ -62,13 +61,13 @@ class TabSet extends Component {
 }
 
 const mapStateToProps = state => ({
-  activeTab: state.tabs.activeTab,
+  activeTab: state.tabs.activeTab
 })
 
 const mapDispatchToProps = dispatch =>
   bindActionCreators(
     {
-      activateTab,
+      activateTab
     },
     dispatch
   )

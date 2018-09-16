@@ -15,7 +15,7 @@ import api from "../../api"
 function* removeEntity(action) {
   console.log("REMOVE", action)
   try {
-    const id = action.data;
+    const id = action.data
     const response = yield call(api.entities.destroy(id))
     yield put(deleteEntitySuccess(response.data))
     yield put(
@@ -31,7 +31,7 @@ function* removeEntity(action) {
     yield put(
       addFlashMessage({
         type: "error",
-        text: `Failed to remove entity: ${JSON.stringify(e.response.data)}`,
+        text: `Failed to remove entity: ${JSON.stringify(e.response.data)}`
       })
     )
   }

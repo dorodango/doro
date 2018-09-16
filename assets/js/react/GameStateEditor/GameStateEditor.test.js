@@ -33,7 +33,7 @@ describe("GameStateEditor", () => {
   describe("with some entities", () => {
     const entities = [
       { src: "priv_file://world.json", id: "one" },
-      { src: "gist://aa44ff",  id: "two" },
+      { src: "gist://aa44ff", id: "two" },
       { id: "three" },
       { src: "", id: "four" }
     ]
@@ -50,23 +50,18 @@ describe("GameStateEditor", () => {
       expect(fetchEntitiesSpy).not.toHaveBeenCalled()
     })
     it("download all calls download with all entities", () => {
-      wrapper.find('.GameStateEditor__download--all').simulate('click')
+      wrapper.find(".GameStateEditor__download--all").simulate("click")
       expect(downloadEntitiesSpy).toHaveBeenCalled()
       expect(downloadEntitiesSpy.mock.calls[0]).toEqual([
-        expect.objectContaining(
-          { entities: entities }
-        )
+        expect.objectContaining({ entities: entities })
       ])
     })
     it("download new entities calls download with only entities that have not src", () => {
-      wrapper.find('.GameStateEditor__download--new').simulate('click')
+      wrapper.find(".GameStateEditor__download--new").simulate("click")
       expect(downloadEntitiesSpy).toHaveBeenCalled()
       expect(downloadEntitiesSpy.mock.calls[0]).toEqual([
-        expect.objectContaining(
-          { entities: entities.slice(2,4) }
-        )
+        expect.objectContaining({ entities: entities.slice(2, 4) })
       ])
     })
   })
-
 })
