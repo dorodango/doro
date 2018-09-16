@@ -1,9 +1,9 @@
 {
-  "entities": [{
+  "entities": [
+    {
       "id": "turntable",
       "name": "Turntable",
       "props": {
-        "playing": false
       },
       "behaviors": [
         {
