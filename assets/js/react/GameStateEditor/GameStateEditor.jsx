@@ -85,13 +85,13 @@ class GameStateEditor extends Component {
           <header>
             <div className="GameStateEditor__actions">
               <button
-                className="GameStateEditor__download button"
+                className="GameStateEditor__download GameStateEditor__download--all button"
                 onClick={this.handleDownloadEntities}
               >
                 Download All Entities
               </button>
               <button
-                className="GameStateEditor__download button"
+                className="GameStateEditor__download GameStateEditor__download--new button"
                 onClick={this.handleDownloadNewEntities}
               >
                 Download New Entities
