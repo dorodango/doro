@@ -19,7 +19,7 @@ class TabSet extends Component {
   }
 
   static defaultProps = {
-    activeTab: "Editor"
+    activeTab: ""
   }
 
   constructor(props) {
@@ -32,9 +32,13 @@ class TabSet extends Component {
 
   render() {
     const { className, tabs, buttonListClassName } = this.props
-    const active = this.props.activeTab;
+    if (!tabs.length) {
+      return "";
+    }
+
+    let active = this.props.activeTab;
     if (!active) {
-      return null;
+      active = tabs[0].name;
     }
     const theActiveTab = activeTab(active, tabs)
     const theActiveTabInfo = activeTabInfo(active, tabs)

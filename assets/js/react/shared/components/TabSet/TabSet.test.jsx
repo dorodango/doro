@@ -1,6 +1,6 @@
 import React from "react"
 import { shallow } from "enzyme"
-import TabSet from "./TabSet"
+import { TabSet } from "./TabSet"
 
 const tabs = [
   { name: "First", component: <div className="first" /> },
@@ -8,7 +8,7 @@ const tabs = [
   { name: "Link", link: "https://example.com/somewhere" }
 ]
 
-const requiredProps = { tabs }
+const requiredProps = { tabs, activateTab: jest.fn() }
 
 describe("TabSet", () => {
   let wrapper
@@ -31,9 +31,10 @@ describe("TabSet", () => {
       expect(wrapper.find(".second")).toHaveLength(0)
     })
 
-    describe("given a click on the second tab button", () => {
+    describe("given the activeTab is 'Second' in props", () => {
       beforeEach(() => {
-        buttons.simulate("buttonClick", "Second")
+        props = { ...requiredProps, activeTab: "Second" }
+        wrapper = shallow(<TabSet {...props} />)
       })
 
       it("renders the second tab", () => {
