@@ -1,7 +1,14 @@
 defmodule Doro.World.GameState do
   use GenServer
 
+  alias Doro.Entity
+
   @table_name :entities
+
+  def set(new_state) do
+    # TODO this appears to only be used in tests... do we still need it
+    GenServer.call(__MODULE__, {:set_entities, new_state.entities})
+  end
 
   def start_link(_) do
     GenServer.start_link(__MODULE__, [], name: __MODULE__)
@@ -9,10 +16,6 @@ defmodule Doro.World.GameState do
 
   def clear do
     GenServer.call(__MODULE__, :clear)
-  end
-
-  def set(new_state) do
-    GenServer.call(__MODULE__, {:set_entities, new_state.entities})
   end
 
   def get, do: all_entities()
@@ -35,13 +38,17 @@ defmodule Doro.World.GameState do
     GenServer.call(__MODULE__, {:set_entity_prop, entity_id, key, value})
   end
 
-  def add_entity(entity = %Doro.Entity{}) do
+  def add_entity(entity = %Entity{}) do
     add_entities([entity])
     entity
   end
 
   def add_entities(entities) do
     GenServer.call(__MODULE__, {:insert_entities, entities})
+  end
+
+  def remove_entity(entity = %Entity{}) do
+    set(%{entities: get_entities(fn e -> e.id != entity.id end)})
   end
 
   defp all_entities do
