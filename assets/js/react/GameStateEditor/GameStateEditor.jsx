@@ -40,15 +40,13 @@ class GameStateEditor extends Component {
 
   handleEdit = entity => {
     this.props.fetchEntities()
-    this.setState({
-      entity: entity
-    })
+    this.setState({entity})
   }
 
   handleDownloadNewEntities = _ev => {
     const { entities } = this.props
     this.props.downloadEntities({
-      entities: filter(entry => entry.src == null, entities),
+      entities: filter(entry => !entry.src, entities),
       filename: "new-entities.json"
     });
   }

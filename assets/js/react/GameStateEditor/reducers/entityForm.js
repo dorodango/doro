@@ -29,7 +29,7 @@ export default function(state = defaultState, action) {
     case EDIT_ENTITY:
       if (data) {
         let entity = data.entity || data.body.data.entity;
-        entity = omit("src", convertBehaviorsToHash(entity))
+        entity = omit(["src"], convertBehaviorsToHash(entity))
         return mergeDeepRight(state, { entity, editStarted: new Date() })
       }
       return state

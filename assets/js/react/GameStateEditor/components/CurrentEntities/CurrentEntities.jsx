@@ -69,7 +69,7 @@ class CurrentEntities extends Component {
 
   handleEdit = (entity) => {
     return () => {
-      this.props.editEntity({entity: entity})
+      this.props.editEntity({entity})
     }
   }
 
