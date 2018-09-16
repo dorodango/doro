@@ -18,28 +18,23 @@ const renderEditButton = (entity, handleEdit) => (
   </button>
 )
 
-
 const renderDeleteButton = (entity, handleDelete) => {
-  if (entity.src !== null) {
-    return "";
+  if (entity.src) {
+    return ""
   }
   return (
-    <button className="Entity__delete button" onClick={handleDelete} >
+    <button className="Entity__delete button" onClick={handleDelete}>
       X
     </button>
   )
-};
+}
 
 const Entity = ({ entity, handleEdit, handleDelete, highlightTerm }) => {
   return (
     <div className="Entity">
       <div className="Entity__actions">
-        {
-          renderEditButton(entity, handleEdit)
-        }
-        {
-          renderDeleteButton(entity, handleEdit)
-        }
+        {renderEditButton(entity, handleEdit)}
+        {renderDeleteButton(entity, handleDelete)}
       </div>
       <pre>
         <code>{highlightedJsonObject(entity, highlightTerm)}</code>
