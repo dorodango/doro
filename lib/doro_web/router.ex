@@ -24,7 +24,7 @@ defmodule DoroWeb.Router do
     pipe_through(:api)
     get("/entities", Api.EntitiesController, :index)
     put("/entities", Api.EntitiesController, :create)
-    post("/entities/:id", Api.EntitiesController, :update)
+    delete("/entities/:id", Api.EntitiesController, :destroy)
     get("/behaviors", Api.BehaviorsController, :index)
   end
 end

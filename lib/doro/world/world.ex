@@ -31,6 +31,8 @@ defmodule Doro.World do
     ])
   end
 
+  def remove_entity(entity_id), do: GameState.remove_entity(entity_id)
+
   def move_entity(entity, destination = %Entity{}), do: move_entity(entity, destination.id)
 
   def move_entity(entity, destination_id) when is_binary(destination_id) do

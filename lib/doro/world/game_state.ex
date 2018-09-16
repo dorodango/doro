@@ -6,7 +6,6 @@ defmodule Doro.World.GameState do
   @table_name :entities
 
   def set(new_state) do
-    # TODO this appears to only be used in tests... do we still need it
     GenServer.call(__MODULE__, {:set_entities, new_state.entities})
   end
 
@@ -47,8 +46,10 @@ defmodule Doro.World.GameState do
     GenServer.call(__MODULE__, {:insert_entities, entities})
   end
 
-  def remove_entity(entity = %Entity{}) do
-    set(%{entities: get_entities(fn e -> e.id != entity.id end)})
+  def remove_entity(entity = %Entity{}), do: remove_entity(entity.id)
+
+  def remove_entity(entity_id) do
+    set(%{entities: get_entities(fn e -> e.id != entity_id end)})
   end
 
   defp all_entities do

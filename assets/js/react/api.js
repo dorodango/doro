@@ -1,5 +1,5 @@
 /** Identify and Expose API endpoints available for React/Redux/Sagas */
-import { get, put } from "./services/api"
+import { get, put, destroy as del } from "./services/api"
 
 const api = {
   behaviors: {
@@ -7,7 +7,8 @@ const api = {
   },
   entities: {
     index: () => get("/api/entities"),
-    create: data => put("/api/entities", data)
+    create: data => put("/api/entities", data),
+    destroy: (id) => () => del(`/api/entities/${id}`)
   }
 }
 

@@ -46,6 +46,15 @@ defmodule DoroWeb.Api.EntitiesController do
     end
   end
 
+  @doc """
+  Destroy an entity (by id)
+  """
+  def destroy(conn, params = %{"id" => id}) do
+    Doro.World.remove_entity(id)
+    conn
+    |> json(%{message: "#{id} has been removed"})
+  end
+
   defp to_entity(params) do
     params
     |> atomize_keys
