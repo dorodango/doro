@@ -17,7 +17,7 @@ describe("EntityForm", () => {
   })
   describe("with the minimum props", () => {
     beforeEach(() => {
-      wrapper = shallow(<EntityForm {...requiredProps}/>)
+      wrapper = shallow(<EntityForm {...requiredProps} />)
     })
 
     it("renders without crashing", () => {
@@ -25,7 +25,7 @@ describe("EntityForm", () => {
       expect(wrapper.find("Spinner")).toHaveLength(1)
     })
     it("triggers the fetch behaviors action", () => {
-      expect(requiredProps.fetchAvailableBehaviors).toHaveBeenCalled();
+      expect(requiredProps.fetchAvailableBehaviors).toHaveBeenCalled()
     })
   })
 
@@ -39,7 +39,7 @@ describe("EntityForm", () => {
           visible: { description: "" }
         }
       }
-      wrapper = mount(<EntityForm {...requiredProps} {...extraProps}/>)
+      wrapper = mount(<EntityForm {...requiredProps} {...extraProps} />)
     })
 
     it("renders an empty form", () => {
@@ -51,11 +51,13 @@ describe("EntityForm", () => {
 
     it("renders an visible by default form", () => {
       expect(wrapper.find(".EntityForm").text()).toContain("Behavior: visible")
-      expect(wrapper.find(".EntityForm").text()).toContain("visible: description")
+      expect(wrapper.find(".EntityForm").text()).toContain(
+        "visible: description"
+      )
     })
 
     it("does not the fetch behaviors action", () => {
-      expect(requiredProps.fetchAvailableBehaviors).not.toHaveBeenCalled();
+      expect(requiredProps.fetchAvailableBehaviors).not.toHaveBeenCalled()
     })
   })
 
@@ -69,31 +71,34 @@ describe("EntityForm", () => {
           visible: { description: "" }
         },
         entity: {
-          id: 'whatever',
-          name: 'what ever',
+          id: "whatever",
+          name: "what ever",
           props: { location: "start" },
           behaviors: {
             visible: {
               description: "is a shiny blob"
             },
-            portable: {
-
-            }
+            portable: {}
           }
         }
       }
-      wrapper = mount(<EntityForm {...requiredProps} {...extraProps}/>)
+      wrapper = mount(<EntityForm {...requiredProps} {...extraProps} />)
     })
 
     it("does not the fetch behaviors action", () => {
-      expect(requiredProps.fetchAvailableBehaviors).not.toHaveBeenCalled();
+      expect(requiredProps.fetchAvailableBehaviors).not.toHaveBeenCalled()
     })
 
     it("renders all behaviors and associated form fields", () => {
       const formAsText = wrapper.find(".EntityForm").text()
-      expect(wrapper.find("input[name='name']").props().value).toEqual("what ever")
+      expect(wrapper.find("input[name='name']").props().value).toEqual(
+        "what ever"
+      )
       expect(wrapper.find("input[name='id']").props().value).toEqual("whatever")
-      expect(wrapper.find("input[name='behaviors.visible.description']").props().value).toEqual("is a shiny blob")
+      expect(
+        wrapper.find("input[name='behaviors.visible.description']").props()
+          .value
+      ).toEqual("is a shiny blob")
       expect(formAsText).toContain("Behavior: visible")
       expect(formAsText).toContain("visible: description")
       expect(formAsText).toContain("Behavior: portable")
@@ -101,35 +106,36 @@ describe("EntityForm", () => {
     })
 
     it("clicking on clear clears the entity", () => {
-      wrapper.find(".EntityForm__clear-entity").simulate('click')
+      wrapper.find(".EntityForm__clear-entity").simulate("click")
 
       const formAsText = wrapper.find(".EntityForm").text()
       expect(wrapper.find("input[name='name']").props().value).toEqual("")
       expect(wrapper.find("input[name='id']").props().value).toEqual("")
-      expect(wrapper.find("input[name='behaviors.visible.description']").props().value).toEqual("")
+      expect(
+        wrapper.find("input[name='behaviors.visible.description']").props()
+          .value
+      ).toEqual("")
       expect(formAsText).toContain("Behavior: visible")
       expect(formAsText).toContain("visible: description")
       expect(formAsText).not.toContain("Behavior: portable")
     })
 
     it("clicking on add submits the entity", () => {
-      wrapper.find(".EntityForm__submit-entity").simulate('click')
+      wrapper.find(".EntityForm__submit-entity").simulate("click")
 
-      expect(requiredProps.addEntity).toHaveBeenCalledWith(
-        {
-          id: "whatever",
-          name: "what ever",
-          props: {
-            location: "start"
+      expect(requiredProps.addEntity).toHaveBeenCalledWith({
+        id: "whatever",
+        name: "what ever",
+        props: {
+          location: "start"
+        },
+        behaviors: {
+          visible: {
+            description: "is a shiny blob"
           },
-          behaviors: {
-            visible: {
-              description: "is a shiny blob"
-            },
-            portable: { }
-          }
+          portable: {}
         }
-      );
+      })
     })
   })
 })

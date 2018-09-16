@@ -4,14 +4,20 @@ import {
   FETCH_ENTITIES_SUCCESS,
   FETCH_ENTITIES_FAILURE
 } from "../actions/gameStateEditor"
+import { EDIT_ENTITY } from "../../actions/app"
+
 import { extractLocationsFromEntities } from "../selectors"
 
 export const defaultState = {
-  entities: []
+  entities: [],
+  activeTab: null,
+  loading: false
 }
 
 export default function(state = defaultState, action) {
   switch (action.type) {
+    case EDIT_ENTITY:
+      return mergeDeepRight(state, { activeTab: "Editor" })
     case FETCH_ENTITIES:
       return mergeDeepRight(state, {
         loading: true

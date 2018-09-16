@@ -9,16 +9,14 @@ describe("extractLocationsFromEntities", () => {
   let entities = [
     {
       props: {},
-      name_tokens: [
-        'sidewalk'
-      ],
-      name: 'sidewalk',
-      id: 'sidewalk',
+      name_tokens: ["sidewalk"],
+      name: "sidewalk",
+      id: "sidewalk",
       behaviors: [
         {
-          type: 'visible',
+          type: "visible",
           own: true,
-          description: 'You are on a sidewalk.'
+          description: "You are on a sidewalk."
         }
       ]
     },
@@ -27,50 +25,44 @@ describe("extractLocationsFromEntities", () => {
     },
     {
       props: {
-        location: 'bathroom'
+        location: "bathroom"
       },
-      name_tokens: [
-        'machine',
-        'sewing',
-        'sewing machine'
-      ],
-      name: 'sewing machine',
-      id: 'juki',
+      name_tokens: ["machine", "sewing", "sewing machine"],
+      name: "sewing machine",
+      id: "juki",
       behaviors: [
         {
-          type: 'visible',
-          description: 'is a Juki DNU-1541, threaded with some #69 bonded nylon.'
+          type: "visible",
+          description:
+            "is a Juki DNU-1541, threaded with some #69 bonded nylon."
         }
       ]
     },
     {
       props: {
-        location: 'start'
+        location: "start"
       },
-      name_tokens: [
-        'open',
-        'open window',
-        'window'
-      ],
-      name: 'open window',
-      id: 'office-fire_escape-door',
+      name_tokens: ["open", "open window", "window"],
+      name: "open window",
+      id: "office-fire_escape-door",
       behaviors: [
         {
-          type: 'exit',
+          type: "exit",
           own: true,
-          destination_id: 'fire_escape'
+          destination_id: "fire_escape"
         },
         {
-          type: 'visible',
+          type: "visible",
           own: true,
-          description: 'is a small fire escape that looks like a fire hazard itself.'
+          description:
+            "is a small fire escape that looks like a fire hazard itself."
         }
       ]
-    },
+    }
   ]
 
   it("extracts locations from entities", () => {
-    expect( extractLocationsFromEntities(entities) ).toEqual(["sidewalk"])
+    expect(extractLocationsFromEntities(entities)).toEqual(["sidewalk"])
   })
 })
 
@@ -81,22 +73,22 @@ describe("convertBehaviorsToArray", () => {
       name: "the thing",
       behaviors: {
         visible: { description: "is the thing's description" },
-        god: {},
-      },
+        god: {}
+      }
     })
     expect(repacked).toEqual({
       id: "the-thing",
       name: "the thing",
       behaviors: [
         { type: "visible", description: "is the thing's description" },
-        { type: "god" },
-      ],
+        { type: "god" }
+      ]
     })
   })
   it("handles empty behaviors properly", () => {
     expect(convertBehaviorsToArray({})).toEqual({})
     expect(convertBehaviorsToArray({ behaviors: {} })).toEqual({
-      behaviors: [],
+      behaviors: []
     })
   })
 })
@@ -108,22 +100,22 @@ describe("convertBehaviorsToHash", () => {
       name: "the thing",
       behaviors: [
         { type: "visible", description: "is the thing's description" },
-        { type: "god" },
-      ],
+        { type: "god" }
+      ]
     })
     expect(repacked).toEqual({
       id: "the-thing",
       name: "the thing",
       behaviors: {
         visible: { description: "is the thing's description" },
-        god: {},
-      },
+        god: {}
+      }
     })
   })
   it("handles empty behaviors properly", () => {
     expect(convertBehaviorsToHash({})).toEqual({})
     expect(convertBehaviorsToHash({ behaviors: [] })).toEqual({
-      behaviors: {},
+      behaviors: {}
     })
   })
 })

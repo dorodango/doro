@@ -32,6 +32,16 @@ defmodule Doro.World.GameStateTest do
     end
   end
 
+  describe "remove_entity/1" do
+    test "removes the entity by id" do
+      assert length(GameState.get_entities()) == 2
+      GameState.remove_entity(%Entity{id: "iceman"})
+      assert length(GameState.get_entities()) == 1
+      refute GameState.get_entity("iceman")
+      assert GameState.get_entity("maverick")
+    end
+  end
+
   describe "get_entity/1" do
     test "returns an entity with the given id, or nil" do
       assert %Entity{id: "iceman"} = GameState.get_entity("iceman")

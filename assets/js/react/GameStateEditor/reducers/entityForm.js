@@ -9,6 +9,7 @@ import {
   ADD_ENTITY_FAILURE
 } from "../actions/entityForm"
 import { EDIT_ENTITY, CLOSE_EDIT_PANE } from "../../actions/app"
+
 import { convertBehaviorsToHash } from "../selectors"
 
 export const defaultState = {
@@ -24,7 +25,8 @@ export default function(state = defaultState, action) {
 
     case EDIT_ENTITY:
       if (data) {
-        const entity = omit("src", convertBehaviorsToHash(data.body.data.entity))
+        let entity = data.entity || data.body.data.entity
+        entity = omit(["src"], convertBehaviorsToHash(entity))
         return mergeDeepRight(state, { entity, editStarted: new Date() })
       }
       return state
@@ -37,13 +39,13 @@ export default function(state = defaultState, action) {
     case ADD_ENTITY_SUCCESS:
       return mergeDeepRight(state, {
         entity: data.entity,
-        loading: false,
+        loading: false
       })
     case FETCH_AVAILABLE_BEHAVIORS_SUCCESS:
       return mergeDeepRight(state, {
         availableBehaviors: data.behaviors,
         behaviorShapes: data.behaviorShapes,
-        loading: false,
+        loading: false
       })
     case ADD_ENTITY_FAILURE:
     case FETCH_AVAILABLE_BEHAVIORS_FAILURE:

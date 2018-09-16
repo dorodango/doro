@@ -2,12 +2,14 @@ import fetchAvailableBehaviorsSaga from "../GameStateEditor/sagas/fetchAvailable
 import fetchEntitiesSaga from "../GameStateEditor/sagas/fetchEntitiesSaga"
 import downloadEntitiesSaga from "../GameStateEditor/sagas/downloadEntitiesSaga"
 import addEntitySaga from "../GameStateEditor/sagas/addEntitySaga"
+import deleteEntitySaga from "../GameStateEditor/sagas/deleteEntitySaga"
 import gameChannelSaga from "../shared/sagas/gameChannelSaga"
 
 export default [
   fetchAvailableBehaviorsSaga,
   fetchEntitiesSaga,
   downloadEntitiesSaga,
+  deleteEntitySaga,
   addEntitySaga,
   gameChannelSaga
 ]

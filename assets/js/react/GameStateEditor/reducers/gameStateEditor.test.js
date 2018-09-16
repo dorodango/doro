@@ -3,13 +3,13 @@ import reducer, { defaultState } from "./gameStateEditor"
 import {
   fetchEntities,
   fetchEntitiesSuccess,
-  fetchEntitiesFailure,
+  fetchEntitiesFailure
 } from "../actions/gameStateEditor"
 
 describe("gameStateEditor.reducer", () => {
   const entities = [
     { id: "a-location", name: "a location" },
-    { id: "not-a-location", props: { location: "a-location" }}
+    { id: "not-a-location", props: { location: "a-location" } }
   ]
 
   it("has a default state", () => {

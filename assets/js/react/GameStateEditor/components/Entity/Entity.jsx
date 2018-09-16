@@ -12,16 +12,29 @@ const highlightedJsonObject = (entity, highlightTerm) => {
   }
 }
 
+const renderEditButton = (entity, handleEdit) => (
+  <button className="Entity__edit button" onClick={handleEdit}>
+    Edit
+  </button>
+)
+
+const renderDeleteButton = (entity, handleDelete) => {
+  if (entity.src) {
+    return ""
+  }
+  return (
+    <button className="Entity__delete button" onClick={handleDelete}>
+      X
+    </button>
+  )
+}
+
 const Entity = ({ entity, handleEdit, handleDelete, highlightTerm }) => {
   return (
     <div className="Entity">
       <div className="Entity__actions">
-        <button className="Entity__edit button" onClick={handleEdit}>
-          Edit
-        </button>
-        <button className="Entity__delete button" onClick={handleDelete}>
-          X
-        </button>
+        {renderEditButton(entity, handleEdit)}
+        {renderDeleteButton(entity, handleDelete)}
       </div>
       <pre>
         <code>{highlightedJsonObject(entity, highlightTerm)}</code>

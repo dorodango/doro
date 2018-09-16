@@ -9,7 +9,11 @@ import FlashMessage from "../shared/components/Flash/Flash"
 import CurrentEntities from "./components/CurrentEntities/CurrentEntities"
 import EntityForm from "./components/EntityForm/EntityForm"
 import TabSet from "../shared/components/TabSet/TabSet"
-import { fetchEntities, downloadEntities } from "./actions/gameStateEditor"
+import {
+  fetchEntities,
+  downloadEntities,
+  activateTab
+} from "./actions/gameStateEditor"
 
 class GameStateEditor extends Component {
   static propTypes = {
@@ -36,35 +40,20 @@ class GameStateEditor extends Component {
 
   handleEdit = entity => {
     this.props.fetchEntities()
-    this.setState({
-      entity: entity
-    })
-  }
-
-  handleDelete = entity => {
-    // const { entities } = this.props
-    // this.setState({
-    //   entities: filter(entry => entry.id !== entity.id, entities)
-    // })
+    this.setState({ entity })
   }
 
   handleDownloadNewEntities = _ev => {
     const { entities } = this.props
     this.props.downloadEntities({
-      entities: filter(entry => entry.src == null, entities),
+      entities: filter(entry => !entry.src, entities),
       filename: "new-entities.json"
-    });
+    })
   }
 
   handleDownloadEntities = _ev => {
     const { entities } = this.props
     this.props.downloadEntities({ entities: entities })
-  }
-
-  handleClear = _ev => {
-    // this.setState({
-    //   entities: []
-    // })
   }
 
   renderTabs = () => {
@@ -77,7 +66,7 @@ class GameStateEditor extends Component {
           <div className="GameStateEditor__addNew">
             <EntityForm />
           </div>
-        ),
+        )
       },
       {
         name: "Entities",
@@ -96,20 +85,20 @@ class GameStateEditor extends Component {
           <header>
             <div className="GameStateEditor__actions">
               <button
-                className="GameStateEditor__download button"
+                className="GameStateEditor__download GameStateEditor__download--all button"
                 onClick={this.handleDownloadEntities}
               >
                 Download All Entities
               </button>
               <button
-                className="GameStateEditor__download button"
+                className="GameStateEditor__download GameStateEditor__download--new button"
                 onClick={this.handleDownloadNewEntities}
               >
                 Download New Entities
               </button>
             </div>
           </header>
-          <main>{this.renderTabs()}</main>
+          <div>{this.renderTabs()}</div>
         </section>
       </div>
     )

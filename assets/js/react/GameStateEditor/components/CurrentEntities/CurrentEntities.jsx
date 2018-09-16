@@ -7,7 +7,8 @@ import { isArray, some, filter, get, map } from "lodash"
 import { isEmpty } from "../../../shared/utils/utilities"
 
 import Entity from "../Entity/Entity"
-import { fetchEntities } from "../../actions/gameStateEditor"
+import { fetchEntities, deleteEntity } from "../../actions/gameStateEditor"
+import { editEntity } from "../../../actions/app"
 
 class CurrentEntities extends Component {
   static propTypes = {
@@ -31,9 +32,8 @@ class CurrentEntities extends Component {
     }
   }
 
-  handleSearch = ev => {
-    const query = ev.target.value.trim()
-    let filteredEntities = this.props.entities
+  filterEntities = (entities, query) => {
+    let filteredEntities = entities || []
 
     if (!isEmpty(query)) {
       const fieldMatcher = (field, query) => entity => {
@@ -57,18 +57,31 @@ class CurrentEntities extends Component {
         fieldsMatcher(fields, query)
       )
     }
+    return filteredEntities
+  }
+
+  handleSearch = ev => {
+    const query = ev.target.value.trim()
     this.setState({
-      query: query,
-      filteredEntities: filteredEntities
+      query: query
     })
   }
 
-  handleEdit = () => {}
-  handleDelete = () => {}
+  handleEdit = entity => {
+    return () => {
+      this.props.editEntity({ entity })
+    }
+  }
+
+  handleDelete = id => {
+    return () => {
+      this.props.deleteEntity(id)
+    }
+  }
 
   render() {
-    let { filteredEntities, query } = this.state
-    filteredEntities = filteredEntities || this.props.entities
+    let { query } = this.state
+    const filteredEntities = this.filterEntities(this.props.entities, query)
     return (
       <div className="CurrentEntities">
         <form>
@@ -84,10 +97,10 @@ class CurrentEntities extends Component {
         </div>
         {map(filteredEntities, (elem, idx) => (
           <Entity
-            key={idx}
+            key={elem.id}
             entity={elem}
-            handleEdit={this.handleEdit}
-            handleDelete={this.handleDelete}
+            handleEdit={this.handleEdit(elem)}
+            handleDelete={this.handleDelete(elem.id)}
             highlightTerm={query}
           />
         ))}
@@ -103,7 +116,9 @@ const mapStateToProps = state => ({
 const mapDispatchToProps = dispatch =>
   bindActionCreators(
     {
-      fetchEntities
+      fetchEntities,
+      deleteEntity,
+      editEntity
     },
     dispatch
   )

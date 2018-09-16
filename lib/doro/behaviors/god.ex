@@ -23,14 +23,13 @@ defmodule Doro.Behaviors.God do
   end
 
   interact_if("/edit", %{player: player, rest: rest}) do
-    found_entity = Doro.World.get_entities([in_location(player[:location]), named(rest)])
-    |> Enum.at(0)
+    found_entity = find_entity_in_location_or_location(player, rest)
     rest_present = (rest != nil) && (String.length(rest |> String.trim()) > 0)
     rest_present && found_entity
   end
 
   interact("/edit", %{player: player, rest: name}) do
-    entity = Doro.World.get_entities([in_location(player[:location]), named(name)]) |> Enum.at(0)
+    entity = find_entity_in_location_or_location(player, name)
     send_to_player(player,
       "You concentrate on #{definite(entity)}.  Nothing happens and you feel silly.",
       %{
@@ -38,5 +37,19 @@ defmodule Doro.Behaviors.God do
         "entity": entity |> Doro.World.Marshal.marshal
       }
     )
+  end
+
+  defp find_entity_in_location_or_location(player, rest) do
+    found_entity = Doro.World.get_entities([in_location(player[:location]), named(rest)])
+    |> Enum.at(0)
+    case found_entity do
+      nil ->
+        location = Doro.World.get_entity(player[:location])
+        case location |> named(rest).() do
+          false -> nil
+          _ -> location
+        end
+      _ -> found_entity
+    end
   end
 end
